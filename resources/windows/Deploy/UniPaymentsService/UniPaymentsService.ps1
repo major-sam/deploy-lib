@@ -16,6 +16,14 @@ $json_appsettings.Grpc.Services | % {
 		$_.Host = $env:COMPUTERNAME 
 		$_.Port = 5003
 	}
+	if ($_.name -like "CupisInvoiceService" ){
+		$_.Host = $env:COMPUTERNAME 
+		$_.Port = 5003
+	}
+	if ($_.name -like "CupisPayoutService" ){
+		$_.Host = $env:COMPUTERNAME 
+		$_.Port = 5003
+	}
 }
 
 ConvertTo-Json $json_appsettings -Depth 4 | Format-Json | Set-Content $ConfigPath -Encoding UTF8
