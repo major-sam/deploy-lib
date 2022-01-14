@@ -1,4 +1,3 @@
-$q = "
 USE [BaltbetM]
 GO
 
@@ -40,6 +39,3 @@ WHERE Events.EventStartTime < GETDATE()
 AND LEN(Events.EventResultText) > 0
 
 GO
-"
-
-Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database BaltBetM -Query $q -ErrorAction continue

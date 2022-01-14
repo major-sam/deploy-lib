@@ -1,5 +1,3 @@
-$q = "
-
 USE BaltBetM
 GO
 SET QUOTED_IDENTIFIER ON
@@ -18,5 +16,3 @@ VALUES(@ExchangeId, 2, NULL, NULL, 1, GETDATE(), 0, 0, NULL, NULL, GETDATE(), NU
 
 INSERT INTO [BaltBetM].[Payments].[PaymentRequests]
 VALUES(@ExchangeId, NEWID(), 845, 110, NEWID(), 10, 130, 10, GETDATE(), NULL, 1, 643, 1, 0, NULL, NULL, NULL, NULL, 10, NULL, 1, 0, NULL, NULL, NULL, DEFAULT, NULL, NULL, NULL, 0, GETDATE(), NULL, NULL,0)
-"
-Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database BaltBetM -Query $q -ErrorAction continue

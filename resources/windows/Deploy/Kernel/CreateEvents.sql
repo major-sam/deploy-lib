@@ -1,4 +1,3 @@
-$q ="
 USE BaltBetM
 GO
 SET QUOTED_IDENTIFIER ON
@@ -207,5 +206,3 @@ WHERE EventTypes.EventTypeMemberNumber>1
 ) EM ON EVENTS.LineID = EM.LineID
 WHERE EM.PlayedId = 2 AND PlayerId2 is NULL
 GO
-"
-Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database BaltBetM -Query $q -ErrorAction continue

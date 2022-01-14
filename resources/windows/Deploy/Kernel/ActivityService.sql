@@ -1,4 +1,3 @@
-$q = "
 USE BaltBetM
 GO
 SET QUOTED_IDENTIFIER ON
@@ -40,5 +39,3 @@ INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
 VALUES (N'20200324075735_Initial', N'3.1.2');
 
 GO
-"
-Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database BaltBetM -Query $q -ErrorAction continue

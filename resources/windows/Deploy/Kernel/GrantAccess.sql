@@ -1,4 +1,3 @@
-$q = "
 USE BaltBetM
 GO
 SET QUOTED_IDENTIFIER ON
@@ -47,6 +46,3 @@ BEGIN
 END
 CLOSE goods_cursor
 DEALLOCATE goods_cursor
-"
-
-Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database BaltBetM -Query $q -ErrorAction continue

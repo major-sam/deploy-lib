@@ -1,4 +1,3 @@
-$q = "
 USE BaltBetM
 GO
 SET QUOTED_IDENTIFIER ON
@@ -58,7 +57,3 @@ update UniRu.Accounts.AccountPreferences set UniRu.Accounts.AccountPreferences.A
 from BaltBetM.dbo.Accounts  inner join UniRu.Accounts.AccountPreferences on  BaltBetM.dbo.Accounts.AccountId = UniRu.Accounts.AccountPreferences.AccountId and BaltBetM.dbo.Accounts.PlayerType = 2
 
 
-
-"
-
-Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database BaltBetM -Query $q -ErrorAction continue
