@@ -19,6 +19,7 @@ WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '#VM_IP'
 WHEN 'OAuth.LastLogoutUrl' THEN 'https://#VM_HOSTNAME.bb-webapps.com:449/account/logout/last'
 WHEN 'OAuth.TokenUrl' THEN 'https://#VM_HOSTNAME.bb-webapps.com:449/oauth/token'
 WHEN 'Global.RabbitMq.NotificationGateWayBus.IsEnabled' THEN 'false'
+WHEN 'Pages.Prematch.IsHotEventsEnabled' THEN 'true'
 ELSE Value END
 
 IF EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Payment.IsCupisPaymentsEnabled')
