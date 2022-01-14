@@ -146,3 +146,36 @@ def doMavenDeploy(taskBranch){
 	return resultList
 }
 
+def doSingleServiceMavenDeploy(Map config = [:]){
+	def taskBranch = getNexusBranch (config.groupId, config.branch)
+	if (taskBranch){
+		"\"-Ddeploy.branch=${taskBranch}\""
+		def deployParams = (
+				"\"-Dmaven.repo.local=" + config.repo + "\" " +
+				"\"-Ddeploy.groupid=" + config.groupId+ "\" " +
+				"\"-Ddeploy.dir=" + config.deployDir +  "\" " +
+				"\"-Ddeploy.branch=" + taskBranch +  "\""
+				)
+		powershell (
+				script: "mvn clean versions:use-latest-releases" +
+				" dependency:unpack -s MAVEN_SETTINGS.xml"+
+				" -f pomxml ${deployParams}",
+				label: "Maven deploy ${config.groupId} branch ${taskBranch}"
+				)
+		def packageVersion = powershell (
+				script:"(Get-ChildItem -Directory "+ 
+				".\\.mvnMarketing\\Marketing\\"+
+				taskBranch+").name", 
+				returnStdout: true
+				)
+		return [
+			Repo: 'Marketing',
+			Branch: taskBranch,
+			Version: packageVersion.trim()
+		]
+	}
+	else{
+		error ("Marketing repo has no master branch")
+
+	}
+}
