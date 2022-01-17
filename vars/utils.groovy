@@ -165,8 +165,8 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 				)
 		def packageVersion = powershell (
 				script:"(Get-ChildItem -Directory "+ 
-				config.repo +"\\"+
-				taskBranch+").name", 
+				config.repo +"\\"+config.repo+"\\"+
+				taskBranch+" -First 1).name", 
 				returnStdout: true
 				)
 		return [
