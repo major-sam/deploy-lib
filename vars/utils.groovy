@@ -59,7 +59,7 @@ def lookupBranchInNexus (repoName, task){
 				)
 		def repoMap = new JsonSlurperClassic().parseText(text)
 		def boolean foundIt = repoMap.items.size() > 0
-		println (foundIt ? "found ${task}" : "found ${task}" ) 
+		println (foundIt ? "found ${task}" : "not found ${task}" ) 
 		return foundIt
 	}
 }
