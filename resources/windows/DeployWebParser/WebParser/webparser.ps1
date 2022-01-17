@@ -1,5 +1,4 @@
 import-module '.\scripts\sideFunctions.psm1'
-Import-Module Carbon
 
 $ServicesFolder = "C:\Services"
 $ServiceName = "WebParser"
@@ -21,12 +20,6 @@ $RabbitClientAPK = $config.configuration.connectionStrings.add | Where-Object na
 $RabbitClientAPK.connectionString = "host=$($env:COMPUTERNAME):5672; username=test; password=test; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
 
 $config.Save($PathToExeConfig)
-
-
-Write-Host "[INFO] Run XML Transformation"
-Convert-XmlFile -Path "$PathToConfig\Settings.xml" -XdtPath "$PathToConfig\Settings.Test.xml" -Destination "$PathToConfig\SettingsNew.xml"
-Remove-Item "$PathToConfig\Settings.xml"
-Move-Item "$PathToConfig\SettingsNew.xml" "$PathToConfig\Settings.xml"
 
 Write-Host "[INFO] EDIT Settings.xml..."
 [xml]$config = Get-Content -Path "$($PathToConfig)\Settings.xml"
