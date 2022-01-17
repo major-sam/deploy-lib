@@ -4,11 +4,11 @@ $apiPort = '50002'
 ##Credential provided by jenkins
 $username = "$($ENV:SERVICE_CREDS_USR)" 
 $pass =  "$($ENV:SERVICE_CREDS_PSW)"
-$RuntimeVersion ='v4.0'
 $preloader = "SitePreload"
 $IISPools = @( 
     @{
         SiteName = 'BaltBet.Payment.BalancingService.Blazor'
+        RuntimeVersion = 'v4.0'
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }

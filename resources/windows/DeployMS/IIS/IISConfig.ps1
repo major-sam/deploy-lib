@@ -10,6 +10,7 @@ $preloader = "SitePreload"
 $IISPools = @( 
     @{
         SiteName = 'MarketingService'
+        RuntimeVersion = 'v4.0'
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }
@@ -23,6 +24,7 @@ $IISPools = @(
     }
     @{
         SiteName = 'MarketingImages'
+        RuntimeVersion = 'v4.0'
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }
@@ -36,6 +38,7 @@ $IISPools = @(
     }
     @{
         SiteName = 'MarketingServiceAdmin'
+        RuntimeVersion = 'v4.0'
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }
@@ -49,6 +52,7 @@ $IISPools = @(
     }
     @{
         SiteName = 'MarketingServiceClient'
+        RuntimeVersion = 'v4.0'
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }

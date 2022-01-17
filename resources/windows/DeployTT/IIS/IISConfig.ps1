@@ -5,11 +5,11 @@ $apiPort = '50005'
 ##Credential provided by jenkins
 $username = "$($ENV:SERVICE_CREDS_USR)" 
 $pass =  "$($ENV:SERVICE_CREDS_PSW)"
-$RuntimeVersion ='v4.0'
 $preloader = "SitePreload"
 $IISPools = @( 
     @{
         SiteName = 'Baltbet.TradingTool.Api'
+        RuntimeVersion = 'v4.0'
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }
