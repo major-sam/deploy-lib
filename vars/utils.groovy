@@ -47,7 +47,7 @@ def lookupBranchInNexus (repoName, task){
 	withCredentials([file(credentialsId: 'NexusNetRC', variable: 'NexusNetRC')]){
 		def text = powershell (
 				returnStdout: true,
-				label: 'Lookup branch ' + task + 'in repo ' + repoName ,
+				label: 'Lookup branch ' + task + ' in repo ' + repoName ,
 				script : '''
 				curl.exe --netrc-file "$env:NexusNetRC" `
 					-X GET "http://nexus:8081/service/rest/v1/search/assets?repository=''' +

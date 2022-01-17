@@ -1,7 +1,6 @@
 import-module '.\scripts\sideFunctions.psm1'
 
 $ProgressPreference = 'SilentlyContinue'
-$targetDir = 'C:\Kernel'
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 $queryTimeout = 720
 $dbs = @(
