@@ -30,6 +30,7 @@ $RegCaptcha.value = "false"
 
 $UniPaymentUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "UniPaymentsServiceUrl"
 $UniPaymentUrl.connectionString = "https://${env:COMPUTERNAME}.$($wildcardDomain):54381"
-
-$webdoc.configuration.'system.serviceModel'.client.endpoint.address = "net.tcp://$($CurrentIpAddr):8150/PromoManager"
+if(Get-Member -inputobject $webdoc.configuration -name 'system.serviceModel' -Membertype Properties){
+	$webdoc.configuration.'system.serviceModel'.client.endpoint.address = "net.tcp://$($CurrentIpAddr):8150/PromoManager"
+}
 $webdoc.Save($SiteConfig)
