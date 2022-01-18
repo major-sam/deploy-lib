@@ -85,7 +85,7 @@ def getNexusBranch (repoName, userTask){
 def updatePom(services, branchTask){
 	services.each{ 
 		nexusLookup = getNexusBranch(it, branchTask)
-		if (nexusLookup && (nexusLookup != 'master')){
+		if (nexusLookup){
 			powershell (
 				script: '''
 				\$pom= "'''+ "${env.WORKSPACE}\\deployPom.xml" +'''"
@@ -98,8 +98,10 @@ def updatePom(services, branchTask){
 				label: 'Update pom '+ it + ' with ' + nexusLookup, 
 				returnStdout:true
 				)
-				
 		} 
+		else{
+			error ("${it} has no master in nexus!")
+		}
 	}	
 }
 
