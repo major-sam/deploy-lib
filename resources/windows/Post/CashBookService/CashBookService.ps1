@@ -4,5 +4,5 @@ Import-module '.\scripts\sideFunctions.psm1'
 $ServiceName = "CashBookService"
 $serviceBin = Get-Item  "C:\Services\${ServiceName}\CashBook.Service.exe"
 $sname = RegisterWinService($serviceBin)
-Start-Service $sname
-Set-Recovery -ServiceDisplayName $sname -Server $env:COMPUTERNAME
+#Start-Service $sname
+#Set-Recovery -ServiceDisplayName $sname -Server $env:COMPUTERNAME
