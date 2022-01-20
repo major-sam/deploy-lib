@@ -15,5 +15,6 @@ $obj = $webdoc.configuration.appSettings.add | where {$_.key -like "SiteServerAd
 $obj.value = $CurrentIpAddr+":8088"
 $obj = $webdoc.configuration.appSettings.add | where {$_.key -like "IsSuperexpressEnabled"} 
 $obj.value = "true"
+$webdoc.configuration.'system.web'.sessionState.mode="inProc"
 $webdoc.configuration.'system.serviceModel'.client.endpoint | ForEach-Object { $_.address = ($_.address).replace("localhost","$($CurrentIpAddr)") }
 $webdoc.Save($webConfig)
