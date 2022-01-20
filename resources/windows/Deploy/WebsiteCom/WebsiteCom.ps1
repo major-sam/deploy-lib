@@ -15,6 +15,9 @@ $obj = $webdoc.configuration.appSettings.add | where {$_.key -like "SiteServerAd
 $obj.value = $CurrentIpAddr+":8088"
 $obj = $webdoc.configuration.appSettings.add | where {$_.key -like "IsSuperexpressEnabled"} 
 $obj.value = "true"
-$webdoc.configuration.'system.web'.sessionState.mode="inProc"
 $webdoc.configuration.'system.serviceModel'.client.endpoint | ForEach-Object { $_.address = ($_.address).replace("localhost","$($CurrentIpAddr)") }
 $webdoc.Save($webConfig)
+
+$oldString = '<sessionState mode="SQLServer" allowCustomSqlDatabase="true" sqlConnectionString="Server=172.16.0.153;Initial catalog=WebSite_ASPState;User Id=website;Password=w#bs!t#;"/>'
+$newString = '<sessionState cookieless="UseCookies" cookieName="mySessionCookie" mode="StateServer" stateConnectionString="tcpip=localhost:42424" timeout="20" useHostingIdentity="false" />'
+(Get-Content -Path $webConfig -Encoding UTF8).replace($oldString,$newString) | Set-Content -Path $webConfig -Encoding UTF8
