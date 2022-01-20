@@ -5,6 +5,6 @@ $webdoc = [Xml](Get-Content $Config)
 $webdoc.configuration."system.serviceModel".client.endpoint |% {$_.address= $_.address.replace('localhost', $CurrentIpAddr) }
 $webdoc.Save($Config)
 
-$oldString = '<sessionState mode="SQLServer" allowCustomSqlDatabase="true" sqlConnectionString="Server=172.16.0.153;Initial catalog=WebSite_ASPState;User Id=website;Password=w#bs!t#;"/>'
+$oldString = '<sessionState mode="SQLServer" allowCustomSqlDatabase="true"\n sqlConnectionString="Server=172.16.0.153;Initial catalog=WebSite_ASPState;User Id=website;Password=w#bs!t#;"/>'
 $newString = '<sessionState cookieless="UseCookies" cookieName="mySessionCookie" mode="StateServer" stateConnectionString="tcpip=localhost:42424" timeout="20" useHostingIdentity="false" />'
 (Get-Content -Path $Config -Encoding UTF8).replace($oldString,$newString) | Set-Content -Path $Config -Encoding UTF8
