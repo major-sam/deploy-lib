@@ -7,4 +7,4 @@ $webdoc.Save($Config)
 
 $oldString = '<sessionState mode="SQLServer" allowCustomSqlDatabase="true" sqlConnectionString="Server=172.16.0.153;Initial catalog=WebSite_ASPState;User Id=website;Password=w#bs!t#;"/>'
 $newString = '<sessionState cookieless="UseCookies" cookieName="mySessionCookie" mode="StateServer" stateConnectionString="tcpip=localhost:42424" timeout="20" useHostingIdentity="false" />'
-(Get-Content -Path $webConfig -Encoding UTF8).replace($oldString,$newString) | Set-Content -Path $webConfig -Encoding UTF8
+(Get-Content -Path $webConfig -Encoding UTF8).replace($oldString,$newString) | Set-Content -Path $Config -Encoding UTF8
