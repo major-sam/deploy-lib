@@ -22,7 +22,4 @@ $config.ConnectionStrings.DomainDb = $CSDomainDb
 $config.ConnectionStrings.KernelDb = $CSKernelDb
 Set-Content -Path "$ServiceFolderPath\appsettings.json" -Encoding UTF8 -Value ($config | ConvertTo-Json -Depth 100)
 
-# Создаем БД BaltBetDomain
-Write-Host -ForegroundColor Green "[INFO] Create database $dbname"
-Invoke-sqlcmd -ServerInstance $env:COMPUTERNAME -Query "CREATE DATABASE [$dbname]" -Verbose
 
