@@ -31,16 +31,15 @@ if (test-path $logpath){
 	$webdoc.Save($svc.Fullname)
 }
 else{
-	Write-Host -ForegroundColor Green "[INFO] Edit BaltBet.CashBookService configuration files..."
-		$pathtojson = "C:\Services\PersonalInfoCenter\MessageService\appsettings.json"
-		$config = Get-Content -Path $pathtojson -Encoding UTF8
-		$json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
+	Write-Host -ForegroundColor Green "[INFO] Edit BaltBet.messageservice configuration files..."
+	$pathtojson = "C:\Services\PersonalInfoCenter\MessageService\appsettings.json"
+	$config = Get-Content -Path $pathtojson -Encoding UTF8
+	$json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
 
-		$json_appsetings.Serilog.WriteTo| %{ if ($_.Name -like 'File'){
-				$_.Args.path = "C:\logs\PersonalInfoCenter\MessageService-{Date}.log"   
-			}
+	$json_appsetings.Serilog.WriteTo| %{ if ($_.Name -like 'File'){
+			$_.Args.path = "C:\logs\PersonalInfoCenter\MessageService-{Date}.log"   
 		}
-	$json_appsetings.Kestrel.EndPoints.HttpsInlineCertStore.Certificate.Location = "LocalMachine"
+	}
 	ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 
 }
