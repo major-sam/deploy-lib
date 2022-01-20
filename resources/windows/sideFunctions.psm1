@@ -142,7 +142,7 @@ function RegisterIISSite($site){
     $name =  $site.SiteName
     $runtimeVersion = $site.RuntimeVersion
 	if ($site.siteSubDir){
-		$targetDir = "$($site.rootDir)\$name"
+		$targetDir = Join-Path -path $site.rootDir -childpath $name
 	}else{
 		$targetDir = "$($site.rootDir)"
 	}
