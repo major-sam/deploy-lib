@@ -9,7 +9,7 @@ Write-Host -ForegroundColor Green "In progress..."
 
 # Редактируем конфиг
 $ServiceName = "BaltBetDomainService"
-$ServiceFolderPath = "C:\inetpub\${ServiceName}"
+$ServiceFolderPath = "C:\inetpub\${ServiceName}\${ServiceName}"
 $dbname = "BaltBetDomain"
 $CSDomainDb = "server=localhost;Integrated Security=SSPI;MultipleActiveResultSets=true;Initial Catalog=$dbname"
 $CSKernelDb = "server=localhost;Integrated Security=SSPI;MultipleActiveResultSets=true;Initial Catalog=BaltBetM"
@@ -25,3 +25,4 @@ Set-Content -Path "$ServiceFolderPath\appsettings.json" -Encoding UTF8 -Value ($
 # Создаем БД BaltBetDomain
 Write-Host -ForegroundColor Green "[INFO] Create database $dbname"
 Invoke-sqlcmd -ServerInstance $env:COMPUTERNAME -Query "CREATE DATABASE [$dbname]" -Verbose
+
