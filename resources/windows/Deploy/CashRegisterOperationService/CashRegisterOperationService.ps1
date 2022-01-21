@@ -6,22 +6,6 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 $ServiceName = "CashRegisterOperationService"
-$ServiceFolderPath = "C:\Services\${ServiceName}"
-
-Move-Item -Path "C:\Services\CashRegisterOperationServiceDB" -Destination $ServiceFolderPath
-
-$dbname = "CashRegisterOperationService"
-$queryTimeout = 720
-$sqlfolder = "C:\Services\CashRegisterOperationService\CashRegisterOperationServiceDB"
-
-# Создаем БД CashRegisterOperationService
-CreateSqlDatabase($dbname)
-
-# Выполняем скрипты
-foreach ($script in (Get-Item -Path $sqlfolder\* -Include "*.sql").FullName | Sort-Object ) {    
-    Write-Host -ForegroundColor Green "[INFO] Execute $script on $dbname"
-    Invoke-Sqlcmd -verbose -QueryTimeout $queryTimeout -ServerInstance $env:COMPUTERNAME -Database $dbname -InputFile $script -ErrorAction continue
-}
 
 # Правим конфиг
 Write-Host -ForegroundColor Green "[INFO] Edit CashRegisterOperationService configuration files..."
@@ -35,3 +19,14 @@ $json_appsetings.Serilog.WriteTo| %{ if ($_.Name -like 'File'){
 }
 
 ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
+
+$reportVal =@"
+[$ServiceName]
+$config
+	.Serilog.WriteTo| %{ if ($_.Name -like 'File'){
+			$_.Args.path = "C:\logs\CashBookService\CashBookService-{Date}.log"   
+		}
+	.Kestrel.EndPoints.HttpsInlineCertStore.Certificate.Location = "LocalMachine"
+"@
+
+Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8
