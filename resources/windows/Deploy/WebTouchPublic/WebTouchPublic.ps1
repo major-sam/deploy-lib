@@ -11,7 +11,18 @@ Write-Host -ForegroundColor Green "[INFO] Edit web.config of WebTouch-Public"
 $webdoc = [Xml](Get-Content $SiteConfig)
 $webdoc.configuration.serverConfig.ServerAddress = "$($CurrentIpAddr):8082"
 $webdoc.configuration.serverConfig.SiteServerAddress = "$($CurrentIpAddr):8088"
-$Recaptcha = $webdoc.configuration.appSettings.add | Where-Object key -eq "IsRecaptchaEnabled"
-$Recaptcha.value = "false"
+($webdoc.configuration.appSettings.add | Where-Object key -eq "IsRecaptchaEnabled").value = "false"
 $webdoc.Save($SiteConfig)
+
+
+$reportval =@"
+[WebMobile]
+$SiteConfig
+    .configuration.serverConfig.ServerAddress = "$($CurrentIpAddr):8082"
+    .configuration.serverConfig.SiteServerAddress = "$($CurrentIpAddr):8088"
+    (.configuration.appSettings.add | Where-Object key -eq "IsRecaptchaEnabled").value = "false"
+"@
+add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
+
+Write-Host -ForegroundColor Green "[INFO] Done"
 

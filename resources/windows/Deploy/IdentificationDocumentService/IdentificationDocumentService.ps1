@@ -26,7 +26,7 @@ $conf.Save($ConfigFilePath)
 Write-Host -ForegroundColor Green "[INFO] IdentificationService deployed"
 
 $reportVal =@"
-[$ServiceName]
+[IdentificationDocumentService]
 $ConfigFilePath
     configuration.appSettings.add | Where-Object key -eq "BaseAddress").SetAttribute("value","http://localhost:8123")
     configuration.appSettings.add | Where-Object key -eq "UploadFolder" ).SetAttribute("value","C:\DownloadsCPS")
