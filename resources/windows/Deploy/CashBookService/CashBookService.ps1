@@ -31,8 +31,8 @@ ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojso
 $reportVal =@"
 [$ServiceName]
 $config
-	.Serilog.WriteTo| %{ if ($_.Name -like 'File'){
-			$_.Args.path = "C:\logs\CashBookService\CashBookService-{Date}.log"   
+	.Serilog.WriteTo| %{ if (_.Name -like 'File'){
+			_.Args.path = "C:\logs\CashBookService\CashBookService-{Date}.log"   
 		}
 	.Kestrel.EndPoints.HttpsInlineCertStore.Certificate.Location = "LocalMachine"
 "@

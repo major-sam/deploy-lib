@@ -48,10 +48,36 @@ $conf.configuration."system.serviceModel".services.service |% {$_.endpoint |% {$
 $conf.Save($KernelConfig)
 
 ####KERNELWEB
-$LogConfig  = "C:\KernelWeb\KernelWeb.exe.config"
-Write-Host "[INFO] Edit web.config of $LogConfig"
+$webLogConfig  = "C:\KernelWeb\KernelWeb.exe.config"
+Write-Host "[INFO] Edit web.config of $webLogConfig"
 
-$webdoc = [Xml](Get-Content $LogConfig)
+$webdoc = [Xml](Get-Content $webLogConfig)
 $webdoc.configuration.log4net.appender|%{$_.file.value = "c:\logs\kernelWeb\"}
 
-$webdoc.Save($LogConfig)
+$webdoc.Save($webLogConfig)
+
+$reportval =@"
+[Kernel]
+$webConfig
+	.Settings.EventCacheSettings.Enabled = "false"
+	.Settings.EventCacheSettings.CoefsCache.FileName = "$cachePath\EventCoefsCache.dat"
+	.Settings.EventCacheSettings.CoefSumCache.FileName =  "$cachePath\EventCoefsSumCache.dat"
+																							  
+	.Settings.CurrentEventsJob.Enabled = "false"
+	.Settings.CurrentEventsJob.FileCache.FileName = "$cachePath\EventCoefsCacheJob.dat"
+	.Settings.AggregatorSettings.connection | % { .serviceType
+		if (.serviceType -iin @("StandardPaymentService", "CpsPaymentService")){
+					_.SetAttribute("notificationUrl","http://$($CurrentIpAddr):88/callback/baltbet" )
+						}
+	}
+$LogConfig
+	.log4net.appender|%{_.file.value = _.file.value.replace("Log\", "c:\logs\kernel\")}
+$UnityConfig
+	.unity.container|%{_.register}|?{_.type -like "Kernel.IStopKernelValidator, Kernel"}).constructor.param.value = "config\StartStop.txt"
+$KernelConfig
+	.configuration."system.serviceModel".services.service |% {_.endpoint |% {_.address = _.address.replace("localhost",$CurrentIpAddr)}}
+$webLogConfig
+	.configuration.log4net.appender|%{_.file.value = "c:\logs\kernelWeb\"}
+"@
+
+add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

@@ -22,3 +22,14 @@ $config.Serilog.WriteTo|% {
 }
 
 ConvertTo-Json $config -Depth 4  | Format-Json | Set-Content "$ServiceFolderPath\appsettings.json" -Encoding UTF8
+
+$reportVal =@"
+[$ServiceName]
+$ServiceFolderPath\appsettings.json
+	.Serilog.WriteTo| %{ if (_.Name -like 'File'){
+			_.Args.path = "C:\logs\CoefService\CoefService-{Date}.log"
+		}
+	.Settings.DataBase = "data source=localhost;initial catalog=${DataBase};Integrated Security=true;MultipleActiveResultSets=True;"
+"@
+
+Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8
