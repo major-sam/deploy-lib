@@ -1,3 +1,4 @@
+import-module '.\scripts\sideFunctions.psm1'
 # Редактируем конфиг
 $ServiceName = "SuperExpressService"
 $appsettings = "C:\Services\SuperExpressService\appsettings.json"

@@ -1,3 +1,4 @@
+import-module '.\scripts\sideFunctions.psm1'
 <#
     BaltBet.TicketServiceApi
     Скрипт для разворота BaltBet.TicketServiceApi.
