@@ -13,3 +13,11 @@ $config.Serilog.WriteTo[1].Args.path = "C:\logs\ActionLogService\ActionLogServic
 $config.Settings.Database = "data source=localhost;initial catalog=${Catalog};Integrated Security=true;MultipleActiveResultSets=True;"
 
 Set-Content -Path "$ServiceFolderPath\appsettings.json" -Encoding UTF8 -Value ($config | ConvertTo-Json -Depth 100)
+
+$reportVal =@"
+[$ServiceName]
+Serilog.WriteTo[1].Args.path = "C:\logs\ActionLogService\ActionLogService-.log"
+Settings.Database = "data source=localhost;initial catalog=${Catalog};Integrated Security=true;MultipleActiveResultSets=True;"
+"@
+
+Add-Content -force -Path "$($env.WORKSPACE)\$($CONFIG_UPDATES)" -value $reportVal -Encoding utf8
