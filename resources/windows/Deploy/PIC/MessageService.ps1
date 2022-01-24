@@ -22,6 +22,13 @@ $dbs = @(
 )
 ###restore DB
 RestoreSqlDb -db_params $dbs
+$TaskPath =  "C:\Services\PersonalInfoCenter\MessageService\DB"
+if (test-path $TaskPath){
+	get-ChildItem $TaskPath | % {
+			Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database dbs[0].DbName -InputFile $_ -ErrorAction Stop
+		}
+	}
+
 ### fix logpaths
 $logpath ="C:\Services\PersonalInfoCenter\MessageService\Log.config"
 if (test-path $logpath){
