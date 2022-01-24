@@ -19,6 +19,8 @@ $reportval =@"
 $SiteConfig
     .configuration.serverConfig.ServerAddress = "$($CurrentIpAddr):8082"
     .configuration.serverConfig.SiteServerAddress = "$($CurrentIpAddr):8088"
+$('='*60)
+
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 

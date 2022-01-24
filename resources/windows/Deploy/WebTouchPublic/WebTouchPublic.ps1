@@ -21,6 +21,8 @@ $SiteConfig
     .configuration.serverConfig.ServerAddress = "$($CurrentIpAddr):8082"
     .configuration.serverConfig.SiteServerAddress = "$($CurrentIpAddr):8088"
     (.configuration.appSettings.add | Where-Object key -eq "IsRecaptchaEnabled").value = "false"
+$('='*60)
+
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 

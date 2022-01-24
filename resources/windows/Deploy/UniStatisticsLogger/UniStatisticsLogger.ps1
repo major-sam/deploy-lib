@@ -10,6 +10,8 @@ $reportval =@"
 [UniStatisticsLogger]
 $ConfigPath
     .configuration.log4net.appender | % { $_.file.value = $_.file.value.replace("logs", "c:/logs/UniStatisticsLogger")}
+$('='*60)
+
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 

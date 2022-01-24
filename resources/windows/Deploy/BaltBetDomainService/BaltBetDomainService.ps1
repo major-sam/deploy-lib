@@ -27,6 +27,8 @@ $reportVal =@"
 "$ServiceFolderPath\appsettings.json" 
     .ConnectionStrings.DomainDb = $CSDomainDb
     .ConnectionStrings.KernelDb = $CSKernelDb
+$('='*60)
+
 "@
 
 Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8

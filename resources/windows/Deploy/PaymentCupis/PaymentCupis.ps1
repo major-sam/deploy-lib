@@ -31,6 +31,8 @@ $webConfig
     .AggregatorGrpcOptions.ServiceAddress = "http://172.16.1.70:32421"
     .AggregatorGrpcOptions.NotificationUrl = "http://${IPAddress}:5001/api/v1/notifications/aggregator"
     .AggregatorGrpcOptions.CheckWithdrawUrl = "http://${IPAddress}:5001/api/v1/payout/checkwithdraw"
+$('='*60)
+
 
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

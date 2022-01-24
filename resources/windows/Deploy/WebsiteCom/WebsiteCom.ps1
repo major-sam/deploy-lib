@@ -50,6 +50,8 @@ $WebConfig
 	foreach (attr in attrs.GetEnumerator()) {    
 		.configuration.'system.web'.SelectSingleNode('//sessionState').SetAttribute(attr.Name, attr.Value)
 	}
+$('='*60)
+
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 

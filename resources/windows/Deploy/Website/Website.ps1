@@ -48,6 +48,8 @@ $SiteConfig
 	if(Get-Member -inputobject .configuration -name 'system.serviceModel' -Membertype Properties){
 		.configuration.'system.serviceModel'.client.endpoint.address = "net.tcp://$($CurrentIpAddr):8150/PromoManager"
 }
+$('='*60)
+
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 

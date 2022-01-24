@@ -19,6 +19,8 @@ $reportval =@"
 [Kernel]
 $configfilepath
     .Kestrel.EndPoints.HttpsInlineCertStore =  $HttpsInlineCertStore
+$('='*60)
+
 "@
 
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

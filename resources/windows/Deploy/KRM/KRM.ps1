@@ -14,6 +14,8 @@ $reportval =@"
 $KRMConfig
 	.configuration."system.serviceModel".client |% {_.endpoint |% {_.address = _.address.replace("localhost",$CurrentIpAddr)}}
 
+$('='*60)
+
 "@
 
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

@@ -57,6 +57,8 @@ $ServiceFolderPath\appsettings.json
     .Authorization.Realm = "https://vm4-p0.bb-webapps.com:4453/"
                                                                                                     
     .Bus.CupisCallbackBusConnectionString = "host=$($env:COMPUTERNAME);username=test;password=test"
+$('='*60)
+
 "@
 
 Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8

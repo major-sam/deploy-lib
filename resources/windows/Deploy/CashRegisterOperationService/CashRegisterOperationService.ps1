@@ -27,6 +27,8 @@ $config
 			_.Args.path = "C:\logs\CashBookService\CashBookService-{Date}.log"   
 		}
 	.Kestrel.EndPoints.HttpsInlineCertStore.Certificate.Location = "LocalMachine"
+$('='*60)
+
 "@
 
 Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8

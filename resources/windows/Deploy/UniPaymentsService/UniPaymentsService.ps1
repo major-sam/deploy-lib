@@ -53,6 +53,8 @@ $ConfigPath
 			_.Port = 5003
 		}
 	}
+$('='*60)
+
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 

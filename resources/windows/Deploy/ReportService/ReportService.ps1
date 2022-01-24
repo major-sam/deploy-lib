@@ -25,5 +25,7 @@ $Config
     .configuration."system.serviceModel".services |% {_.service | % { 
         _.endpoint.address =_.endpoint.address.replace('localhost', $CurrentIpAddr)}}
 
+$('='*60)
+
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

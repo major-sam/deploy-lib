@@ -45,6 +45,8 @@ $ServiceFolderPath\appsettings.json
     .Cupis.CertThumbprint = $CupisCertThumbprint
     .Fns.BaseUrl = $FnsBaseUrl
     .Fns.Key = $FnsKey
+$('='*60)
+
 "@
 
 Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8

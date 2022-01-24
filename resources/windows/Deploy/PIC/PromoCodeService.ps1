@@ -21,6 +21,8 @@ $appSettings
 		if (_.Name -like 'File'){
 			_.Args.path=  "C:\logs\PersonalInfoCenter\PromoCodeService-{Date}.log"
 	}
+$('='*60)
+
 
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

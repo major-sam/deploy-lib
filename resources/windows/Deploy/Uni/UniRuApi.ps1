@@ -35,6 +35,8 @@ $webConfig
 	.configuration.connectionStrings.AppendChild($ConnectionStringsAdd)
 	(.configuration.Grpc.services.add | where {_.name -eq 'DefaultService' }).host = $IPAddress
 	(.configuration.Grpc.services.add | where {_.name -eq 'PromocodeAdminService' }).host = $IPAddress
+$('='*60)
+
 "@
 
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

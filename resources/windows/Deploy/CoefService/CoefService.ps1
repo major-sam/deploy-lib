@@ -30,6 +30,8 @@ $ServiceFolderPath\appsettings.json
 			_.Args.path = "C:\logs\CoefService\CoefService-{Date}.log"
 		}
 	.Settings.DataBase = "data source=localhost;initial catalog=${DataBase};Integrated Security=true;MultipleActiveResultSets=True;"
+$('='*60)
+
 "@
 
 Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8

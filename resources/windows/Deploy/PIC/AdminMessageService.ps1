@@ -9,6 +9,8 @@ $reportval =@"
 [AdminMessageService]
 $config
         .log4net.appender.file.value = "c:\logs\PersonalInfoCenter\$($svc.Directory.name)-"
+$('='*60)
+
 
 "@
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

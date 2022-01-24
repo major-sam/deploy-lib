@@ -78,6 +78,8 @@ $KernelConfig
 	.configuration."system.serviceModel".services.service |% {_.endpoint |% {_.address = _.address.replace("localhost",$CurrentIpAddr)}}
 $webLogConfig
 	.configuration.log4net.appender|%{_.file.value = "c:\logs\kernelWeb\"}
+$('='*60)
+
 "@
 
 add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

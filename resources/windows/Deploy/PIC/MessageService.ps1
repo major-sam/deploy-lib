@@ -33,6 +33,8 @@ if (test-path $logpath){
 	[MessageService]
 	$logpath
 		.log4net.appender.file.value = "c:\logs\PersonalInfoCenter\$($svc.Directory.name)-"
+$('='*60)
+
 "@
 }
 else{
@@ -52,6 +54,8 @@ else{
 		.Serilog.WriteTo| %{ if (_.Name -like 'File'){
 				_.Args.path = "C:\logs\PersonalInfoCenter\MessageService-{Date}.log"   
 			}
+$('='*60)
+
 "@
 
 }
