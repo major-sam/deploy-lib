@@ -3,6 +3,7 @@ if($env:HOMEDRIVE -like 'z:') {
 	restart-service RabbitMQ 
 	start-sleep 7
 }
+Add-LocalGroupMember -Group "Administrators" -Member "GKBALTBET\JenkinsUsers"
 #$usernames = @("GKBALTBET\TestKernel_svc")
 #
 #foreach($username in $usernames){
