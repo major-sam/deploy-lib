@@ -1,6 +1,7 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 $pathtojson = "C:\Services\Payments\PaymentCupisService\PaymentCupis.RestApi.Host\appsettings.json"
+$IPAddress = (Get-NetIPAddress -AddressFamily ipv4 | Where-Object -FilterScript { $_.interfaceindex -ne 1 }).IPAddress.trim()
 
 $config = Get-Content -Path $pathtojson -Encoding UTF8
 $config = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
