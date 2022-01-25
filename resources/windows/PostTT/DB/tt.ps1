@@ -24,6 +24,18 @@ SELECT
 FROM
 	[trading].[Proxies]
 WHERE [Username] = 'snekrasov'"
+$q2 ="
+INSERT INTO [trading].[ProxyServices]
+SELECT 
+	10,
+	Id,
+	0,
+	NULL,
+	0
+FROM
+	[trading].[Proxies]
+WHERE [Username] = 'snekrasov'"
 Invoke-Sqlcmd -Database 'TradingTool' -query $q -Verbose
 Invoke-Sqlcmd -Database 'TradingTool' -query $q0 -Verbose
 Invoke-Sqlcmd -Database 'TradingTool' -query $q1 -Verbose
+Invoke-Sqlcmd -Database 'TradingTool' -query $q2 -Verbose

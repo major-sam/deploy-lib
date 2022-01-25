@@ -1015,7 +1015,7 @@ $servicesVar = @(
 	"SUREBET",
 	"BET365",
 	"BETRADAR",
-	"BETCITY",
+	#"BETCITY",
 	"ONEXBET",
 	"FONBET",
 	"OLIMP",
