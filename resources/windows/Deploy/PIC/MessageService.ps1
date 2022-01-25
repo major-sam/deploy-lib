@@ -25,8 +25,8 @@ RestoreSqlDb -db_params $dbs
 $TaskPath =  "C:\Services\PersonalInfoCenter\MessageService\DB"
 if (test-path $TaskPath){
 	get-ChildItem $TaskPath | % {
-			write-host "Apply $_ to $($dbs[0].DbName)"
-			Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database dbs[0].DbName -InputFile $_ -ErrorAction Stop
+			write-host "Apply $($_.Fullname) to $($dbs.[0])"
+			Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database dbs[0].DbName -InputFile $_.Fullname -ErrorAction Stop
 		}
 	}
 else{
