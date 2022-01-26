@@ -50,6 +50,11 @@ IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Asterisk.S
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Pages.Prematch.IsHotEventsEnabled')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
 	VALUES (1,'Pages.Prematch.IsHotEventsEnabled','true',0)
+
+
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RemoteWebApi.PrematchService.Uri')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'Global.RemoteWebApi.PrematchService.Uri','https://#VM_HOSTNAME.bb-webapps.com:4435',0)	
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
