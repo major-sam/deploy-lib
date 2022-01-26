@@ -1,5 +1,3 @@
-$lineEventsQ = @'
-
 use BaltBetM
 SET QUOTED_IDENTIFIER ON
 go
@@ -362,7 +360,4 @@ exec sp_MSforeachtable @command1="print '?'", @command2="ALTER TABLE ? WITH CHEC
 go
 sp_msforeachtable @command1="print '?'", @command2="ALTER TABLE ? ENABLE TRIGGER  all"
 go
-'@
-
-invoke-sqlcmd -QueryTimeout 1720 -database 'BaltbetM'  -ServerInstance LOCALHOST -Query $lineEventsQ -verbose
 
