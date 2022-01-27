@@ -17,7 +17,7 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 Write-Host -ForegroundColor Green "[INFO] Edit BaltBet.TicketServiceApi configuration files..."
 $config = Get-Content -Path $pathtojson -Encoding UTF8
 $json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
-$json_appsetings.Kestrel.EndPoints.Http.Url = "${IPAddress}:5037" 
+$json_appsetings.Kestrel.EndPoints.Http.Url = "http://${IPAddress}:5037" 
 ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 
 $reportval =@"
