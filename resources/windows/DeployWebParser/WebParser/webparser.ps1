@@ -8,7 +8,7 @@ $PathToExeConfig = "$($ServicesFolder)\$($ServiceName)\WebParser.exe.config"
 Write-Host "[INFO] EDIT WebParser.exe.config..."
 [xml]$config = Get-Content -Path $PathToExeConfig
 $ServiceWebParser = $config.configuration.'system.serviceModel'.services.service | Where-Object name -eq "WebParser.ServiceWebParser"
-$ServiceWebParser.endpoint.address = "http://$($env:COMPUTERNAME):19020"
+$ServiceWebParser.endpoint.address = "http://$($env:COMPUTERNAME):9011"
 
 $BaseParserContext = $config.configuration.connectionStrings.add | Where-Object name -eq "Parser.Base.Line.ParserContext"
 $BaseParserContext.connectionString = "data source=$($env:COMPUTERNAME);Integrated Security=SSPI;initial catalog=$($ServiceName);MultipleActiveResultSets=True;"
