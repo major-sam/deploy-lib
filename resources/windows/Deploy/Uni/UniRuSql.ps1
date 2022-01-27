@@ -54,7 +54,12 @@ IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Pages.Prem
 
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RemoteWebApi.PrematchService.Uri')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Global.RemoteWebApi.PrematchService.Uri','https://#VM_HOSTNAME.bb-webapps.com:4435',0)	
+	VALUES (1,'Global.RemoteWebApi.PrematchService.Uri','https://#VM_HOSTNAME.bb-webapps.com:4435',0)
+	
+	
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'PlayerIdentificationSettings.WrongAttemptCount')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'PlayerIdentificationSettings.WrongAttemptCount','5',0)
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
