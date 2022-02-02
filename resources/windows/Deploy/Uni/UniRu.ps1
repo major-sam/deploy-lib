@@ -16,6 +16,9 @@ $webdoc = [Xml](Get-Content $webConfig)
 ($webdoc.configuration.connectionStrings.add | where {
 	$_.name -eq 'UniPaymentsServiceUrl' 
 	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:54381"
+($webdoc.configuration.connectionStrings.add | where {
+	$_.name -eq 'UniEventServiceUrl' 
+	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435"
 $webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'DefaultService' }).host = $IPAddress
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService' }).host = $IPAddress
@@ -32,6 +35,9 @@ $webConfig
 	(.configuration.connectionStrings.add | where {
 		_.name -eq 'UniPaymentsServiceUrl' 
 		}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:54381"
+	(.configuration.connectionStrings.add | where {
+		_.name -eq 'UniEventServiceUrl' 
+		}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435"	
 	$.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 	(.configuration.Grpc.services.add | where {$_.name -eq 'DefaultService' }).host = $IPAddress
 	(.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService' }).host = $IPAddress
