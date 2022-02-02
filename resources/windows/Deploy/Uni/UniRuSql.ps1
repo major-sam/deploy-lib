@@ -63,6 +63,8 @@ IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.Rem
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'PlayerIdentificationSettings.WrongAttemptCount')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
 	VALUES (1,'PlayerIdentificationSettings.WrongAttemptCount','5',0)
+
+DELETE FROM UniRu.Settings.SiteOptions WHERE NAME like '%RemoteWebApi%'
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
