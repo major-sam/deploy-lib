@@ -15,6 +15,9 @@ $webdoc = [Xml](Get-Content $apiWebConfig)
 ($webdoc.configuration.connectionStrings.add | where {
 	$_.name -eq 'DataContext' 
 	}).connectionString = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
+($webdoc.configuration.connectionStrings.add | where {
+	$_.name -eq 'UniEventServiceUrl' 
+	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435"
 $webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 $ConnectionStringsAdd = $webdoc.CreateElement('add')
 $ConnectionStringsAdd.SetAttribute("name","OAuth.LastLogoutUrl")
