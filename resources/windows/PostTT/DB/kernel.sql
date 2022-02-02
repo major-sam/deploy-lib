@@ -148,6 +148,17 @@ select [CoefTypeID]
 PRINT 'insert into CoefTypes done'
 go
 
+PRINT 'insert into EventMembers'
+insert into EventMembers
+select ct.[EventMemberId]
+      ,ct.[LineMemberId]
+      ,ct.[LineID]
+      ,ct.[DateCreate]
+       from [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.EventMembers ct
+INNER JOIN [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.Events ev on ct.LineID = ev.LineID
+where ev.EVENTSTARTTIME > GETDATE() AND ev.Live = 0
+PRINT 'insert into EventMembers done'
+go
 PRINT 'insert into LineMembers'
 INSERT INTO LineMembers([LineMemberId]
       ,[LineMemberTypeId]
@@ -338,17 +349,6 @@ select [LineID],
 from [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.Events ct 
 where ct.EventStartTime>=getdate() and ct.Live=0
 PRINT 'insert into Events done'
-go
-PRINT 'insert into EventMembers'
-insert into EventMembers
-select ct.[EventMemberId]
-      ,ct.[LineMemberId]
-      ,ct.[LineID]
-      ,ct.[DateCreate]
-       from [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.EventMembers ct
-INNER JOIN [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.Events ev on ct.LineID = ev.LineID
-where ev.EVENTSTARTTIME > GETDATE() AND ev.Live = 0
-PRINT 'insert into EventMembers done'
 go
 PRINT 'delete eventmembers'
 delete eventmembers  from eventmembers  left outer join events on events.lineid = eventmembers.lineid where events.lineid is null
