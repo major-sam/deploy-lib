@@ -11,7 +11,6 @@ Jenkins – an open source automation server which enables developers around the
 
 https://bitbucket.baltbet.ru:8445/projects/DVO/repos/deploy/diff/deploy.json?until=b92f6c87a7468e11ddd821a005630a582f11f794
 
-теперь принимает лист ps1 скриптов. Для sql я пока не сделал - обернул их в ps.
 
 в библиотеке скрипт для выполнения находится так:
  OS(агента)/StageName(или указать строку)/Параметр Name в json/параметр Stage в файлике(лист - выполняется последовательно) 
