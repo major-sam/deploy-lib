@@ -7,6 +7,7 @@ $apiPort = '50009'
 $apiPortBS = '50005'
 $pathtojson = "C:\Services\Payments\PaymentBalanceReport\appsettings.json"
 $jsonDepth = 6
+$defaultDomain = "bb-webapps.com"
 
 Write-Host -ForegroundColor Green "[info] edit json files"
 $configFile = Get-Content -Encoding UTF8 $pathtojson  -Raw 
@@ -14,8 +15,9 @@ $configFile = Get-Content -Encoding UTF8 $pathtojson  -Raw
 
 $json_appsetings = $configFile -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/'| ConvertFrom-Json
 
-$json_appsetings.Kestrel.Endpoints.Https.Url = "https://$($apiAddr):$($apiPort)"
+$json_appsetings.Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):$($apiPort)"
 $json_appsetings.Kestrel.Endpoints.Https.Certificate.Location = "LocalMachine"
+$json_appsetings.Kestrel.Endpoints.Https.Certificate.Subject = "*.bb-webapps.com"
 $json_appsetings.BalancingServiceOptions.BaseAddress = "http://$($apiAddr):$($apiPortBS)"
 $json_appsetings.KernelOptions.KernelApiBaseAddress = "http://$($apiAddr):8081"
 $json_appsetings.Serilog.WriteTo | % {
