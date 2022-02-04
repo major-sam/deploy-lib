@@ -1,7 +1,7 @@
 import-module '.\scripts\sideFunctions.psm1'
 ##### edit imorter json files
 ## mayby to env
-$logPath = "C:\Logs\Payments\BaltBet.Payment.BalancingService-.txt"
+$logPath = "C:\Logs\Payments\BaltBet.Payment.BalanceReport-.txt"
 $apiAddr =  (Get-NetIPAddress -AddressFamily IPv4 | ?{$_.InterfaceIndex -ne 1}).IPAddress.trim()
 $apiPort = '50009'
 $apiPortBS = '50005'
@@ -23,7 +23,7 @@ $json_appsetings.Serilog.WriteTo | % {
 		$_.Args.path = $logPath
 	}
 }
-$BalanceReportDir = '.\BalanceReports'
+$BalanceReportDir = 'C:\Services\Payments\PaymentBalanceReport\BalanceReports'
 $json_appsetings.BalanceReportOptions.ReportDir = $BalanceReportDir
 #New-SmbShare -Name "Balance Reports" -Path $BalanceReportDir
 $json_appsetings.BalancingServiceOptions  | Add-Member -Force -MemberType NoteProperty  -Name ZoneId -Value 1
