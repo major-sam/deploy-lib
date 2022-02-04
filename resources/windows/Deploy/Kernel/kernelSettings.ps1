@@ -22,9 +22,11 @@ $webdoc.Settings.EventCacheSettings.CoefSumCache.FileName =  "$cachePath\EventCo
 $webdoc.Settings.CurrentEventsJob.Enabled = "false"
 $webdoc.Settings.CurrentEventsJob.FileCache.FileName = "$cachePath\EventCoefsCacheJob.dat"
 $webdoc.Settings.AggregatorSettings.connection | % { $_.serviceType
-    if ($_.serviceType -iin @("StandardPaymentService", "CpsPaymentService")){
-		        $_.SetAttribute("notificationUrl","http://$($CurrentIpAddr):88/callback/baltbet" )
-				    }
+	if ($_.serviceType -iin @("StandardPaymentService")) {
+		$_.SetAttribute("GrpcAddress", "172.16.1.70:32421")
+		$_.SetAttribute("WcfAddress", "https://payments.sandbox.baltbet.com/svc/PaymentService.svc")
+		$_.SetAttribute("notificationUrl", "http://$($CurrentIpAddr):88/callback/baltbet")
+	}
 }
 $webdoc.Save($webConfig)
 ### edit Log.config

@@ -3,7 +3,7 @@ import-module '.\scripts\sideFunctions.psm1'
 ## mayby to env
 $logPath = "C:\Logs\Payments\BaltBet.Payment.BalancingService-.txt"
 $apiAddr =  (Get-NetIPAddress -AddressFamily IPv4 | ?{$_.InterfaceIndex -ne 1}).IPAddress.trim()
-$apiPort = '50001'
+$apiPort = '50005'
 $pathtojson = 'C:\Services\Payments\PaymentBalancing\BaltBet.Payment.BalancingService\appsettings.json'
 $jsonDepth = 4
 
@@ -13,9 +13,7 @@ $configFile = Get-Content $pathtojson  -Raw
 
 $json_appsetings = $configFile -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/'| ConvertFrom-Json
 
-$json_appsetings.Kestrel.Endpoints.PSObject.Properties.Remove('Https')
-$json_appsetings.Kestrel.Endpoints | Add-Member -Force -NotePropertyMembers @{ Http= @{ Url = "http://$($apiAddr):$($apiPort)" }} 
-$json_appsetings.Kestrel.Endpoints.Http.Url = "http://$($apiAddr):$($apiPort)"
+$json_appsetings.Kestrel.Endpoints.Api.Url = "http://$($apiAddr):$($apiPort)"
 $json_appsetings.Kernel.KernelApiBaseAddress = "http://$($apiAddr):8081"
 ($json_appsetings.Serilog.WriteTo|%{
 	 if($_.name -like "file"){
