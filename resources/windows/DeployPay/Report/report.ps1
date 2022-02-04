@@ -23,6 +23,8 @@ $json_appsetings.Serilog.WriteTo | % {
 		$_.Args.path = $logPath
 	}
 }
+
+New-Item -path "C:\Services\Payments\PaymentBalanceReport\BalanceReports" -Type Directory
 $BalanceReportDir = 'C:\Services\Payments\PaymentBalanceReport\BalanceReports'
 $json_appsetings.BalanceReportOptions.ReportDir = $BalanceReportDir
 #New-SmbShare -Name "Balance Reports" -Path $BalanceReportDir
