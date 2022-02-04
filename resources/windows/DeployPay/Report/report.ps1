@@ -30,7 +30,7 @@ $json_appsetings.BalancingServiceOptions  | Add-Member -Force -MemberType NotePr
 $json_appsetings.BalancingServiceOptions  | Add-Member -Force -MemberType NoteProperty  -Name Timeout -Value "00:00:30" 
 $json_appsetings.KernelOptions  | Add-Member -Force -MemberType NoteProperty  -Name Timeout -Value "00:00:30"
 
-$json_appsetings.AggregatorOptions.Aggregators.GrpcServiceAddress = "https://172.16.1.70:32420;http://172.16.1.70:32421"
+$json_appsetings.AggregatorOptions.Aggregators[0].GrpcServiceAddress = "https://172.16.1.70:32420;http://172.16.1.70:32421"
 
 ConvertTo-Json $json_appsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"
