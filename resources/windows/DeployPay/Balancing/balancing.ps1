@@ -15,10 +15,10 @@ $json_appsetings = $configFile -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace
 
 $json_appsetings.Kestrel.Endpoints.Api.Url = "http://$($apiAddr):$($apiPort)"
 $json_appsetings.Kernel.KernelApiBaseAddress = "http://$($apiAddr):8081"
-($json_appsetings.Serilog.WriteTo|%{
-	 if($_.name -like "file"){
-		 $_.Args.path = $logPath
-	  }
+($json_appsetings.Serilog.WriteTo | % {
+	if ($_.name -like "file") {
+		$_.Args.path = $logPath
+	}
 })
 $json_appsetings.ConnectionStrings.BalancingDb = "data source=localhost;initial catalog=BalancingDb;integrated security=True;MultipleActiveResultSets=True;"
 $json_appsetings.Swagger.Enabled = $false
@@ -35,10 +35,10 @@ $configFile = Get-Content $pathtojson  -Raw
 $json_appsetings = $configFile -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/'| ConvertFrom-Json
 $json_appsetings.PSObject.Properties.Remove('Kestrel')
 $json_appsetings.Balancing.Address = "http://$($apiAddr):$($apiPort)"
-($json_appsetings.Serilog.WriteTo|%{
-	 if($_.name -like "file"){
-		 $_.Args.path = $logPath
-	  }
+($json_appsetings.Serilog.WriteTo | % {
+	if ($_.name -like "file") {
+		$_.Args.path = $logPath
+	}
 })
 ConvertTo-Json $json_appsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"
