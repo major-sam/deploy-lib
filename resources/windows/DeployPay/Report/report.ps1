@@ -28,6 +28,7 @@ $json_appsetings.Serilog.WriteTo | % {
 
 New-Item -path "C:\Services\Payments\PaymentBalanceReport\BalanceReports" -Type Directory
 $BalanceReportDir = 'C:\Services\Payments\PaymentBalanceReport\BalanceReports'
+$json_appsetings.BalanceReportOptions.Cron = "1 1 12 * * ?"
 $json_appsetings.BalanceReportOptions.ReportDir = $BalanceReportDir
 #New-SmbShare -Name "Balance Reports" -Path $BalanceReportDir
 $json_appsetings.BalancingServiceOptions  | Add-Member -Force -MemberType NoteProperty  -Name ZoneId -Value 1
