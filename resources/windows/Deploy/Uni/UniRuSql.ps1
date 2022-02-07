@@ -44,7 +44,7 @@ IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Asterisk.L
 	VALUES (1,'Asterisk.Login','site',0)
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Asterisk.Secret')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Asterisk.Secret','hzccIuSfo1rMgVBU',0)
+	VALUES (1,'Asterisk.Secret',$env:AsteriskSeceret,0)
 
 
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Pages.Prematch.IsHotEventsEnabled')
