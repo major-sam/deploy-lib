@@ -1,5 +1,6 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
+$IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 $q = "
 UPDATE [UniRu].Settings.SiteOptions SET Value = CASE Name
 WHEN 'Global.CKFinderSettings.ImageHost' THEN 'https://#VM_HOSTNAME.bb-webapps.com:443'
