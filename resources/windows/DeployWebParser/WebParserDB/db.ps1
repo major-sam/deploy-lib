@@ -5,20 +5,20 @@ $ServiceName = "WebParser"
 $PathToTaskScripts = "$($ServicesFolder)\$($ServiceName)\DB Script"
 $db = @(
 	@{
-		DbName = $ServiceName
+		DbName = "Parser"
 		BackupFile = "\\server\tcbuild$\Testers\DB\Parser\Parser.bak"
 		RelocateFiles = @(
 			@{
 				SourceName = "ParserNew"
-				FileName = "$($ServiceName).mdf"
+				FileName = "Parser.mdf"
 			}
 			@{
 				SourceName = "ParserNew_log"
-				FileName = "$($ServiceName)_log.ldf"
+				FileName = "Parserlog.ldf"
 			}
 			@{
 				SourceName = "ParserNew_Log2"
-				FileName = "$($ServiceName)_LOg2.ldf"
+				FileName = "Parser_LOg2.ldf"
 			}
 		)
 	}
@@ -34,5 +34,5 @@ if (!(Get-ChildItem "$($PathToTaskScripts)\*" -include "*.sql")) {
 
 foreach ($file in (Get-ChildItem "$($PathToTaskScripts)\*" -include "*.sql")){
     Write-Host -ForegroundColor Green "[INFO] Invoke $($file.Name) script..."
-    Invoke-Sqlcmd  -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database $ServiceName -InputFile $file.FullName -Verbose -ErrorAction continue
+    Invoke-Sqlcmd  -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database "Parser" -InputFile $file.FullName -Verbose -ErrorAction continue
 }
