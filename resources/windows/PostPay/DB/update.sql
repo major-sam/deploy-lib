@@ -1,16 +1,16 @@
 USE [BalancingDb]
 GO
-SET IDENTITY_INSERT [balancing].[CardMasks] ON 
-GO
-INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (1, N'Visa', N'Visa', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
-GO
-INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (2, N'Mastercard', N'Mastercard', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
-GO
-INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (3, N'MIR', N'MIR', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
-GO
-INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (4, N'Maestro', N'Maestro', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
-GO
-SET IDENTITY_INSERT [balancing].[CardMasks] OFF
+--SET IDENTITY_INSERT [balancing].[CardMasks] ON 
+--GO
+----INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (1, N'Visa', N'Visa', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
+----GO
+----INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (2, N'Mastercard', N'Mastercard', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
+----GO
+----INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (3, N'MIR', N'MIR', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
+----GO
+--INSERT [balancing].[CardMasks] ([Id], [Name], [IssuerKey], [CreationTimestamp]) VALUES (4, N'Maestro', N'Maestro', CAST(N'2022-02-07T10:34:14.0899685' AS DateTime2))
+--GO
+--SET IDENTITY_INSERT [balancing].[CardMasks] OFF
 GO
 SET IDENTITY_INSERT [balancing].[IntentItems] ON 
 GO
