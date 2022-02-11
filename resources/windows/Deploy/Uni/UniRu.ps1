@@ -22,6 +22,18 @@ $webdoc = [Xml](Get-Content $webConfig)
 $webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'DefaultService' }).host = $IPAddress
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService' }).host = $IPAddress
+#configuration.appSettings.SelectNodes add node enable swagger   
+$targetNode = $webdoc.configuration.appSettings.SelectNodes("add[@key='webapi:EnableSwagger']")
+if($targetNode.Count){
+    write-host 'remove old nodes'
+    foreach($node in $targetNode){$node.ParentNode.RemoveChild($node)}
+}
+write-host 'creating node'
+$webdoc.configuration.appSettings.add| fc
+$new = $webdoc.CreateElement("add")
+$new.SetAttribute("key","webapi:EnableSwagger")
+$new.SetAttribute( "value","false")
+$webdoc.configuration.appSettings.AppendChild($new)
 $webdoc.Save($webConfig)
 
 $reportval =@"
