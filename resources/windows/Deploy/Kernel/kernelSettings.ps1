@@ -26,7 +26,7 @@ $webdoc.Settings.AggregatorSettings.connection | % { $_.serviceType
 		$_.SetAttribute("AuthCertThumbprint", "$env:CLIENT_TEST_KERNEL_THUMBPRINT")
 		$_.SetAttribute("GrpcAddress", "172.16.1.70:32421")
 		$_.SetAttribute("WcfAddress", "https://payments.sandbox.baltbet.com/svc/PaymentService.svc")
-		$_.SetAttribute("notificationUrl", "http://$($CurrentIpAddr):88/callback/baltbet")
+		$_.SetAttribute("NotificationUrl", "http://$($CurrentIpAddr):88/callback/baltbet")
 	}
 }
 $webdoc.Save($webConfig)
