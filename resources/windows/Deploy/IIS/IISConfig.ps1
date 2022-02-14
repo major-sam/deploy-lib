@@ -54,7 +54,7 @@ $IISPools = @(
             userName="$username";password="$pass";identitytype=3
             }
         Bindings= @(
-                @{protocol='https';bindingInformation="*:$($apiPort):"}
+                @{protocol='https';bindingInformation="*:50002:"}
             )
 		CertPath = 'Cert:\LocalMachine\My\38be86bcf49337804643a671c4c56bc4224c6606'
 			rootDir = 'C:\Services\Payments\PaymentBalancing'

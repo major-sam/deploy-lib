@@ -59,7 +59,6 @@ def lookupBranchInNexus (repoName, task){
 				)
 		def repoMap = new JsonSlurperClassic().parseText(text)
 		def boolean foundIt = repoMap.items.size() > 0
-		println (foundIt ? "found ${task}" : "not found ${task}" ) 
 		return foundIt
 	}
 }
@@ -139,7 +138,7 @@ def doMavenDeploy(taskBranch){
 			returnStdout: true)
 		def packageVersion = powershell (
 			script:"(Get-ChildItem -Directory (Get-ChildItem -Directory .\\.mvn\\${service}| Select-Object -First 1).FullName).name", 
-			label: 'find service ' + service + ' version', 
+			label: 'find service:' + service + ', branch:'+ packageBranch , 
 			returnStdout: true)
 		resultList << [
 			Repo: service,
