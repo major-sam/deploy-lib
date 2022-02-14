@@ -6,7 +6,7 @@ $targetDir = "C:\Services\AccountStatisticsService\${serviceName}"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
-$assGrpcPort = 5015
+$assGrpcPort = 5038
 
 Write-host "[INFO] Start ${serviceName} deploy script"
 Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
