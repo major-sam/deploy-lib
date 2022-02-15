@@ -1,9 +1,9 @@
 import-module '.\scripts\sideFunctions.psm1'
 $picRoot = 'c:\Services\PersonalInfoCenter'
 $serviceBins = @(
-		"$($picRoot)\MessageService\MessageService.Host.exe" , 
-		"$($picRoot)\PromoCodeService\BaltBet.PromoCodeService.Host.exe" , 
-		"$($picRoot)\PushService\BaltBet.PushService.Host.exe")
+		Get-ChildItem -Recurse -Filter *.exe -Depth 2 $picRoot |%  {$_.fullname} | ?
+			{$_ -inotlike "*AdminMessageService*"}
+)
 $serviceBins | % {
 	$sname = RegisterWinService(get-item -path $_)
 	start-Service $sname
