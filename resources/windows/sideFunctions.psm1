@@ -99,18 +99,25 @@ function RestoreSqlDb($db_params) {
 	write-output "mssql data:" $MSSQLDataPath
 	foreach ($db in $db_params){
 		$RelocateFile = @() 
+        $dt = Invoke-Sqlcmd "restore filelistonly from disk='$($db.BackupFile)'"
         $dbname = $db.DbName
-		if ($db.ContainsKey('RelocateFiles')){
-			foreach ($dbFile in $db.RelocateFiles) {
-				$RelocateFile += New-Object Microsoft.SqlServer.Management.Smo.RelocateFile($dbFile.SourceName, ("{0}\{1}" -f $MSSQLDataPath, $dbFile.FileName))
-			}
-            write-output $db.BackupFile
-			Restore-SqlDatabase -Verbose -ServerInstance $env:COMPUTERNAME -Database $db.DbName -BackupFile $db.BackupFile -RelocateFile $RelocateFile -ReplaceDatabase
-			Push-Location C:\Windows
-		}else{
-			Restore-SqlDatabase -Verbose -ServerInstance $env:COMPUTERNAME -Database $db.DbName -BackupFile $db.BackupFile -ReplaceDatabase
-			Push-Location C:\Windows			
-		}
+        foreach ($r in $dt){
+            $RelocateFile += New-Object Microsoft.SqlServer.Management.Smo.RelocateFile(
+                    $r.LogicalName , ("{0}{1}_{2}" -f $MSSQLDataPath,$dbname,$r.LogicalName)
+                )
+        }
+        Restore-SqlDatabase -Verbose -ServerInstance $env:COMPUTERNAME -Database $db.DbName -BackupFile $db.BackupFile -RelocateFile $RelocateFile -ReplaceDatabase
+        Push-Location C:\Windows			
+## legacy		if ($db.ContainsKey('RelocateFiles')){
+## legacy			foreach ($dbFile in $db.RelocateFiles) {
+## legacy				$RelocateFile += New-Object Microsoft.SqlServer.Management.Smo.RelocateFile($dbFile.SourceName, ("{0}{1}" -f $MSSQLDataPath, $dbFile.FileName))
+## legacy			}
+## legacy            write-output $db.BackupFile
+## legacy			Push-Location C:\Windows
+## legacy		}else{
+## legacy			Restore-SqlDatabase -Verbose -ServerInstance $env:COMPUTERNAME -Database $db.DbName -BackupFile $db.BackupFile -ReplaceDatabase
+## legacy			Push-Location C:\Windows			
+## legacy		}
 	}
 }
 
