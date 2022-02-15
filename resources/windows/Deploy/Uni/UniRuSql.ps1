@@ -66,6 +66,20 @@ IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'PlayerIden
 	VALUES (1,'PlayerIdentificationSettings.WrongAttemptCount','5',0)
 
 DELETE FROM UniRu.Settings.SiteOptions WHERE NAME like '%RemoteWebApi%'
+
+
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.SetkaCup.StreamUrl')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'BroadcastSettings.SetkaCup.StreamUrl','https://#VM_HOSTNAME.bb-webapps.com:4443/broadcast/setkacup/{matchId}',0)
+
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.MatchTv.StreamUrl')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'BroadcastSettings.MatchTv.StreamUrl','https://#VM_HOSTNAME.bb-webapps.com:4443/dm-mobileapp/broadcast/matchtv/{matchId}',0)
+
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.Rfpl.StreamUrl')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'BroadcastSettings.Rfpl.StreamUrl','https://#VM_HOSTNAME.bb-webapps.com:4443/dm-mobileapp/broadcast/umamedia/{matchId}',0)
+
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
