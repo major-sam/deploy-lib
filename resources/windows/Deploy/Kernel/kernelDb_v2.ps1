@@ -7,56 +7,14 @@ $dbs = @(
 	@{
 		DbName = "BaltBetM"
 		BackupFile = "\\server\tcbuild$\Testers\DB\_jenkins\BaltbetM.bak"
-		RelocateFiles = @(
-			@{
-				SourceName = "BaltBetM"
-				FileName = "BaltBetM.mdf"
-			}
-			@{
-				SourceName = "CoefFileGroup"
-				FileName = "CoefFileGroup.mdf"
-			}
-			@{
-				SourceName = "BaltBet"
-				FileName = "BaltBet.ldf"
-			}
-		)
 	}
 	@{
 		DbName = "BaltBetMMirror"
 		BackupFile = "\\server\tcbuild$\Testers\DB\_jenkins\BaltbetM.bak"
-		RelocateFiles = @(
-			@{
-				SourceName = "BaltBetM"
-				FileName = "BaltBetMMirror.mdf"
-			}
-			@{
-				SourceName = "CoefFileGroup"
-				FileName = "CoefFileGroupMirror.mdf"
-			}
-			@{
-				SourceName = "BaltBet"
-				FileName = "BaltBetMirror.ldf"
-			}
-		)
 	}
 	@{
 		DbName = "BaltBetWeb"
 		BackupFile = "\\server\tcbuild$\Testers\DB\_jenkins\BaltbetWeb.bak"
-		RelocateFiles = @(
-			@{
-				SourceName = "BaltBetWeb"
-				FileName = "BaltBetWeb.mdf"
-			}
-			@{
-				SourceName = "Files"
-				FileName = "Files"
-			}
-			@{
-				SourceName = "BaltBetWeb_log"
-				FileName = "BaltBetWeb.ldf"
-			}
-		)
 	}
 )
 Write-Host -ForegroundColor Green "[INFO] Create dbs"
