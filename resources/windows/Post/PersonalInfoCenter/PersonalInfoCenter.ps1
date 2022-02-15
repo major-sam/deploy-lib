@@ -1,7 +1,7 @@
 import-module '.\scripts\sideFunctions.psm1'
 $picRoot = 'c:\Services\PersonalInfoCenter'
 $serviceBins = @(
-		"$($picRoot)\MessageService\BaltBet.MessageService.Host.exe" , 
+		"$($picRoot)\MessageService\MessageService.Host.exe" , 
 		"$($picRoot)\PromoCodeService\BaltBet.PromoCodeService.Host.exe" , 
 		"$($picRoot)\PushService\BaltBet.PushService.Host.exe")
 $serviceBins | % {
