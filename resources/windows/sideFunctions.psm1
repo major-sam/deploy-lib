@@ -193,7 +193,6 @@ function RegisterWinService($serviceBin){
 	write-host "set $sname credentials"
 	$service = gwmi win32_service -filter "name='$sname'"
 	$service.Change($Null, $Null, $Null, $Null, $Null, $Null, $ENV:SERVICE_CREDS_USR, $ENV:SERVICE_CREDS_PSW)| Out-Null
-	write-host "$sname registred. Starting..."
 	return $sname
 }
 

@@ -6,6 +6,7 @@ start-Service $sname
 Set-Recovery -ServiceDisplayName $sname -Server $env:COMPUTERNAME
 $serviceBin = Get-Item  "C:\KernelWeb\KernelWeb.exe"
 $sname = RegisterWinService($serviceBin)
-start-Service $sname
+write-host "$sname registred. Starting..."
+(get-service $sname).start()
 Set-Recovery -ServiceDisplayName $sname -Server $env:COMPUTERNAME
  return 0
