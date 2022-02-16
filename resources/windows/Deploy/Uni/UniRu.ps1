@@ -34,6 +34,10 @@ $new = $webdoc.CreateElement("add")
 $new.SetAttribute("key","webapi:EnableSwagger")
 $new.SetAttribute( "value","false")
 $webdoc.configuration.appSettings.AppendChild($new)
+(($webdoc.configuration.ckfinder.backends.backend|	where {
+	$_.name -ilike "default"
+	}).option| where {
+		$_.name -ilike 'root'}).value = 'c:\inetpub\images'
 $webdoc.Save($webConfig)
 
 $reportval =@"
