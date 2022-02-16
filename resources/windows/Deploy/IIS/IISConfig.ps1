@@ -283,7 +283,7 @@ $IISPools = @(
     }
     @{
         SiteName = 'BaltBet.AccountStatisticsService.Host'
-        RuntimeVersion = $RuntimeVersion
+        RuntimeVersion = ''
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }
@@ -296,7 +296,7 @@ $IISPools = @(
     }
     @{
         SiteName = 'UniBonusService'
-        RuntimeVersion = $RuntimeVersion
+        RuntimeVersion = ''
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }
