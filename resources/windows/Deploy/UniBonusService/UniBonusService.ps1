@@ -1,4 +1,4 @@
-Import-module '.\sideFunctions.psm1'
+Import-module '.\scripts\sideFunctions.psm1'
 
 $ServiceName = "UniBonusService"
 $targetDir = "C:\Services\$($ServiceName)"
