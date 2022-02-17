@@ -12,6 +12,12 @@ Import-module '.\scripts\sideFunctions.psm1'
 
 $ServiceName = "BaltBet.CupisIntegrationService.GrpcHost"
 $ServiceFolderPath = "C:\Services\CupisIntegrationService\${ServiceName}"
+if (test-path $ServiceFolderPath){
+    Write-Host 'LEGACY GRPC HOST'
+}
+else{
+    exit 0
+}
 
 # Редактируем конфиг
 Write-Host -ForegroundColor Green "[INFO] Print BaltBet.CupisIntegrationService.GrpcHost configuration files..."
