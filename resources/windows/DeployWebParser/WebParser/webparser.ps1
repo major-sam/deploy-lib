@@ -11,7 +11,7 @@ $ServiceWebParser = $config.configuration.'system.serviceModel'.services.service
 $ServiceWebParser.endpoint.address = "http://$($env:COMPUTERNAME):9011"
 
 $BaseParserContext = $config.configuration.connectionStrings.add | Where-Object name -eq "Parser.Base.Line.ParserContext"
-$BaseParserContext.connectionString = "data source=$($env:COMPUTERNAME);Integrated Security=SSPI;initial catalog=$($ServiceName);MultipleActiveResultSets=True;"
+$BaseParserContext.connectionString = "data source=$($env:COMPUTERNAME);Integrated Security=SSPI;initial catalog=Parser;MultipleActiveResultSets=True;"
 
 $RabbitConnection = $config.configuration.connectionStrings.add | Where-Object name -eq "RabbitConnection"
 $RabbitConnection.connectionString = "host=$($env:COMPUTERNAME):5672; username=test; password=test; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
