@@ -1,4 +1,5 @@
-$q  = @'DECLARE @MinDate datetime
+$q  = @'
+DECLARE @MinDate datetime
 
 SELECT @MinDate = MIN(EventStartTime) FROM EVENTS WHERE LineID <>1
 
