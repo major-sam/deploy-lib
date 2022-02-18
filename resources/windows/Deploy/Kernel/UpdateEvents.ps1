@@ -15,4 +15,4 @@ BetEndDate = DATEADD(DAY, @DateDiff, BetEndDate)
 WHERE LineID <>1
 '@
 
-Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database 'BaltVBetM' -query $q -ErrorAction Stop
+Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database 'BaltBetM' -query $q -ErrorAction Stop
