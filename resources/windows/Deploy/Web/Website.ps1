@@ -22,6 +22,21 @@ $webdoc.configuration.appSettings.add | %{ if ($_.key -eq "ClientId"){
 	Where-Object key -eq "IsRegistrationCaptchaEnabled").value = "false"
 ($webdoc.configuration.connectionStrings.add | 
 	Where-Object name -eq "UniPaymentsServiceUrl").connectionString = "https://${env:COMPUTERNAME}.$($wildcardDomain):54381"
+
+# Добавляем/изменяем параметр BaseRedirectUniUrl
+$BaseRedirectUniUrl = ($webdoc.configuration.appSettings.add | Where-Object key -eq "BaseRedirectUniUrl")
+if ($BaseRedirectUniUrl) {
+	Write-Host "[INFO] BaseRedirectUniUrl exists, change value"
+	($webdoc.configuration.appSettings.add | Where-Object key -eq "BaseRedirectUniUrl").value = "https://${env:COMPUTERNAME}.$($wildcardDomain):4443"
+} else {
+	Write-Host "[INFO] BaseRedirectUniUrl does not exits, add new element"
+	$webdoc.configuration.appSettings.add | Format-Custom
+	$new = $webdoc.CreateElement("add")
+	$new.SetAttribute("key", "BaseRedirectUniUrl")
+	$new.SetAttribute("value", "https://${env:COMPUTERNAME}.$($wildcardDomain):4443")
+	$webdoc.configuration.appSettings.AppendChild($new)
+}
+	
 if(Get-Member -inputobject $webdoc.configuration -name 'system.serviceModel' -Membertype Properties){
 	$webdoc.configuration.'system.serviceModel'.client.endpoint.address = "net.tcp://$($CurrentIpAddr):8150/PromoManager"
 }
