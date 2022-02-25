@@ -7,7 +7,7 @@ $pathtojson = "$targetDir\appsettings.json "
 ###### edit json files
 
 Write-Host -ForegroundColor Green "[info] edit json files"
-$json_appsetings = Get-Content -Raw -path $pathtojson | ConvertFrom-Json 
+$json_appsetings = Get-Content -Raw -path $pathtojson | % { $_ -replace '[\s^]//.*', "" } | ConvertFrom-Json 
 $HttpsInlineCertStore = '
     {     }
 '| ConvertFrom-Json 
