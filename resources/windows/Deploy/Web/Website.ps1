@@ -36,6 +36,9 @@ if ($BaseRedirectUniUrl) {
 	$new.SetAttribute("value", "https://${env:COMPUTERNAME}.$($wildcardDomain):4443")
 	$webdoc.configuration.appSettings.AppendChild($new)
 }
+
+$webdoc.configuration.Grpc.Services.add | %{ if ($_.name -eq "TicketService"){
+	$_.host = $CurrentIpAddr; $_.port = "5037"}}
 	
 if(Get-Member -inputobject $webdoc.configuration -name 'system.serviceModel' -Membertype Properties){
 	$webdoc.configuration.'system.serviceModel'.client.endpoint.address = "net.tcp://$($CurrentIpAddr):8150/PromoManager"
