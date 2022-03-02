@@ -24,9 +24,9 @@ $json_appsetings.Serilog.WriteTo | % { if ($_.Name -like 'File') {
 }
 
 # Правим настройки Kestrel и Grpc
-$json_appsetings.Kestrel.EndPoints.Https.Certificate.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${ccKestrelPort}/"
-$json_appsetings.Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
-$json_appsetings.Kestrel.EndPoints.GRPC.Url = "http://localhost:${ccGrpcPort}/"
+$json_appsetings.Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${ccKestrelPort}/"
+$json_appsetings.Kestrel.Endpoints.Https.Certificate.Subject = "*.bb-webapps.com"
+$json_appsetings.Kestrel.Endpoints.GRPC.Url = "http://localhost:${ccGrpcPort}/"
 
 ConvertTo-Json $json_appsetings -Depth 4 | Format-Json | Set-Content $pathtojson -Encoding UTF8
 
