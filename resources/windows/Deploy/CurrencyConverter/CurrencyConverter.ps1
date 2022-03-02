@@ -28,6 +28,14 @@ $json_appsetings.Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($
 $json_appsetings.Kestrel.Endpoints.Https.Certificate.Subject = "*.bb-webapps.com"
 $json_appsetings.Kestrel.Endpoints.GRPC.Url = "http://localhost:${ccGrpcPort}/"
 
+# Добавляем пользователя
+Write-Host -ForegroundColor Green "[INFO] Add $($env:DEPLOYUSER) to AllowedUsers list..."
+$AllowedUsers = @(
+    "GKBALTBET\achudov"
+)
+$AllowedUsers += "GKBALTBET\$($env:DEPLOYUSER)"
+$json_appsetings.AllowedUsers = $AllowedUsers
+
 ConvertTo-Json $json_appsetings -Depth 4 | Format-Json | Set-Content $pathtojson -Encoding UTF8
 
 $reportVal = @"
@@ -36,7 +44,7 @@ $config
 	.Serilog.WriteTo| %{ if (_.Name -like 'File'){
 			_.Args.path = "C:\Logs\${ServiceName}\${ServiceName}.log" 
 		}
-    .Kestrel.EndPoints.Https.Certificate.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${ccKestrelPort}/"
+    .Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${ccKestrelPort}/"
     .Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
     .Kestrel.EndPoints.GRPC.Url = "http://localhost:${ccGrpcPort}/"
 $('='*60)
