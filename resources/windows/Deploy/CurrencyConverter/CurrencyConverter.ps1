@@ -19,7 +19,7 @@ $json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?
 
 # Правим путь к лог файлу
 $json_appsetings.Serilog.WriteTo | % { if ($_.Name -like 'File') {
-        $_.Args.path = "C:\Logs\${ServiceName}\${ServiceName}.log"   
+        $_.Args.path = "C:\Logs\${ServiceName}\${ServiceName}-.log"   
     }
 }
 
