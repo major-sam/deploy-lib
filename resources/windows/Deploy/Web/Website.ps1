@@ -37,7 +37,7 @@ if ($BaseRedirectUniUrl) {
 	$webdoc.configuration.appSettings.AppendChild($new)
 }
 
-$webdoc.configuration.Grpc.add | %{ if ($_.name -eq "TicketService"){
+$webdoc.configuration.Grpc.Services.add | %{ if ($_.name -eq "TicketService"){
 	$_.host = $CurrentIpAddr; $_.port = "5037"}}
 	
 if(Get-Member -inputobject $webdoc.configuration -name 'system.serviceModel' -Membertype Properties){

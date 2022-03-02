@@ -25,7 +25,7 @@ $webdoc = [Xml](Get-Content -Encoding UTF8 $webConfig)
 	$_.key -like "IsSuperexpressEnabled"}).value = "true"
 $webdoc.configuration.'system.serviceModel'.client.endpoint | ForEach-Object {
 	$_.address = ($_.address).replace("localhost","$($CurrentIpAddr)") }
-$webdoc.configuration.Services.add | %{ if ($_.name -eq "TicketService"){
+$webdoc.configuration.Grpc.Services.add | %{ if ($_.name -eq "TicketService"){
 	$_.host = $CurrentIpAddr; $_.port = "5037"}}
 $webdoc.configuration.'system.web'.sessionState.RemoveAllAttributes()
 foreach ($attr in $attrs.GetEnumerator()) {    
