@@ -6,7 +6,7 @@ $ifKernekConfigExist = (Test-Path -Path $configFile)
 
 $config = [xml](Get-Content -Path $configFile -Encoding utf8)
 
-$PaymentConverter = ($config.Settings.PaymentConverterSettings | Where-Object serverAddress -ne $null) | Out-Null
+$PaymentConverter = ($config.Settings.PaymentConverterSettings | Where-Object serverAddress -ne $null)
 
 if($ifKernekConfigExist) {
     Write-Host -ForegroundColor Green "[INFO] ${configFile} exists."
