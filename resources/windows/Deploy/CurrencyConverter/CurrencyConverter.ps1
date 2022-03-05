@@ -27,6 +27,7 @@ $json_appsetings.Serilog.WriteTo | % { if ($_.Name -like 'File') {
 $json_appsetings.Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${ccKestrelPort}/"
 $json_appsetings.Kestrel.Endpoints.Https.Certificate.Subject = "*.bb-webapps.com"
 $json_appsetings.Kestrel.Endpoints.GRPC.Url = "http://localhost:${ccGrpcPort}/"
+$json_appsetings.RatesSchedulerOptions.RunOnServiceStart = $true
 
 # Добавляем пользователя
 Write-Host -ForegroundColor Green "[INFO] Add $($env:DEPLOYUSER) to AllowedUsers list..."
@@ -47,6 +48,7 @@ $config
     .Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${ccKestrelPort}/"
     .Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
     .Kestrel.EndPoints.GRPC.Url = "http://localhost:${ccGrpcPort}/"
+    .RatesSchedulerOptions.RunOnServiceStart = $true
 $('='*60)
 
 "@
