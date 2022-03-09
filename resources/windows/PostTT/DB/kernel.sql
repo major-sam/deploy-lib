@@ -156,7 +156,7 @@ select ct.[EventMemberId]
       ,ct.[DateCreate]
        from [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.EventMembers ct
 INNER JOIN [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.Events ev on ct.LineID = ev.LineID
-where ev.EVENTSTARTTIME > GETDATE() AND ev.Live = 0
+where ev.EVENTSTARTTIME > GETDATE() -3 AND ev.Live = 0
 PRINT 'insert into EventMembers done'
 go
 PRINT 'insert into LineMembers'
@@ -347,7 +347,7 @@ select [LineID],
 	[IsBetFinished],
 	[EventTypeID] 
 from [srvapkbb3.gkbaltbet.local].BaltBetM.dbo.Events ct 
-where ct.EventStartTime>=getdate() and ct.Live=0
+where ct.EventStartTime>=getdate() -3 and ct.Live=0
 PRINT 'insert into Events done'
 go
 PRINT 'delete eventmembers'
