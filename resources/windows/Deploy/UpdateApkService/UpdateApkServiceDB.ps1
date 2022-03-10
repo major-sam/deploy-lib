@@ -10,7 +10,7 @@ CreateSqlDatabase($dbname)
 # Выполняем скрипт инициализации
 $initScript = "${initScriptFolder}\DeployDb.sql"
 if(Test-Path $initScript) {
-    Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database $dbname -InputFile $script -ErrorAction continue
+    Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database $dbname -InputFile $initScript -ErrorAction continue
 } else {
     Write-Host -ForegroundColor Green "[WARN] There is no ${initScript} "
     #exit 1
