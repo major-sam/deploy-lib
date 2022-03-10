@@ -1,6 +1,6 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
-$dbname = "UpdateApk"
+$dbname = "UpdateApkService"
 $initScriptFolder = "C:\Services\UpdateApk\DB"
 
 
@@ -8,7 +8,7 @@ $initScriptFolder = "C:\Services\UpdateApk\DB"
 CreateSqlDatabase($dbname)
 
 # Выполняем скрипт инициализации
-$initScript = "${initScriptFolder}\InitDb.sql"
+$initScript = "${initScriptFolder}\DeployDb.sql"
 if(Test-Path $initScript) {
     Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database $dbname -InputFile $script -ErrorAction continue
 } else {
@@ -16,7 +16,7 @@ if(Test-Path $initScript) {
     #exit 1
 }
 
-# Выполняем остальные скрипты
+<# Выполняем остальные скрипты
 if (Test-Path $initScriptFolder) {
     foreach ($script in (Get-Item -Path $initScriptFolder\* -Include "*.sql" -Exclude "InitDb.sql").FullName | Sort-Object ) {    
         Write-Host -ForegroundColor Green "[INFO] Execute $script on $dbname"
@@ -25,3 +25,4 @@ if (Test-Path $initScriptFolder) {
 } else {
     Write-Host -ForegroundColor Green "[INFO] There is no Tasks folder"
 }
+#>
