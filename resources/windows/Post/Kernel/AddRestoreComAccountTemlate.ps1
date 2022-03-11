@@ -1,5 +1,4 @@
 # Добавляем email шаблон в [BaltBetM].[Emails].[EmailTemplates] для RestoreComAccount
-#$restoreComAccountTemplate = Get-Content -Path ".\resources\windows\Post\Kernel\RestoreComAccountTemplate.html" -Encoding utf8
 $restoreComAccountTemplate = Get-Content -Path ".\RestoreComAccountTemplate.html" -Encoding utf8
 
 $query = "
