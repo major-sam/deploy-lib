@@ -84,7 +84,10 @@ def getNexusBranch (repoName, userTask){
 def updatePom(services, branchTask){
 	services.each{ 
 		nexusLookup = getNexusBranch(it, branchTask)
-		if (nexusLookup){
+		if (nexusLookup == 'master'){
+			return
+		}
+		else if (nexusLookup){
 			powershell (
 				script: '''
 				\$pom= "'''+ "${env.WORKSPACE}\\deployPom.xml" +'''"
@@ -116,7 +119,7 @@ def getPomServices(){
 			 Write-Output ($artifacts -join ",")''',
 		 encoding: 'UTF8').split(',') as List
 	services[-1] = services[-1].replaceAll("[^A-Za-z0-9]", "")
-	return services
+	return services.sort()
 }
 
 def doMavenDeploy(taskBranch){
@@ -132,21 +135,20 @@ def doMavenDeploy(taskBranch){
 			]){
 		powershell "mvn clean versions:use-latest-releases dependency:unpack -s MAVEN_SETTINGS.xml -f deployPom.xml ${deployParams}"
 	}
-	services.each { service -> 
-		def packageBranch = powershell (
-			script:"(Get-ChildItem -Directory .\\.mvn\\${service}| Select-Object -First 1).name", 
+	result = powershell(
+			script:"""
+				\$svc = "${services.join(',')}".Split(',')
+				Get-ChildItem -Directory .\\.mvn | % {
+					if (\$_ -iin \$svc){
+						\$branch =  Get-ChildItem -Directory \$_.FullName
+						\$ver = Get-ChildItem -Directory \$branch.FullName
+						write-output "=========`n\$_ :`n`t\$branch - \$ver"
+					}
+				}
+			""", 
+			label: 'get bundle',
 			returnStdout: true)
-		def packageVersion = powershell (
-			script:"(Get-ChildItem -Directory (Get-ChildItem -Directory .\\.mvn\\${service}| Select-Object -First 1).FullName).name", 
-			label: 'find service:' + service + ', branch:'+ packageBranch , 
-			returnStdout: true)
-		resultList << [
-			Repo: service,
-			Branch: packageBranch.trim(),
-			Version: packageVersion.trim()
-		]
-	}
-	return resultList
+	return """$result"""
 }
 
 def doSingleServiceMavenDeploy(Map config = [:]){
@@ -170,11 +172,12 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 				taskBranch+" | Select-Object -First 1).name", 
 				returnStdout: true
 				)
-		return [
-			Repo: config.groupId,
-			Branch: taskBranch,
-			Version: packageVersion.trim()
-		]
+		return """
+		============
+			Repo: ${config.groupId},
+			Branch: $taskBranch,
+			Version: ${packageVersion.trim()}
+		"""
 	}
 	else{
 		error ("${config.groupId} repo has no master branch")
