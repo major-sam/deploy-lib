@@ -309,7 +309,7 @@ $IISPools = @(
     }
     @{
         SiteName = 'UpdateApkService'
-        RuntimeVersion = ''
+        RuntimeVersion = 'v4.0'
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3
             }
