@@ -345,8 +345,14 @@ Set-WebConfigurationProperty -Filter "system.applicationHost/sites/site[@name='$
 
 C:\Windows\system32\inetsrv\appcmd.exe set config "images" /section:directorybrowse /enabled:true
 
-$SiteName = "BaltBet.Payment.BalancingService.Blazor"
+$sitesToChangeAuthentication = @(
+    "BaltBet.Payment.BalancingService.Blazor",
+    "UpdateApkService"
+)
 
-Set-WebConfigurationProperty -Filter '/system.webServer/security/authentication/anonymousAuthentication' -Name 'enabled' -Value 'false' -PSPath 'IIS:\' -Location $SiteName
-Set-WebConfigurationProperty -Filter "/system.webServer/security/authentication/windowsAuthentication" -Name 'Enabled' -Value 'True' -PSPath 'IIS:\' -Location $SiteName
-
+foreach ($siteName in $sitesToChangeAuthentication) {
+    Write-Host "[INFO] Disable anonymous authentication for $siteName"
+    Set-WebConfigurationProperty -Filter "/system.webServer/security/authentication/anonymousAuthentication" -Name "enabled" -Value "false" -PSPath "IIS:\Sites" -Location "/$siteName"
+    Write-Host "[INFO] Enable windows authentication for $siteName"
+    Set-WebConfigurationProperty -Filter "/system.webServer/security/authentication/windowsAuthentication" -Name "enabled" -Value "true" -PSPath "IIS:\Sites" -Location "/$siteName"
+}
