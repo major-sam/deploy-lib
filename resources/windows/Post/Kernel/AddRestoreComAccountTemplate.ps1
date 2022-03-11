@@ -141,7 +141,7 @@ $restoreComAccountTemplate = @'
 '@
 
 $query = "
-UPDATE [BaltBetM].[Emails].[EmailTemplates] SET Body = '$restoreComAccountTemplate'
+UPDATE [BaltBetM].[Emails].[EmailTemplates] SET Body = '$($restoreComAccountTemplate -replace "'", "''")'
 	    WHERE Name = 'RestoreComAccount'
 "
 Write-Host "[INFO] Add email template for RestoreComAccount"
