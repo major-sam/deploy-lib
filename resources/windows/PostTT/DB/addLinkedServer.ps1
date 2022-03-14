@@ -20,7 +20,7 @@ else{    $conn = New-Object Microsoft.SqlServer.Management.Common.ServerConnecti
     $conn.StatementTimeout = 0
     $conn.Connect()
     $smo = New-Object Microsoft.SqlServer.Management.Smo.Server -ArgumentList $conn
-    $SqlUser = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Login -ArgumentList $smo,"GKBALTBET\kernelsvc"
+    $SqlUser = New-Object -TypeName Microsoft.SqlServer.Management.Smo.Login -ArgumentList $smo,$ENV:TT_SERVICE_CREDS_USR
     $SqlUser.LoginType = 'WindowsUser'
     $sqlUser.PasswordPolicyEnforced = $false
     $SqlUser.Create()
