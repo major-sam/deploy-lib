@@ -40,7 +40,7 @@ ELSE Value END
 "
 # Содержимое из скрипта по задаче ARCHI-225
 $q225 = "
-DROP TABLE [dbo].[__EFMigrationsHistory]
+DROP TABLE IF EXISTS [dbo].[__EFMigrationsHistory]
 GO
 
 DROP TABLE [Auth].[__EFMigrationsHistory]
