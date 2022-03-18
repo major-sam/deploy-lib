@@ -5,13 +5,13 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 
 $ProgressPreference = 'SilentlyContinue'
 
-$release_bak_folder = "\\server\tcbuild`$\Testers\DB\For WebApi"
+$release_bak_folder = "C:\Services\UniAuthService\DB"
 
 $Dbname =  "AuthService"
 $dbs = @(
 	@{
 		DbName = $Dbname
-		BackupFile = "$release_bak_folder\WebApiAuth.bak" 
+		BackupFile = "$release_bak_folder\init.bak.bak" 
         RelocateFiles = @(
 			@{
 				SourceName = "AuthService"
@@ -26,41 +26,5 @@ $dbs = @(
 )
 
 ###Create dbs
-Write-Host -ForegroundColor Green "[INFO] Create dbs $Dbname"
+Write-Host -ForegroundColor Green "[INFO] Create and restore db $Dbname"
 RestoreSqlDb -db_params $dbs
-
-
-$oldIp = '#VM_IP'
-$oldHostname = '#VM_HOSTNAME'
-$oldDbname =  "#DB_NAME"
-$q = "
-UPDATE [#DB_NAME].Settings.Options SET Value = CASE Name
-WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '#VM_IP'
-ELSE Value END
-"
-# Содержимое из скрипта по задаче ARCHI-225
-$q225 = "
-DROP TABLE IF EXISTS [dbo].[__EFMigrationsHistory]
-GO
-
-DROP TABLE [Auth].[__EFMigrationsHistory]
-GO
-
-DROP TABLE [Settings].[Options]
-GO
-
-DROP TABLE [Settings].[OptionsGroups]
-GO
-
-DROP INDEX [IX_AuthenticatedAccounts_RefreshToken] ON [Auth].[AuthenticatedAccounts]
-GO
-
-ALTER TABLE [Auth].[AuthenticatedAccounts] ALTER COLUMN [RefreshToken] NVARCHAR (MAX) NULL
-GO
-"
-
-$query = $q.replace( $oldIp,  $IPAddress).replace( $oldHostname, $env:COMPUTERNAME).replace( $oldDbname , $Dbname)
-Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $DbName -query $query -ErrorAction Stop
-
-Write-Host -ForegroundColor Green "[INFO] Execute sql script from task ARCHI-225 on $Dbname"
-Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $DbName -query $q225 -ErrorAction Continue
