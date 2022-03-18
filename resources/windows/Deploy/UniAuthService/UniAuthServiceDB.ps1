@@ -11,7 +11,7 @@ $Dbname =  "AuthService"
 $dbs = @(
 	@{
 		DbName = $Dbname
-		BackupFile = "$release_bak_folder\init.bak.bak" 
+		BackupFile = "$release_bak_folder\init.bak" 
         RelocateFiles = @(
 			@{
 				SourceName = "AuthService"
