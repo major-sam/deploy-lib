@@ -15,7 +15,7 @@ $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
 $grpcPort = 32418
 $dbname = "AuthService"
-$keyFolder = "c:\keys"
+$keyFolder = "c:\keys_UniRu"
 $reCaptchaPK = $env:RECAPTCHA_PK
 
 Write-host "[INFO] Start ${serviceName} deploy script"
