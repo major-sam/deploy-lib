@@ -7,6 +7,7 @@ $doNotStart = @(
 "Baltbet.TradingTool.Scraping.Sbobet"
 "Baltbet.TradingTool.Scraping.Surebet"
 "Baltbet.TradingTool.Scraping.Emulator"
+"Baltbet.TradingTool.Scraping.Pinnacle"
 "Baltbet.TradingTool.Scraping.AllbestbetsApi"
 )
 Get-ChildItem C:/Services/TradingTool -Exclude "tools","client"| Get-childitem -recurse -depth 1 -filter "*.exe" |? {
