@@ -4,7 +4,7 @@ import-module '.\scripts\sideFunctions.psm1'
 $logPath = "C:\Logs\Payments\BaltBet.Payment.BalanceReport-.txt"
 $apiAddr =  (Get-NetIPAddress -AddressFamily IPv4 | ?{$_.InterfaceIndex -ne 1}).IPAddress.trim()
 $apiPort = '50009'
-$apiPortBS = '50005'
+$apiPortBS = '49999'
 $pathtojson = "C:\Services\Payments\PaymentBalanceReport\appsettings.json"
 $jsonDepth = 6
 $defaultDomain = "bb-webapps.com"
