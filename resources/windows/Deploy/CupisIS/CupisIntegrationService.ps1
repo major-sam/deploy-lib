@@ -27,6 +27,7 @@ $FnsKey = $env:CUPIS_FNS_KEY
 $cisHttpsPort = 4453
 $cisGrpcPort = 5010
 $idsHttpPort = 8123
+$defaultDomain = "bb-webapps.com"
 
 $config = Get-Content "${ServiceFolderPath}\appsettings.json" -Encoding utf8 | ConvertFrom-Json
 $config.Cupis.BaseUrl = $CupisBaseUrl
@@ -36,13 +37,14 @@ $config.Cupis.CertThumbprint = $CupisCertThumbprint
 $config.Bus.CupisCallbackBusConnectionString = "host=localhost"
 $config.Fns.BaseUrl = $FnsBaseUrl
 $config.Fns.Key = $FnsKey
+$config.Fns.UseFakeRequest = "true"
 $config.VirtualMachines.EnableMultiNotification = "false"
 $config.DocumentImages.UploadServiceAddress = "http://localhost:${idsHttpPort}"
 $config.Authorization.Realm = "https://vm4-p0.bb-webapps.com:${cisHttpsPort}/"
 
 $config.Bus.CupisCallbackBusConnectionString = "host=$($env:COMPUTERNAME);username=test;password=test"
 
-$config.Kestrel.EndPoints.Https.Url = "https://localhost:${cisHttpsPort}"
+$config.Kestrel.EndPoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${cisHttpsPort}"
 $config.Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
 $config.Kestrel.EndPoints.Https.Certificate.Store = "My"
 $config.Kestrel.EndPoints.Https.Certificate.AllowInvalid = "true"

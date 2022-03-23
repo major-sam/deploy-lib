@@ -180,7 +180,9 @@ INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]
 INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]) VALUES (1446, 1, N'Widgets.Interesting.Sports[1].MinBestBet', NULL, 0)
 INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]) VALUES (1447, 1, N'Widgets.Interesting.Sports[1].MinBestExpress', NULL, 0)
 update [Settings].[SiteOptions] set Value='true' where name ='Widgets.Interesting.Sports[0].IsEnabled'
-SET IDENTITY_INSERT [Settings].[SiteOptions] OFF	
+SET IDENTITY_INSERT [Settings].[SiteOptions] OFF
+
+DROP TABLE dbo.PreRegistrationData
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
