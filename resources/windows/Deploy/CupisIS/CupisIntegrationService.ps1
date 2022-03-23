@@ -24,6 +24,9 @@ $CupisBackupBaseUrl = "https://demo-api.1cupis.ru/"
 $CupisCertThumbprint = $env:CUPIS_CERT_THUMBPRINT
 $FnsBaseUrl = "https://api-fns.ru/api/"
 $FnsKey = $env:CUPIS_FNS_KEY
+$cisHttpsPort = 4453
+$cisGrpcPort = 5010
+$idsHttpPort = 8123
 
 $config = Get-Content "${ServiceFolderPath}\appsettings.json" -Encoding utf8 | ConvertFrom-Json
 $config.Cupis.BaseUrl = $CupisBaseUrl
@@ -34,11 +37,17 @@ $config.Bus.CupisCallbackBusConnectionString = "host=localhost"
 $config.Fns.BaseUrl = $FnsBaseUrl
 $config.Fns.Key = $FnsKey
 $config.VirtualMachines.EnableMultiNotification = "false"
-$config.DocumentImages.UploadServiceAddress = "http://localhost:8123"
-$config.Authorization.Realm = "https://vm4-p0.bb-webapps.com:4453/"
+$config.DocumentImages.UploadServiceAddress = "http://localhost:${idsHttpPort}"
+$config.Authorization.Realm = "https://vm4-p0.bb-webapps.com:${cisHttpsPort}/"
 
 $config.Bus.CupisCallbackBusConnectionString = "host=$($env:COMPUTERNAME);username=test;password=test"
 
+$config.Kestrel.EndPoints.Https.Url = "https://localhost:${cisHttpsPort}"
+$config.Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
+$config.Kestrel.EndPoints.Https.Certificate.Store = "My"
+$config.Kestrel.EndPoints.Https.Certificate.AllowInvalid = "true"
+
+$config.Kestrel.EndPoints.gRPC.Url = "http://localhost:${cisGrpcPort}"
 
 ConvertTo-Json $config -Depth 4  | Format-Json | Set-Content "$ServiceFolderPath\appsettings.json" -Encoding UTF8
 
@@ -53,10 +62,15 @@ $ServiceFolderPath\appsettings.json
     .Fns.BaseUrl = $FnsBaseUrl
     .Fns.Key = $FnsKey
     .VirtualMachines.EnableMultiNotification = "false"
-    .DocumentImages.UploadServiceAddress = "http://localhost:8123"
-    .Authorization.Realm = "https://vm4-p0.bb-webapps.com:4453/"
+    .DocumentImages.UploadServiceAddress = "http://localhost:${idsHttpPort}"
+    .Authorization.Realm = "https://vm4-p0.bb-webapps.com:${cisHttpsPort}/"
                                                                                                     
     .Bus.CupisCallbackBusConnectionString = "host=$($env:COMPUTERNAME);username=test;password=test"
+    .Kestrel.EndPoints.Https.Url = "https://localhost:${cisHttpsPort}"
+    .Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
+    .Kestrel.EndPoints.Https.Certificate.Store = "My"
+    .Kestrel.EndPoints.Https.Certificate.AllowInvalid = "true"
+    .Kestrel.EndPoints.gRPC.Url = "http://localhost:${cisGrpcPort}"
 $('='*60)
 
 "@
