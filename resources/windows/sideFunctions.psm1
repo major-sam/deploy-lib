@@ -233,3 +233,32 @@ function Set-Recovery{
 		 $output = sc.exe $serverPath failure $($service.Name) actions= $action reset= $resetCounter
 		 }
 	 }
+
+function Apply-DB-Tasks {
+    param (
+         [string] [Parameter(Mandatory=$true)] $ScriptFolder,
+         [string] [Parameter(Mandatory=$true)] $TargetDB,
+		 [int] $QueryTimeout = 720 # in seconds
+         [string] $DBServer = $env:COMPUTERNAME)
+         [string] $extension = 'sql')
+
+        if (Test-Path $ScriptFolder) {
+            $scriptArray = (Get-Item -Path $ScriptFolder\* -Include "*.$extension").FullName 
+            if ($scriptArray -ne $null){
+                foreach ($script in $scriptArray | Sort-Object ) {    
+                    Write-Host -ForegroundColor Green "[INFO] Execute $script on $TargetDB"
+                    Invoke-Sqlcmd `
+                        -verbose `
+                        -QueryTimeout $QueryTimeout `
+                        -ServerInstance $DBServer`
+                        -Database $TargetDB `
+                        -InputFile $script `
+                        -ErrorAction continue
+                }    
+            else{
+                Write-Host -ForegroundColor Yellow "[INFO] There is no Tasks for this build"
+            }
+        } else {
+            Write-Host -ForegroundColor Yellow "[INFO] There is no Tasks folder"
+        }
+}

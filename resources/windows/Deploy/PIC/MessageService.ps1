@@ -22,17 +22,6 @@ $dbs = @(
 )
 ###restore DB
 RestoreSqlDb -db_params $dbs
-$TaskPath =  "C:\Services\PersonalInfoCenter\MessageService\DB"
-if (test-path $TaskPath){
-	get-ChildItem $TaskPath | % {
-			write-host "Apply $($_.Fullname) to $($dbs[0].DbName)"
-			Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $dbs[0].DbName -InputFile $_.Fullname -ErrorAction Stop
-		}
-	}
-else{
-	write-host "$TaskPath not exist"
-}
-
 ### fix logpaths
 $logpath ="C:\Services\PersonalInfoCenter\MessageService\Log.config"
 if (test-path $logpath){

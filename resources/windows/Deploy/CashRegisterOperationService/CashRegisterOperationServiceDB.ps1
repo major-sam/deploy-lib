@@ -11,14 +11,7 @@ $ServiceFolderPath = "C:\Services\${ServiceName}"
 Move-Item -Path "C:\Services\CashRegisterOperationServiceDB" -Destination $ServiceFolderPath
 
 $dbname = "CashRegisterOperationService"
-$sqlfolder = "C:\Services\CashRegisterOperationService\CashRegisterOperationServiceDB"
 
 # Создаем БД CashRegisterOperationService
 CreateSqlDatabase($dbname)
-
-# Выполняем скрипты
-foreach ($script in (Get-Item -Path $sqlfolder\* -Include "*.sql").FullName | Sort-Object ) {    
-    Write-Host -ForegroundColor Green "[INFO] Execute $script on $dbname"
-    Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database $dbname -InputFile $script -ErrorAction continue
-}
 
