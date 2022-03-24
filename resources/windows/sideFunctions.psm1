@@ -196,7 +196,7 @@ function RegisterWinService($serviceBin){
 	return $sname
 }
 
-function Stop-ServiceWithTimeout ($name) {
+function Stop-ServiceWithTimeout($name) {
 	$timespan = New-Object -TypeName System.Timespan -ArgumentList 0,0,10
 	$svc = Get-Service -Name $name
 	if ($svc -eq $null) { return $false }
@@ -225,40 +225,43 @@ function Set-Recovery{
 		 [int] $resetCounter = 4000 # in seconds
 		)
 		$serverPath = "\\" + $server
-		$services = Get-CimInstance -ClassName 'Win32_Service' | Where-Object {$_.DisplayName -imatch $ServiceDisplayName}
-	$action = $action1+"/"+$time1+"/"+$action2+"/"+$time2+"/"+$actionLast+"/"+$timeLast
+		$services = Get-CimInstance -ClassName 'Win32_Service' | Where-Object {
+            $_.DisplayName -imatch $ServiceDisplayName}
+        $action = $action1+"/"+$time1+"/"+$action2+"/"+$time2+"/"+$actionLast+"/"+$timeLast
 
 		foreach ($service in $services){
 # https://technet.microsoft.com/en-us/library/cc742019.aspx
-		 $output = sc.exe $serverPath failure $($service.Name) actions= $action reset= $resetCounter
+             $output = sc.exe $serverPath failure $($service.Name) actions= $action reset= $resetCounter
 		 }
 	 }
 
-function Apply-DB-Tasks {
+function Apply-DB-Tasks{
     param (
          [string] [Parameter(Mandatory=$true)] $ScriptFolder,
          [string] [Parameter(Mandatory=$true)] $TargetDB,
-		 [int] $QueryTimeout = 720 # in seconds
-         [string] $DBServer = $env:COMPUTERNAME)
-         [string] $extension = 'sql')
+		 [int] $QueryTimeout = 720, # in seconds
+         [string] $DBServer = 'localhost',
+         [string] $extension = 'sql'
+         )
 
-        if (Test-Path $ScriptFolder) {
-            $scriptArray = (Get-Item -Path $ScriptFolder\* -Include "*.$extension").FullName 
-            if ($scriptArray -ne $null){
-                foreach ($script in $scriptArray | Sort-Object ) {    
-                    Write-Host -ForegroundColor Green "[INFO] Execute $script on $TargetDB"
-                    Invoke-Sqlcmd `
-                        -verbose `
-                        -QueryTimeout $QueryTimeout `
-                        -ServerInstance $DBServer`
-                        -Database $TargetDB `
-                        -InputFile $script `
-                        -ErrorAction continue
-                }    
-            else{
-                Write-Host -ForegroundColor Yellow "[INFO] There is no Tasks for this build"
-            }
-        } else {
-            Write-Host -ForegroundColor Yellow "[INFO] There is no Tasks folder"
+    if (Test-Path $ScriptFolder) {
+        $scriptArray = (Get-Item -Path $ScriptFolder\* -Include "*.$extension").FullName 
+        if ($scriptArray -ne $null){
+            foreach ($script in $scriptArray | Sort-Object ) {    
+                Write-Host -ForegroundColor Green "[INFO] Execute $script on $TargetDB"
+                Invoke-Sqlcmd `
+                    -verbose `
+                    -QueryTimeout $QueryTimeout `
+                    -ServerInstance $DBServer`
+                    -Database $TargetDB `
+                    -InputFile $script `
+                    -ErrorAction continue
+            }    
         }
+        else{
+            Write-Host -ForegroundColor Yellow "[INFO] There is no Tasks for this build"
+        }
+    } else {
+        Write-Host -ForegroundColor Yellow "[INFO] There is no Tasks folder"
+    }
 }

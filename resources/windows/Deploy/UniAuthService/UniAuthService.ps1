@@ -55,7 +55,7 @@ $jsonAppsetings.ReCaptcha.VerifyUrl = "https://www.google.com/recaptcha/api/site
 # Настраиваем коннект к RabbitMQ
 $jsonAppsetings.Bus.IsEnabled = $true
 $jsonAppsetings.Bus.ConnectionString = "host=$($env:COMPUTERNAME):5672; username=test; password=test"
-$jsonAppsetings.Bus.Exchange = "AccountNotifications"
+$jsonAppsetings.Bus.Exchange = "Exchange.AccountNotifications"
 
 ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "[INFO] $pathtojson renewed with json depth $jsonDepth"
