@@ -235,7 +235,7 @@ function Set-Recovery{
 		 }
 	 }
 
-function Apply-DB-Tasks{
+function ApplyTasks{
     param (
          [string] [Parameter(Mandatory=$true)] $ScriptFolder,
          [string] [Parameter(Mandatory=$true)] $TargetDB,
