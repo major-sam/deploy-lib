@@ -18,9 +18,6 @@ $webdoc = [Xml](Get-Content $apiWebConfig)
 ($webdoc.configuration.connectionStrings.add | where {
 	$_.name -eq 'UniEventServiceUrl' 
 	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
-($webdoc.configuration.connectionStrings.add | where {
-	$_.name -eq 'UniBonusServiceUrl' 
-	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4437".ToLower()
 $webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 $ConnectionStringsAdd = $webdoc.CreateElement('add')
 $ConnectionStringsAdd.SetAttribute("name","OAuth.LastLogoutUrl")
@@ -42,24 +39,5 @@ $new.SetAttribute( "value","false")
 $webdoc.configuration.appSettings.AppendChild($new)
 $webdoc.Save($apiWebConfig)
 
-
-$reportval =@"
-[UniRu]
-$webConfig
-	(.configuration.connectionStrings.add | where {
-		_.name -eq 'UniPaymentsServiceUrl' 
-		}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:54381"
-	.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
-	.CreateElement('add')
-		>.SetAttribute("name","OAuth.LastLogoutUrl")
-		>.SetAttribute("connectionString","https://${env:COMPUTERNAME}.gkbaltbet.local:449/account/logout/last")
-	.configuration.connectionStrings.AppendChild($ConnectionStringsAdd)
-	(.configuration.Grpc.services.add | where {_.name -eq 'DefaultService' }).host = $IPAddress
-	(.configuration.Grpc.services.add | where {_.name -eq 'PromocodeAdminService' }).host = $IPAddress
-$('='*60)
-
-"@
-
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 Write-Host -ForegroundColor Green "[INFO] Done"
 

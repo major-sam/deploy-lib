@@ -15,10 +15,15 @@ $webdoc = [Xml](Get-Content $webConfig)
 	}).connectionString = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 ($webdoc.configuration.connectionStrings.add | where {
 	$_.name -eq 'UniPaymentsServiceUrl' 
-	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:54381"
+	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:54381".ToLower()
+$webdoc.configuration.connectionStrings.add | % {
+	if ($_.name -eq 'UniBonusServiceUrl' ){
+		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4437".ToLower()
+	}
+}
 ($webdoc.configuration.connectionStrings.add | where {
 	$_.name -eq 'UniEventServiceUrl' 
-	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435"
+	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
 $webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'DefaultService' }).host = $IPAddress
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService' }).host = $IPAddress
@@ -33,7 +38,9 @@ $webdoc.configuration.appSettings.add| fc
 $new = $webdoc.CreateElement("add")
 $new.SetAttribute("key","webapi:EnableSwagger")
 $new.SetAttribute( "value","false")
-$webdoc.configuration.appSettings.AppendChild($new)
+if (!$webdoc.configuration.appSettings.add.Contains($new)){
+		$webdoc.configuration.appSettings.AppendChild($new)
+}
 (($webdoc.configuration.ckfinder.backends.backend|	where {
 	$_.name -ilike "default"
 	}).option| where {
