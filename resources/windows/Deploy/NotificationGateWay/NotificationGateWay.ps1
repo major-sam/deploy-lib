@@ -1,3 +1,5 @@
+Import-module '.\scripts\sideFunctions.psm1'
+
 $targetDir  = "C:\Services\NotificationGateWay"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appsettings.json"
