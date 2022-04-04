@@ -6,7 +6,7 @@ $pathtojson = "$targetDir\appsettings.json"
 $jsonDepth = 5
 
 Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
-$jsonAppsetings = Get-Content -Raw -path .\appsettings.json -Encoding UTF8  | % {$_ -replace  '\s\/\/.*', ""} | ConvertFrom-Json 
+$jsonAppsetings = Get-Content -Raw -path $pathtojson  -Encoding UTF8  | % {$_ -replace  '\s\/\/.*', ""} | ConvertFrom-Json 
 
 ###
 #Json values replace
