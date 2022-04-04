@@ -12,6 +12,20 @@ $jsonAppsetings = Get-Content -Raw -path $pathtojson  -Encoding UTF8  | % {$_ -r
 #Json values replace
 ####
 
+# Внесение данных о сертификате
+$Cert = '{
+    "Location": "LocalMachine",
+    "Subject": "*.bb-webapps.com",
+    "Store": "My",
+    "AllowInvalid": "true"
+}'| ConvertFrom-Json
+$jsonAppsetings.Kestrel.Endpoints.Https | Add-Member -NotePropertyValue $Cert -NotePropertyName "Certificate"
+$jsonAppsetings.Kestrel.Endpoints.Https | Add-Member -NotePropertyValue "Http1" -NotePropertyName "Protocols"
+
+# Изменение пути до файла логов
+$FileLogs = $jsonAppsetings.Serilog.WriteTo | % {if($_.Name.Equals("File")){return $_}}
+$FileLogs.Args.path = "C:\\Logs\\BaltBetPaymentAdmin\\BaltBet.Payment.Admin-.log"
+
 # Добавление прав пользователям
 $user1 = "{
     'Name': 'GKBALTBET\\ktofilyuk',
