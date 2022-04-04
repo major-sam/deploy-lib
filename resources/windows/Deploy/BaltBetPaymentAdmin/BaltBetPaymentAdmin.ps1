@@ -6,7 +6,7 @@ $pathtojson = "$targetDir\appsettings.json"
 $jsonDepth = 5
 
 Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
-$jsonAppsetings = Get-Content -Raw -path $pathtojson  -Encoding UTF8  | % {$_ -replace  '\s\/\/.*', ""} | ConvertFrom-Json 
+$jsonAppsetings = Get-Content -Raw -path $pathtojson  -Encoding UTF8 | ConvertFrom-Json 
 
 ###
 #Json values replace
@@ -24,7 +24,7 @@ $jsonAppsetings.Kestrel.Endpoints.Https | Add-Member -NotePropertyValue "Http1" 
 
 # Изменение пути до файла логов
 $FileLogs = $jsonAppsetings.Serilog.WriteTo | % {if($_.Name.Equals("File")){return $_}}
-$FileLogs.Args.path = "C:\\Logs\\BaltBetPaymentAdmin\\BaltBet.Payment.Admin-.log"
+$FileLogs.Args.path = "C:\Logs\BaltBetPaymentAdmin\BaltBet.Payment.Admin-.log"
 
 # Добавление прав пользователям
 $user1 = "{
