@@ -42,8 +42,8 @@ $jsonAppsetings.AuthOptions.Users+=$user2
 $jsonAppsetings.KernelOptions.ConnectionString = "data source=$($env:COMPUTERNAME);initial catalog=BaltBetM;Integrated Security=true;MultipleActiveResultSets=True;trust server certificate=True"
 
 # Коннект до БД Аггрегатора ком и ру зоны
-$jsonAppsetings.PaymentOptions.Com.ConnectionString = "data source=TEST-SQL16WIN19\\MSSQLSERVER2;initial catalog=BaltBet_Payment_Test;Integrated Security=true;MultipleActiveResultSets=True;trust server certificate=True"
-$jsonAppsetings.PaymentOptions.Ru.ConnectionString = "data source=TEST-SQL16WIN19\\MSSQLSERVER2;initial catalog=BaltBet_Payment_Test;Integrated Security=true;MultipleActiveResultSets=True;trust server certificate=True"
+$jsonAppsetings.PaymentOptions.Com.ConnectionString = "data source=TEST-SQL16WIN19\MSSQLSERVER2;initial catalog=BaltBet_Payment_Test;Integrated Security=true;MultipleActiveResultSets=True;trust server certificate=True"
+$jsonAppsetings.PaymentOptions.Ru.ConnectionString = "data source=TEST-SQL16WIN19\MSSQLSERVER2;initial catalog=BaltBet_Payment_Test;Integrated Security=true;MultipleActiveResultSets=True;trust server certificate=True"
 
 
 ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
