@@ -27,7 +27,8 @@ $jsonAppsetings.ConnectionStrings.AuthDb = "data source=localhost;initial catalo
 
 # Настраиваем секцию логирования
 $jsonAppsetings.Serilog.WriteTo | % { if ($_.Name -like 'File') {
-        $_.Args.path = "C:\Logs\Uni.AuthService\Uni.AuthService-.txt"   
+        $_.Args.path = "C:\Logs\Uni.AuthService\Uni.AuthService-.txt"  
+        $_.Args.restrictedToMinimumLevel = "Debug" 
     }
 }
 
