@@ -29,7 +29,7 @@ $webdoc.Save($WebApiConfig)
 # Меняем строки соединений в конфиге WebSiteRu
 $WebsiteRuConfig = "C:\inetpub\Website\Web.config"
 $webdoc = [Xml](Get-Content $WebsiteRuConfig)
-$logoutService = $webdoc.configuration.Grpc.Services.add | Where-Object name = "LogoutServiceClient"
+$logoutService = $webdoc.configuration.Grpc.Services.add | Where-Object name -eq "LogoutServiceClient"
 $logoutService.host = $IPAddress
 $logoutService.port = "5307"
 $webdoc.Save($WebsiteRuConfig)
