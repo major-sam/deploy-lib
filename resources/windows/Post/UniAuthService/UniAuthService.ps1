@@ -7,7 +7,7 @@ $UniRuConfig = "C:\inetpub\ClientWorkPlace\uniru\Web.config"
 $webdoc = [Xml](Get-Content $UniRuConfig)
 $logoutService = $webdoc.configuration.Grpc.Services.add | Where-Object name -eq "LogoutServiceClient"
 $logoutService.host = $IPAddress
-$logoutService.port = 5307
+$logoutService.port = "5307"
 
 $authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "UniAuthServiceUrl"
 $authUrl.connectionString = "https://$($env:COMPUTERNAME).bb-webapps.com:450"
