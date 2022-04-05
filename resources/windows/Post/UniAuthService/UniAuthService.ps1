@@ -23,7 +23,7 @@ $logoutService.port = "5307"
 $authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "UniAuthServiceUrl"
 $authUrl.connectionString = "https://$($env:COMPUTERNAME).bb-webapps.com:450"
 $authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "OAuth.LastLogoutUrl"
-$authUrl.connectionString = "http://$($env:COMPUTERNAME):5307"
+$authUrl.connectionString = "http://$($IPAddress):5307"
 $webdoc.Save($WebApiConfig)
 
 # Меняем строки соединений в конфиге WebSiteRu
