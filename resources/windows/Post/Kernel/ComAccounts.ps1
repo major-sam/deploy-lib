@@ -11,6 +11,9 @@ insert into [BaltBetDomain].[dbo].[ParentDomains] (Id , Name, Address, IsActive,
   VALUES (1, NULL, @MyUrl, 'True' , GETDATE(), 10)
 set IDENTITY_INSERT [BaltBetDomain].[dbo].[ParentDomains] OFF
 
+-- все ниже должно быть удалено с выходом 319 задачи.
+PRINT 'TODO'
+PRINT 'FIX ON ARCHI-319'
 DECLARE @LastAccountGroupID INT;
 select @LastAccountGroupID =  MAX(AccountGroupId) FROM [BaltBetM].[dbo].[AccountGroups];
 insert into [BaltBetM].[dbo].[AccountGroups] (AccountGroupId, AccountGroupName,AccountGroupDescription , Weight, DateCreate)
