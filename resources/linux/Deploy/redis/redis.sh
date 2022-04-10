@@ -1,28 +1,23 @@
 #!/bin/bash
 
+echo '==============================='
 echo 'redis helm chart deploy script'
-
-namespace = $env.ns
-redisPort = $env.REDIS_PORT
-rabbitPort = $env.RABBIT_PORT
-rabbitwebPort = $env.RABBIT_WEB_PORT
-redisPwd = $env.REDIS_PWD
-rabbitUsr = $env.RABBIT_USR
-rabbitPwd = $env.RABBIT_PWD
-
-while (( $# > 1 )); do case $1 in
-   --port) redisPort="$2";;
-   --password) redisPwd="$2";;
-   --namespace) namespace="$2";;
-   *) break;
- esac; shift 2
-done
+echo '==============================='
+echo $NAMESPACE
+echo $REDIS_PORT 
+echo '==============================='
 
 
 /usr/sbin/helm upgrade -i redis bitnami/redis \
     --version 16.5.2 \
-    --namespace $namespace \
+    --namespace $NAMESPACE \
     --create-namespace \
-    --set master.service.nodePorts.redis=$redisPort \
+    --set master.service.nodePorts.redis=$REDIS_PORT \
     --set master.service.type="NodePort" \
-    --set auth.password=$redisPwd
+    --set auth.password=$REDIS_CREDS_PSW \
+    --set replica.replicaCount=0  \
+    --set master.resources.requests.cpu=250m \
+    --set master.resources.limits.cpu=250m   \
+    --set master.resources.requests.memory=250Mi \
+    --set master.resources.limits.memory=250Mi 
+
