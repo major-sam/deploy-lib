@@ -50,7 +50,7 @@ Get-Service *Baltbet* | ForEach-object{
 		write-output 'No service installed'}
 }
 #### cleanup Kernel
-Remove-Item -Path C:\Kernel, C:\KernelWeb -Force -Recurse -ErrorAction SilentlyContinue
+Remove-Item -Path C:\Kernel, C:\KernelWeb, C:\ApkClient -Force -Recurse -ErrorAction SilentlyContinue
 
 #### cleanup services folders
 Remove-Item -Path C:\Services\* -Force -Recurse -ErrorAction SilentlyContinue
