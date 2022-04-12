@@ -13,7 +13,8 @@ echo '==============================='
     --create-namespace \
     --set master.service.nodePorts.redis=$REDIS_PORT \
     --set master.service.type="NodePort" \
-    --set auth.password=$REDIS_CREDS_PSW$VM_ID \
+ #   --set auth.password=$REDIS_CREDS_PSW$VM_ID \
+    --set auth.enabled = 'false' \
     --set replica.replicaCount=0  \
     --set master.resources.requests.cpu=250m \
     --set master.resources.limits.cpu=250m   \
