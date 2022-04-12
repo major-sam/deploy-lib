@@ -39,6 +39,11 @@ $config.Fns.BaseUrl = $FnsBaseUrl
 $config.Fns.Key = $FnsKey
 $config.Fns.UseFakeRequest = "true"
 $config.VirtualMachines.EnableMultiNotification = "false"
+if($config.VirtualMachines.EnableMonitor) {
+    $config.VirtualMachines.EnableMonitor = "true"
+} else {
+    Write-Host "[INFO] VirtualMachines.EnableMonitor setting does not exist"
+}
 $config.DocumentImages.UploadServiceAddress = "http://localhost:${idsHttpPort}"
 $config.Authorization.Realm = "https://vm4-p0.bb-webapps.com:${cisHttpsPort}/"
 
@@ -64,6 +69,7 @@ $ServiceFolderPath\appsettings.json
     .Fns.BaseUrl = $FnsBaseUrl
     .Fns.Key = $FnsKey
     .VirtualMachines.EnableMultiNotification = "false"
+    .VirtualMachines.EnableMonitor = "true"
     .DocumentImages.UploadServiceAddress = "http://localhost:${idsHttpPort}"
     .Authorization.Realm = "https://vm4-p0.bb-webapps.com:${cisHttpsPort}/"
                                                                                                     

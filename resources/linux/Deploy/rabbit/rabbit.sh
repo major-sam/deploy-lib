@@ -8,10 +8,10 @@ echo $RABBIT_WEB_PORT
 echo '==============================='
 
 /usr/sbin/helm upgrade -i test-rabbitmq bitnami/rabbitmq  \
-    --version 8.31.3 \
+    --version 8.30.2 \
     --namespace $NAMESPACE \
     --create-namespace \
-    --set service.type="NodePort" \
+    --set service.type="NodePort",auth.erlangCookie=secretcookie \
     --set service.nodePort=$RABBIT_PORT \
     --set service.managerNodePort=$RABBIT_WEB_PORT\
     --set auth.username=$REDIS_CREDS_USR \
