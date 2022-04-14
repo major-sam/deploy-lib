@@ -1,5 +1,10 @@
 import-module '.\scripts\sideFunctions.psm1'
 
+
+$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
+$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 ## vars
 $release_bak_folder = '\\server\tcbuild$\Testers\DB'
 
@@ -29,13 +34,6 @@ if (test-path $logpath){
 	$webdoc = [Xml](Get-Content $svc.Fullname)
 	$webdoc.log4net.appender.file.value = "c:\logs\PersonalInfoCenter\$($svc.Directory.name)-"
 	$webdoc.Save($svc.Fullname)
-	$reportval =@"
-	[MessageService]
-	$logpath
-		.log4net.appender.file.value = "c:\logs\PersonalInfoCenter\$($svc.Directory.name)-"
-$('='*60)
-
-"@
 }
 else{
 	Write-Host -ForegroundColor Green "[INFO] Edit BaltBet.messageservice configuration files..."
@@ -47,17 +45,8 @@ else{
 			$_.Args.path = "C:\logs\PersonalInfoCenter\MessageService-{Date}.log"   
 		}
 	}
+	$json_appsetings.ConnectionStrings.Redis = $shortRedisStr
 	ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
-	$reportval =@"
-	[MessageService]
-	$logpath
-		.Serilog.WriteTo| %{ if (_.Name -like 'File'){
-				_.Args.path = "C:\logs\PersonalInfoCenter\MessageService-{Date}.log"   
-			}
-$('='*60)
-
-"@
 
 }
 
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

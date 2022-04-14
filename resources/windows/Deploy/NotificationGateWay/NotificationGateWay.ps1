@@ -1,4 +1,8 @@
 Import-module '.\scripts\sideFunctions.psm1'
+$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
+$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $targetDir  = "C:\Services\NotificationGateWay"
 $ProgressPreference = 'SilentlyContinue'
@@ -37,7 +41,7 @@ $jsonAppsetings.AppSettings.EmailSettings.Emails[1].FromPass = "ПАРОЛЬ"
 $jsonAppsetings.ConnectionStrings.DbConnectionString = "Server=$($env.COMPUTERNAME);Database=BaltBet.SmsService.Db;Trusted_Connection=True;"
 
 # Настраиваем коннект до реббита
-$jsonAppsetings.AppSettings.RabbitMQ.ConnectionString = "host=$($env.COMPUTERNAME);username=test;password=test"
+$jsonAppsetings.AppSettings.RabbitMQ.ConnectionString = $shortRabbitStr
 
 ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "[INFO] $pathtojson renewed with json depth $jsonDepth"

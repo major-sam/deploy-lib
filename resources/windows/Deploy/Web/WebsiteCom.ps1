@@ -3,6 +3,10 @@
 $targetDir  = 'C:\inetpub\WebsiteCom'
 $webConfig = "$targetDir\Web.config"
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
+$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
+$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $attrs = @{
  'cookieless' =  "UseCookies"
@@ -31,31 +35,10 @@ $webdoc.configuration.'system.web'.sessionState.RemoveAllAttributes()
 foreach ($attr in $attrs.GetEnumerator()) {    
     $webdoc.configuration.'system.web'.SelectSingleNode('//sessionState').SetAttribute($attr.Name, $attr.Value)
 }
+$webdoc.configuration.globalLog.rabbitmq.defaultConnectionString ="$shortRabbitStr;publisherConfirms=true; timeout=100; requestedHeartbeat=0"
+$webdoc.configuration.rabbitMqConfig.connectionString =$shortRabbitStr
+($webdoc.configuration.cache.redis.add| ? {$_.name -ilike "account"}).connection = $shortRedisStr
 $webdoc.Save($webConfig)
-
-
-$reportval =@"
-[WebMobile]
-$WebConfig
-
-	(.configuration.appSettings.add | where {
-		_.key -like "ServerAddress" }).value = $CurrentIpAddr+":8082"
-	(.configuration.appSettings.add | where {
-		_.key -like "SiteServerAddress"}).value = $CurrentIpAddr+":8088"
-	(.configuration.appSettings.add | where {
-		_.key -like "SiteServerAddressLogin"}).value = $CurrentIpAddr+":8088"
-	(.configuration.appSettings.add | where {
-		_.key -like "IsSuperexpressEnabled"}).value = "true"
-	.configuration.'system.serviceModel'.client.endpoint | ForEach-Object {
-		_.address = (_.address).replace("localhost","$($CurrentIpAddr)") }
-	.configuration.'system.web'.sessionState.RemoveAllAttributes()
-	foreach (attr in attrs.GetEnumerator()) {    
-		.configuration.'system.web'.SelectSingleNode('//sessionState').SetAttribute(attr.Name, attr.Value)
-	}
-$('='*60)
-
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
 
 Write-Host -ForegroundColor Green "[INFO] Done"
 

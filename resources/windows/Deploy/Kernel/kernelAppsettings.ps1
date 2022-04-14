@@ -4,6 +4,8 @@ $ProgressPreference = 'SilentlyContinue'
 $targetDir = 'C:\Kernel'
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 $pathtojson = "$targetDir\appsettings.json "
+$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 ###### edit json files
 
 Write-Host -ForegroundColor Green "[info] edit json files"
@@ -12,15 +14,6 @@ $HttpsInlineCertStore = '
     {     }
 '| ConvertFrom-Json 
 $json_appsetings.Kestrel.EndPoints.HttpsInlineCertStore =  $HttpsInlineCertStore
+$json_appsetings.ConnectionStrings.RabbitMQ = $shortRabbitStr
 ConvertTo-Json $json_appsetings -Depth 4| Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"
-
-$reportval =@"
-[Kernel]
-$configfilepath
-    .Kestrel.EndPoints.HttpsInlineCertStore =  $HttpsInlineCertStore
-$('='*60)
-
-"@
-
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
