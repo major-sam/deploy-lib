@@ -3,6 +3,10 @@ Import-module '.\scripts\sideFunctions.psm1'
 ###vars
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 
+$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
+$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 $ProgressPreference = 'SilentlyContinue'
 
 $release_bak_folder = "\\server\tcbuild`$\Testers\DB\For WebApi"
@@ -30,13 +34,11 @@ Write-Host -ForegroundColor Green "[INFO] Create dbs"
 RestoreSqlDb -db_params $dbs
 
 
-$oldIp = '#VM_IP'
-$oldHostname = '#VM_HOSTNAME'
-$oldDbname =  "#DB_NAME"
-$q = "
-UPDATE [#DB_NAME].Settings.Options SET Value = CASE Name
-WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '#VM_IP'
+$query = "
+UPDATE [$(dbname)].Settings.Options SET Value = CASE Name
+WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '$($IPAddress)'
+WHEN 'Global.KernelRedisConnectionString' THEN '$($shortRedisStr),syncTimeout=1000,allowAdmin=True,connectTimeout=10000,ssl=False,abortConnect=False,connectRetry=10,proxy=None'
 ELSE Value END
+
 "
-$query = $q.replace( $oldIp,  $IPAddress).replace( $oldHostname, $env:COMPUTERNAME).replace( $oldDbname , $Dbname)
 Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $DbName -query $query -ErrorAction Stop

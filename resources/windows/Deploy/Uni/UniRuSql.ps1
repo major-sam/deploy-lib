@@ -1,24 +1,26 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
-$q = "
+$query = "
 UPDATE [UniRu].Settings.SiteOptions SET Value = CASE Name
-WHEN 'Global.CKFinderSettings.ImageHost' THEN 'https://#VM_HOSTNAME.bb-webapps.com:443'
-WHEN 'Global.GlobalLog.BaltBetClientStatistics.StatisticsHandlerUrl' THEN 'https://#VM_HOSTNAME.bb-webapps.com:13443/st'
-WHEN 'Global.GlobalLog.RabbitMq.DefaultConnectionString' THEN 'host=#VM_IP:5672; username=test; password=test; publisherConfirms=true; timeout=100; requestedHeartbeat=0'
-WHEN 'Global.GlobalLog.RabbitMq.GlobalLogger.ConnectionString' THEN 'host=#VM_IP:5672; username=test; password=test; publisherConfirms=true; timeout=100; requestedHeartbeat=0'
+WHEN 'Global.CKFinderSettings.ImageHost' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:443'
+WHEN 'Global.GlobalLog.BaltBetClientStatistics.StatisticsHandlerUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:13443/st'
+WHEN 'Global.GlobalLog.RabbitMq.DefaultConnectionString' THEN 'host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PWD); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
+WHEN 'Global.GlobalLog.RabbitMq.GlobalLogger.ConnectionString' THEN 'host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PWD); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
+WHEN 'Global.RabbitMq.AccountBus.ConnectionString' THEN 'host=$($ENV:_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PWD); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
+WHEN 'Global.KernelRedisConnectionString' THEN '$($ENV:REDIS_HOST):$($ENV:REDIS_PORT),syncTimeout=10000,allowAdmin=True,connectTimeout=10000,ssl=False,abortConnect=False,connectRetry=10,proxy=None'
 WHEN 'PlayerIdentificationSettings.DocumentUploadSettings.RecognitionCompletingPassportAddress' THEN 'http://localhost:8123/api/AccountFiles/Cps/completingPassportData/{0}'
 WHEN 'PlayerIdentificationSettings.DocumentUploadSettings.RecognitionResultsAddress' THEN 'http://localhost:8123/api/AccountFiles/Cps/passports/{0}'
 WHEN 'PlayerIdentificationSettings.DocumentUploadSettings.UploadingDocumentAddress' THEN 'http://localhost:8123/api/AccountFiles/Cps/Upload/{0}/{1}/{2}/{3}'
-WHEN 'Global.MessagesServiceSettings.URL' THEN 'https://#VM_HOSTNAME.bb-webapps.com:4442/ '
-WHEN 'Global.SignalR.Remote.Endpoint' THEN 'https://#VM_HOSTNAME.bb-webapps.com:8491/'
+WHEN 'Global.MessagesServiceSettings.URL' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4442/ '
+WHEN 'Global.SignalR.Remote.Endpoint' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:8491/'
 WHEN 'Registration.InSessionDataEncrptionPassphrase' THEN 'Qwerty1z'
 WHEN 'SupportContacts.SupportEmail' THEN 'report@baltbet.ru'
 WHEN 'UpdateApk.AndroidUrl' THEN 'https://apkupdater.baltbet.ru:1415/com.baltbet.clientapp'
 WHEN 'UpdateApk.CheckUrl' THEN 'https://apkupdater-test.bb-webapps.com:1443/api/check/'
-WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '#VM_IP'
-WHEN 'OAuth.LastLogoutUrl' THEN 'https://#VM_HOSTNAME.bb-webapps.com:449/account/logout/last'
-WHEN 'OAuth.TokenUrl' THEN 'https://#VM_HOSTNAME.bb-webapps.com:449/oauth/token'
+WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '$($IPAddress)'
+WHEN 'OAuth.LastLogoutUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:449/account/logout/last'
+WHEN 'OAuth.TokenUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:449/oauth/token'
 WHEN 'Global.RabbitMq.NotificationGateWayBus.IsEnabled' THEN 'false'
 ELSE Value END
 
@@ -58,7 +60,7 @@ IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Pages.Even
 
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RemoteWebApi.PrematchService.Uri')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Global.RemoteWebApi.PrematchService.Uri','https://#VM_HOSTNAME.bb-webapps.com:4435',0)
+	VALUES (1,'Global.RemoteWebApi.PrematchService.Uri','https://$($env:computername.ToLower()).bb-webapps.com:4435',0)
 	
 	
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'PlayerIdentificationSettings.WrongAttemptCount')
@@ -70,15 +72,15 @@ DELETE FROM UniRu.Settings.SiteOptions WHERE NAME like '%RemoteWebApi%'
 
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.SetkaCup.StreamUrl')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'BroadcastSettings.SetkaCup.StreamUrl','https://#VM_HOSTNAME.bb-webapps.com:4443/broadcast/setkacup/{matchId}',0)
+	VALUES (1,'BroadcastSettings.SetkaCup.StreamUrl','https://$($env:computername.ToLower()).bb-webapps.com:4443/broadcast/setkacup/{matchId}',0)
 
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.MatchTv.StreamUrl')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'BroadcastSettings.MatchTv.StreamUrl','https://#VM_HOSTNAME.bb-webapps.com:4443/dm-mobileapp/broadcast/matchtv/{matchId}',0)
+	VALUES (1,'BroadcastSettings.MatchTv.StreamUrl','https://$($env:computername.ToLower()).bb-webapps.com:4443/dm-mobileapp/broadcast/matchtv/{matchId}',0)
 
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.Rfpl.StreamUrl')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'BroadcastSettings.Rfpl.StreamUrl','https://#VM_HOSTNAME.bb-webapps.com:4443/dm-mobileapp/broadcast/umamedia/{matchId}',0)
+	VALUES (1,'BroadcastSettings.Rfpl.StreamUrl','https://$($env:computername.ToLower()).bb-webapps.com:4443/dm-mobileapp/broadcast/umamedia/{matchId}',0)
 
 
 Use UniRu
@@ -208,7 +210,6 @@ Write-Host -ForegroundColor Green "[INFO] Create dbs"
 
 RestoreSqlDb -db_params $dbs
 
-$query = $q.replace( "#VM_IP",  $IPAddress).replace( "#VM_HOSTNAME", $env:COMPUTERNAME)
 
 Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $dbs[0].DbName -query $query -ErrorAction Stop
 Set-Location C:\
