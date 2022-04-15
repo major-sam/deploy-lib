@@ -181,6 +181,16 @@ INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]
 INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]) VALUES (1447, 1, N'Widgets.Interesting.Sports[1].MinBestExpress', NULL, 0)
 update [Settings].[SiteOptions] set Value='true' where name ='Widgets.Interesting.Sports[0].IsEnabled'
 SET IDENTITY_INSERT [Settings].[SiteOptions] OFF
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'dbo.PreRegistrationData')
+BEGIN
+	DROP TABLE IF EXISTS dbo.PreRegistrationData;
+	PRINT '[INFO] DROP dbo.PreRegistrationData';
+END
+ELSE
+BEGIN
+	PRINT '[INFO] Table dbo.PreRegistrationData does not exist, nothing to DROP...OK';
+END
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
