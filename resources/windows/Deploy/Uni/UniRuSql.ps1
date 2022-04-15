@@ -184,7 +184,7 @@ SET IDENTITY_INSERT [Settings].[SiteOptions] OFF
 
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'PreRegistrationData')
 BEGIN
-	DROP TABLE IF EXISTS dbo.PreRegistrationData;
+	DROP TABLE dbo.PreRegistrationData;
 	PRINT '[INFO] DROP dbo.PreRegistrationData';
 END
 ELSE
