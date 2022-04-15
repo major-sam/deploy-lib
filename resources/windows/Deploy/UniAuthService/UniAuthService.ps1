@@ -7,9 +7,9 @@ UniAuthService (хостим в IIS https:450, заменить на 449 пос�
 
 Import-module '.\scripts\sideFunctions.psm1'
 
-$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $serviceName = "UniAuthService"

@@ -1,8 +1,8 @@
 import-module '.\scripts\sideFunctions.psm1'
 
-$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $ConfigPath = "c:\Services\UniPaymentsService\appsettings.json"
@@ -29,7 +29,7 @@ $json_appsettings.Grpc.Services | % {
 		$_.Port = 5003
 	}
 }
-$json_appsetings.ConnectionStrings.Redis = $shortRedisStr
+$json_appsettings.ConnectionStrings.Redis = $shortRedisStr
 
 ConvertTo-Json $json_appsettings -Depth 4 | Format-Json | Set-Content $ConfigPath -Encoding UTF8
 

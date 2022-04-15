@@ -3,9 +3,9 @@ Import-module '.\scripts\sideFunctions.psm1'
 ###vars
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 
-$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 $ProgressPreference = 'SilentlyContinue'
 
@@ -35,7 +35,7 @@ RestoreSqlDb -db_params $dbs
 
 
 $query = "
-UPDATE [$(dbname)].Settings.Options SET Value = CASE Name
+UPDATE [$($dbname)].Settings.Options SET Value = CASE Name
 WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '$($IPAddress)'
 WHEN 'Global.KernelRedisConnectionString' THEN '$($shortRedisStr),syncTimeout=1000,allowAdmin=True,connectTimeout=10000,ssl=False,abortConnect=False,connectRetry=10,proxy=None'
 ELSE Value END

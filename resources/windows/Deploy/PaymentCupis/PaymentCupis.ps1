@@ -1,9 +1,9 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 
-$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PWD)$($ENV:VM_ID)" 
+$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 $dbname = "Cupis.GrpcHost"
 $pathtojson = "C:\Services\Payments\PaymentCupisService\BaltBet.PaymentCupis.Grpc.Host\appsettings.json"

@@ -5,7 +5,7 @@ Import-module '.\scripts\sideFunctions.psm1'
 $targetDir = "C:\inetpub\ClientWorkPlace\UniRu"
 $webConfig = "$targetDir\Web.config"
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
-$redispasswd = "$($ENV:REDIS_CREDS_PWD)$($ENV:VM_ID)" 
+$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $redisPwdStr= "password=$redispasswd"
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
 ###
@@ -26,7 +26,7 @@ $webdoc.configuration.connectionStrings.add | % {
 }
 Write-Host 'REDIS CONFIG'
 
-$webdoc.configuration."system.web".sessionState.providers.add.connectionString = "$($env:REDIS_HOST):$($env:REDIS_Port)"
+$webdoc.configuration."system.web".sessionState.providers.add.connectionString = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000"
 $webdoc.configuration."system.web".sessionState.providers.add.accessKey = $redispasswd
 $webdoc.configuration.cache.redis.connection = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000,ssl=False,abortConnect=False,connectRetry=10,proxy=None,configCheckSeconds=5"
 ($webdoc.configuration.connectionStrings.add | where {
