@@ -182,7 +182,7 @@ INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]
 update [Settings].[SiteOptions] set Value='true' where name ='Widgets.Interesting.Sports[0].IsEnabled'
 SET IDENTITY_INSERT [Settings].[SiteOptions] OFF
 
-IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'dbo.PreRegistrationData')
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'PreRegistrationData')
 BEGIN
 	DROP TABLE IF EXISTS dbo.PreRegistrationData;
 	PRINT '[INFO] DROP dbo.PreRegistrationData';
