@@ -1,7 +1,13 @@
-if($env:HOMEDRIVE -like 'z:') {
-	$ENV:HOMEDRIVE='C:'
-	restart-service RabbitMQ 
-	start-sleep 7
+#if($env:HOMEDRIVE -like 'z:') {
+#	$ENV:HOMEDRIVE='C:'
+#	restart-service RabbitMQ 
+#	start-sleep 7
+#}
+Get-Service RabbitMQ,Memurai | %{
+    Write-Host "stop service "$_.ServiceName
+    stop-service $_.ServiceName
+    Write-Host "disable service "$_.ServiceName
+    Set-Service $_.ServiceName -StartupType Disabled
 }
 Add-LocalGroupMember -Group "Administrators" -Member "GKBALTBET\JenkinsUsers"
 #$usernames = @("GKBALTBET\TestKernel_svc")

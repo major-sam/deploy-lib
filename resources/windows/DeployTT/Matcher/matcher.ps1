@@ -14,6 +14,7 @@ $configFile = Get-Content -Raw -path $pathtojson
 $json_appsetings = $configFile -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/'| ConvertFrom-Json
 
 $json_appsetings.Serilog.WriteTo[0].Args.path = $logPath
+$json_appsetings.Rabbit.ConnectionString = "$shortRabbitStr;publisherConfirms=true; timeout=100"
 ConvertTo-Json $json_appsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"
 

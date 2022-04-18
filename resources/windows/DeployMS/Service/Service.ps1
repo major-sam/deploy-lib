@@ -11,6 +11,9 @@ $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 4 
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 
+$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+
 ### copy files
 
 ###
@@ -22,5 +25,6 @@ $fileLogs = $jsonAppsetings.Serilog.WriteTo | where {$_.Name -eq 'File' }
 $fileLogs.Args.path = "c:\Logs\MarketingService\MarketingService.log"
 $jsonAppsetings.FilesService.UploadFolderPath = "C:\inetpub\MarketingImages"
 $jsonAppsetings.FilesService.PublicationBaseUrl = "https://$($env:COMPUTERNAME).$($defaultDomain):9883"
+$jsonAppsetings.connectionStrings.RabbitMQ = $shortRabbitStr
 ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"

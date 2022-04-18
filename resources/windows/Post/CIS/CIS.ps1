@@ -12,8 +12,8 @@ Invoke-Sqlcmd -QueryTimeout 360 -verbose -ServerInstance $env:COMPUTERNAME -Data
 
 
 #Добавляем очередь в RabbitMQ
-Write-Host -ForegroundColor Green "[INFO] Create queue Cupis.Payout.ExecuteQueue"
-curl.exe -i -u guest:guest -H "content-type:application/json" -X PUT http://localhost:15672/api/queues/%2f/Cupis.Payout.ExecuteQueue -d"{'auto_delete':false,'durable':true,'arguments':{}}"
+#Write-Host -ForegroundColor Green "[INFO] Create queue Cupis.Payout.ExecuteQueue"
+#curl.exe -i -u guest:guest -H "content-type:application/json" -X PUT http://localhost:15672/api/queues/%2f/Cupis.Payout.ExecuteQueue -d"{'auto_delete':false,'durable':true,'arguments':{}}"
 
 # Регистрируем сервис
 $serviceBin = Get-Item "C:\Services\CupisIntegrationService\BaltBet.CupisIntegrationService.Host\BaltBet.CupisIntegrationService.Host.exe"
