@@ -74,7 +74,22 @@ PRINT 'insert into LineMemberBind done'
 GO
 
 PRINT 'insert into EventTCoefTBind'
-insert into EventTCoefTBind
+insert into EventTCoefTBind( [EventTypesCoefTypesBindId]
+      ,[CoefTypeID]
+      ,[EventTypeId]
+      ,[CoefTypeMain]
+      ,[CoefTypeCount]
+      ,[CoefTypeRepeatCount]
+      ,[MinValue]
+      ,[MaxValue]
+      ,[MarketID]
+      ,[SortOrder]
+      ,[DefaultValue]
+      ,[DefaultAddit]
+      ,[TextVisible]
+      ,[Visibility]
+      ,[AutoCalculated]
+      ,[DateCreate])
 select [EventTypesCoefTypesBindId]
       ,[CoefTypeID]
       ,[EventTypeId]
