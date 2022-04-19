@@ -7,6 +7,8 @@ $apiPort = '50005'
 $pathtojson = 'C:\Services\TradingTool\Services\Baltbet.TradingTool.ResultAnalyzerService\appsettings.json'
 $jsonDepth = 4
 
+$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 Write-Host -ForegroundColor Green "[info] edit json files"
 $configFile = Get-Content -Raw -path $pathtojson 
 ## Json comment imporvement
