@@ -183,6 +183,26 @@ INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]
 INSERT [Settings].[SiteOptions] ([Id], [GroupId], [Name], [Value], [IsInherited]) VALUES (1447, 1, N'Widgets.Interesting.Sports[1].MinBestExpress', NULL, 0)
 update [Settings].[SiteOptions] set Value='true' where name ='Widgets.Interesting.Sports[0].IsEnabled'
 SET IDENTITY_INSERT [Settings].[SiteOptions] OFF
+
+IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'PreRegistrationData')
+BEGIN
+	DROP TABLE dbo.PreRegistrationData;
+	PRINT '[INFO] DROP dbo.PreRegistrationData';
+END
+ELSE
+BEGIN
+	PRINT '[INFO] Table dbo.PreRegistrationData does not exist, nothing to DROP...OK';
+END
+
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.ConnectionString')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'Global.RabbitMq.PicBus.ConnectionString','host=localhost:5672; username=guest; password=guest; publisherConfirms=true; timeout=100; requestedHeartbeat=0',0)
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.IsEnabled')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'Global.RabbitMq.PicBus.IsEnabled','true',0)
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.Exchange')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'Global.RabbitMq.PicBus.Exchange','Exchange.Pic.Ru',0)	
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
