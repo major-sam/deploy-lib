@@ -191,6 +191,16 @@ ELSE
 BEGIN
 	PRINT '[INFO] Table dbo.PreRegistrationData does not exist, nothing to DROP...OK';
 END
+
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.ConnectionString')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'Global.RabbitMq.PicBus.ConnectionString','host=localhost:5672; username=guest; password=guest; publisherConfirms=true; timeout=100; requestedHeartbeat=0',0)
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.IsEnabled')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'Global.RabbitMq.PicBus.IsEnabled','true',0)
+IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.Exchange')
+	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
+	VALUES (1,'Global.RabbitMq.PicBus.Exchange','Exchange.Pic.Ru',0)	
 "
 
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
