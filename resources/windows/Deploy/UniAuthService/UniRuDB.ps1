@@ -1,7 +1,13 @@
 # меняем в админке урл до старого веб апи
 
-$query = "update UniRu.Settings.SiteOptions
-set Value = '/oauth/token'
-where Name = 'OAuth.TokenUrl'"
+$query = "
+UPDATE UniRu.Settings.SiteOptions
+SET Value = '/oauth/token'
+WHERE Name = 'OAuth.TokenUrl'
+
+IF EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'OAuth.LastLogoutUrl')
+    DELETE Settings.SiteOptions WHERE Name = 'OAuth.LastLogoutUrl'
+GO
+"
 
 Invoke-Sqlcmd -Database UniRu -Query $query
