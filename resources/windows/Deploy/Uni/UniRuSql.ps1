@@ -196,7 +196,7 @@ END
 
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.ConnectionString')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Global.RabbitMq.PicBus.ConnectionString','host=localhost:5672; username=guest; password=guest; publisherConfirms=true; timeout=100; requestedHeartbeat=0',0)
+	VALUES (1,'Global.RabbitMq.PicBus.ConnectionString','host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PSW)$($ENV:VM_ID); publisherConfirms=true; timeout=100; requestedHeartbeat=0',0)
 IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.IsEnabled')
 	INSERT INTO UniRu.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
 	VALUES (1,'Global.RabbitMq.PicBus.IsEnabled','true',0)
