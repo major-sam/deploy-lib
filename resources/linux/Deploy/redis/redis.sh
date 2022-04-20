@@ -15,6 +15,7 @@ echo '==============================='
     --set master.service.type="NodePort" \
     --set auth.password=$REDIS_CREDS_PSW$VM_ID \
     --set replica.replicaCount=0  \
+    --set master.persistence.enabled='false' \
     --set master.resources.requests.cpu=250m \
     --set master.resources.limits.cpu=250m   \
     --set master.resources.requests.memory=250Mi \
