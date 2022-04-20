@@ -12,9 +12,9 @@ CreateSqlDatabase ("PushService")
 $file =	"C:\Services\PersonalInfoCenter\PushServiceDB\init.sql"
 Invoke-Sqlcmd -ServerInstance $env:COMPUTERNAME -Database "PushService" -InputFile $file -Verbose
 
-$pathtojson = "C:\Services\PersonalInfoCenter\PushService\appsettings.json"
+$pathtojson = "C:\Services\PersonalInfoCenter\MessageService\appsettings.json"
 
 $config = Get-Content -Path $pathtojson -Encoding UTF8
 $json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
 $json_appsetings.RabbitMqConnection.Host ="$shortRabbitStr; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
-$json_appsetings.ConnectionStrings.Redis = $shortRedisStr
+ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
