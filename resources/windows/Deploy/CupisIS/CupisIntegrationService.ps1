@@ -56,6 +56,7 @@ $config.Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
 $config.Kestrel.EndPoints.Https.Certificate.Store = "My"
 $config.Kestrel.EndPoints.Https.Certificate.AllowInvalid = "true"
 $config.Bus.CupisCallbackBusConnectionString=$shortRabbitStr
+$config.VirtualMachines.LocalMachineBusAddress=$shortRabbitStr
 
 $config.Kestrel.EndPoints.gRPC.Url = "http://localhost:${cisGrpcPort}"
 
