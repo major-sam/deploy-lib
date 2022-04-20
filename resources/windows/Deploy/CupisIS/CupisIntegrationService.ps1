@@ -9,6 +9,8 @@ Import-module '.\scripts\sideFunctions.psm1'
     Конфиг: appsettings.json
 #>
 
+$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $ServiceName = "BaltBet.CupisIntegrationService.Host"
 $ServiceFolderPath = "C:\Services\CupisIntegrationService\${ServiceName}"
@@ -53,34 +55,9 @@ $config.Kestrel.EndPoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDo
 $config.Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
 $config.Kestrel.EndPoints.Https.Certificate.Store = "My"
 $config.Kestrel.EndPoints.Https.Certificate.AllowInvalid = "true"
+$config.Bus.CupisCallbackBusConnectionString=$shortRabbitStr
 
 $config.Kestrel.EndPoints.gRPC.Url = "http://localhost:${cisGrpcPort}"
 
 ConvertTo-Json $config -Depth 4  | Format-Json | Set-Content "$ServiceFolderPath\appsettings.json" -Encoding UTF8
 
-$reportVal =@"
-[$ServiceName]
-$ServiceFolderPath\appsettings.json
-    .Cupis.BaseUrl = $CupisBaseUrl
-    .Cupis.BackupBaseUrl = $CupisBackupBaseUrl
-    g.Cupis.CertPassword = $CupisCertPassword
-    .Cupis.CertThumbprint = $CupisCertThumbprint
-    .Bus.CupisCallbackBusConnectionString = "host=localhost"
-    .Fns.BaseUrl = $FnsBaseUrl
-    .Fns.Key = $FnsKey
-    .VirtualMachines.EnableMultiNotification = "false"
-    .VirtualMachines.EnableMonitor = "true"
-    .DocumentImages.UploadServiceAddress = "http://localhost:${idsHttpPort}"
-    .Authorization.Realm = "https://vm4-p0.bb-webapps.com:${cisHttpsPort}/"
-                                                                                                    
-    .Bus.CupisCallbackBusConnectionString = "host=$($env:COMPUTERNAME);username=test;password=test"
-    .Kestrel.EndPoints.Https.Url = "https://localhost:${cisHttpsPort}"
-    .Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
-    .Kestrel.EndPoints.Https.Certificate.Store = "My"
-    .Kestrel.EndPoints.Https.Certificate.AllowInvalid = "true"
-    .Kestrel.EndPoints.gRPC.Url = "http://localhost:${cisGrpcPort}"
-$('='*60)
-
-"@
-
-Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8
