@@ -20,7 +20,7 @@ echo '==============================='
     --set service.epmdPortEnabled="false" \
     --set auth.username=$REDIS_CREDS_USR \
     --set auth.password=$REDIS_CREDS_PSW$VM_ID  \
-    --set resources.requests.cpu=350m \
+    --set resources.requests.cpu=30m \
     --set resources.limits.cpu=550m  \
     --set resources.requests.memory=450Mi \
     --set memoryHighWatermark.enabled="true" \
