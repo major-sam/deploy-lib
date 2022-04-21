@@ -6,6 +6,7 @@ echo $VM_ID
 echo $RABBIT_PORT
 echo $RABBIT_WEB_PORT
 echo '==============================='
+ #   --set resources.requests.cpu=30m \
 
 /usr/sbin/helm upgrade -i test-rabbitmq bitnami/rabbitmq  \
     --version 8.31.2 \
@@ -20,7 +21,6 @@ echo '==============================='
     --set service.epmdPortEnabled="false" \
     --set auth.username=$REDIS_CREDS_USR \
     --set auth.password=$REDIS_CREDS_PSW$VM_ID  \
-    --set resources.requests.cpu=30m \
     --set resources.limits.cpu=550m  \
     --set resources.requests.memory=450Mi \
     --set memoryHighWatermark.enabled="true" \
