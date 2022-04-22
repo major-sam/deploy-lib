@@ -1,5 +1,5 @@
 import-module '.\scripts\sideFunctions.psm1'
-. "$($PSScriptRoot)\..\..\Deploy\PhotonServer\PhotonServerVariables.ps1" 
+. ".\..\..\Deploy\PhotonServer\PhotonServerVariables.ps1" 
 
 $PhotonServerConfig = Join-Path -Path $DeployPhotonFolder -ChildPath "bin_Win64\PhotonServer.config"
 $PhotonPluginConfig = Join-Path -Path $PhotonPluginFolder -ChildPath "PhotonServer.dll.config"
