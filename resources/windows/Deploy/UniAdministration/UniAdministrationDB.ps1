@@ -5,7 +5,7 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 
 $ProgressPreference = 'SilentlyContinue'
 
-$release_bak_folder = "C:\inetpub\ClientWorkPlace\UniAdministrationDB"
+$release_bak_folder = "C:\inetpub\ClientWorkPlace\UniAdministrationDB\out"
 
 $Dbname =  "UniAdministration"
 $dbs = @(
