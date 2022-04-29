@@ -1,11 +1,31 @@
+
 Import-module '.\scripts\sideFunctions.psm1'
 
-# Создаем БД Antifraud
-$dbName = "Antifraud"
-$dbInitBackup = "init.bak"
+###vars
+$IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 
-Write-Host -ForegroundColor Green "[INFO] Create DB $dbName"
-CreateSqlDatabase $dbName
+$ProgressPreference = 'SilentlyContinue'
 
-Write-Host -ForegroundColor Green "[INFO] Restore $dbInitBackup on $dbName"
-Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Database $dbName -InputFile  "C:\Services\Payments\Antifraud\AntiFraudDB\out\${dbInitBackup}" -ErrorAction continue
+$release_bak_folder = "C:\Services\Payments\Antifraud\AntifraudDB\out"
+
+$Dbname =  "Antifraud"
+$dbs = @(
+	@{
+		DbName = $Dbname
+		BackupFile = "$release_bak_folder\init.bak" 
+        RelocateFiles = @(
+			@{
+				SourceName = "Antifraud"
+				FileName = "Antifraud.mdf"
+			}
+			@{
+				SourceName = "Antifraud_log"
+				FileName = "Antifraud_log.ldf"
+			}
+		)    
+	}
+)
+
+###Create dbs
+Write-Host -ForegroundColor Green "[INFO] Create and restore db $Dbname"
+RestoreSqlDb -db_params $dbs
