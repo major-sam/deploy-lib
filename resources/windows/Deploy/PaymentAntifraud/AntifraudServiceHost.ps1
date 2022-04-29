@@ -9,6 +9,7 @@ $jsonDepth = 5
 
 $dbname = "Antifraud"
 $AggregatorDb = "BaltBet_Payment_Test"
+$AggregatorDbServer = "TEST-SQL16WIN19\MSSQLSERVER2"
 $httpsAFServicePort = 7157
 $defaultDomain = "bb-webapps.com"
 
@@ -29,7 +30,7 @@ $jsonAppsetings.Kestrel.Endpoints.Https.Certificate.Subject = "*.bb-webapps.com"
 
 # Настраиваем секцию подключения к БД
 $jsonAppsetings.ConnectionStrings.Db = "data source=localhost;initial catalog=${dbname};Integrated Security=true;MultipleActiveResultSets=True;"
-$jsonAppsetings.ConnectionStrings.AggregatorDb = "data source=localhost;initial catalog=${AggregatorDb};Integrated Security=true;MultipleActiveResultSets=True;"
+$jsonAppsetings.ConnectionStrings.AggregatorDb = "data source=${AggregatorDbServer};initial catalog=${AggregatorDb};Integrated Security=true;MultipleActiveResultSets=True;"
 
 
 ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
