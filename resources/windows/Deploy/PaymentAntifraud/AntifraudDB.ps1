@@ -26,6 +26,15 @@ $dbs = @(
 	}
 )
 
-###Create dbs
+### Create dbs
 Write-Host -ForegroundColor Green "[INFO] Create and restore db $Dbname"
 RestoreSqlDb -db_params $dbs
+
+### PAY-725
+$query = "
+INSERT INTO Configurations (IsActive, OptionsJson) VALUES (1, N'{ 'mainOptions': { 'isEnabled': true, 'strategy': 1 }, 'failedPaymentsTrigger': { 'isEnabled': true, 'invoiceNumber': 5, 'periodDays': 10, 'percentFailed': 50 } }');
+GO
+"
+Write-Host -ForegroundColor Green "[INFO] Execute query PAY-725 on db $Dbname"
+Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $Dbname -query $query -ErrorAction Stop
+###
