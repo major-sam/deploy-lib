@@ -5,4 +5,4 @@ $kernelSettings.Settings.PushNotificationSettings.IsBetsEnabled = 'true'
 $kernelSettings.Save("C:\Kernel\Settings.xml")
 
 $AchievementServiceFolder = "C:\Services\AchievementService\"
-RegisterWinService("$($AchievementServiceFolder)\BaltBet.AchievementService.Host.exe")
+RegisterWinService("$($AchievementServiceFolder)\AchievementService.exe")
