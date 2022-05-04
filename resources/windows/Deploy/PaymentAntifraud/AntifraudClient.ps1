@@ -8,7 +8,7 @@ $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
 
 $httpsAFServicePort = 7157
-$httpsAFClientPort = 7729
+$httpsAFClientPort = 7279
 $defaultDomain = "bb-webapps.com"
 
 
