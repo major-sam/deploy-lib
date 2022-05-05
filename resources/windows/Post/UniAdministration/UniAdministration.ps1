@@ -11,11 +11,14 @@ $dbname = "UniAdministration"
 ####
 Write-Host -ForegroundColor Green "[INFO] Edit web.config of $webConfig"
 $webdoc = [Xml](Get-Content $webConfig)
-($webdoc.configuration.connectionStrings.add | where {
-	$_.name -eq 'AdministrationContext' 
-	}).connectionString = "data source=localhost;initial catalog=${dbname};Integrated Security=true;MultipleActiveResultSets=True;"
 
+$isAdministrationContext = ($webdoc.configuration.connectionStrings.add | Where-Object { $_.name -eq 'AdministrationContext' })
+if ($isAdministrationContext) {
+	Write-Host -ForegroundColor Green "[INFO] Change AdministrationContext.connectionString"
+    $isAdministrationContext.connectionString = "data source=localhost;initial catalog=${dbname};Integrated Security=true;MultipleActiveResultSets=True;"    
+}
+else {
+    Write-Host -ForegroundColor Green "[INFO] There is not AdministrationContext.connectionString in $webConfig"
+}
 
 $webdoc.Save($webConfig)
-
-Write-Host -ForegroundColor Green "[INFO] Done"
