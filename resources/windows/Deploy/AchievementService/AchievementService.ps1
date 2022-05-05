@@ -13,8 +13,8 @@ $config.Serilog.WriteTo | % {
     }
 }
 
-$config.ConnectionStrings.KernelDb = "data source=$(env:COMPUTERNAME);initial catalog=BaltBetM;Integrated Security=true;MultipleActiveResultSets=True;"
-$config.ConnectionStrings.AchievementDb = "data source=$(env:COMPUTERNAME);initial catalog=AchievementService;Integrated Security=true;MultipleActiveResultSets=True;"
+$config.ConnectionStrings.KernelDb = "data source=$($env:COMPUTERNAME);initial catalog=BaltBetM;Integrated Security=true;MultipleActiveResultSets=True;"
+$config.ConnectionStrings.AchievementDb = "data source=$($env:COMPUTERNAME);initial catalog=AchievementService;Integrated Security=true;MultipleActiveResultSets=True;"
 
 ConvertTo-Json $config -Depth $jsonDepth| Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"
