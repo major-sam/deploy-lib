@@ -49,10 +49,7 @@ $new.SetAttribute( "value","false")
 if (!$webdoc.configuration.appSettings.add.Contains($new)){
 		$webdoc.configuration.appSettings.AppendChild($new)
 }
-(($webdoc.configuration.ckfinder.backends.backend|	where {
-	$_.name -ilike "default"
-	}).option| where {
-		$_.name -ilike 'root'}).value = 'c:\inetpub\images'
+
 $webdoc.Save($webConfig)
 
 Write-Host -ForegroundColor Green "[INFO] Done"
