@@ -269,21 +269,6 @@ $IISPools = @(
 		siteSubDir = $true
     }
     @{
-        SiteName = 'BaltBet.AccountStatisticsService.Host'
-        RuntimeVersion = ''
-        DomainAuth =  @{
-            userName="$username";password="$pass";identitytype=3
-            }
-        Bindings= @(
-                @{
-                    protocol='https';;bindingInformation="*:4436:$($env:COMPUTERNAME).$($wildcardDomain)"}
-#  UNR 752 fix                    protocol='https';;bindingInformation="*:5038:$($env:COMPUTERNAME).$($wildcardDomain)"}
-            )
-        CertPath = 'Cert:\LocalMachine\My\38be86bcf49337804643a671c4c56bc4224c6606'
-        rootDir = 'C:\Services\AccountStatisticsService\BaltBet.AccountStatisticsService.Host'
-        siteSubDir = $false
-    }
-    @{
         SiteName = 'UniBonusService'
         RuntimeVersion = ''
         DomainAuth =  @{
