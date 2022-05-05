@@ -1,3 +1,6 @@
+import-module '.\scripts\sideFunctions.psm1'
+
+
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 $pathtojson = "C:\Services\AchievementService\appsettings.json"
