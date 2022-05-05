@@ -2,7 +2,7 @@ Import-module '.\scripts\sideFunctions.psm1'
 
 
 $serviceName = "BaltBet.AccountStatisticsService.Host"
-$targetDir = "C:\Services\${serviceName}"
+$targetDir = "C:\Services\AccountStatisticsService\${serviceName}"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
