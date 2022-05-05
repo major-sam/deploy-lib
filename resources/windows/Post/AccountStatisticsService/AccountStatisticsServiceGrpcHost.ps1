@@ -1,8 +1,13 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 # Регистрируем сервис
-$ServiceName = "AccountStatisticsService"
-$serviceBin = Get-Item  "C:\Services\${ServiceName}\BaltBet.AccountStatisticsService.GrpcHost\BaltBet.AccountStatisticsService.GrpcHost.exe"
-$sname = RegisterWinService($serviceBin)
-Start-Service $sname
-Set-Recovery -ServiceDisplayName $sname -Server $env:COMPUTERNAME
+$serviceBinPath = "C:\Services\AccountStatisticsService\BaltBet.AccountStatisticsService.GrpcHost\BaltBet.AccountStatisticsService.GrpcHost.exe"
+if (test-path $serviceBinPath){
+    $serviceBin = Get-Item $serviceBinPath
+    $sname = RegisterWinService($serviceBin)
+    Start-Service $sname
+    Set-Recovery -ServiceDisplayName $sname -Server $env:COMPUTERNAME
+}
+else{
+    write-host "file $serviceBinPath not exists"
+}

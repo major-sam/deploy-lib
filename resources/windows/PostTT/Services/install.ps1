@@ -15,7 +15,7 @@ Get-ChildItem C:/Services/TradingTool -Exclude "tools","client"| Get-childitem -
 	}| %{
 		$sname = registerwinservice($_)
 		if ($sname -in $doNotStart){
-			write-host "$sname autostart disabled. Use manual startuo"
+			write-host "$sname autostart disabled. Use manual startup"
 		}
 		else{
 			start-service $sname
