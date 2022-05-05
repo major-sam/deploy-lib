@@ -8,7 +8,7 @@ $config = Get-Content -Encoding utf8 -Path $pathtojson | ConvertFrom-Json
 $config.RabbitMqConnection.Host = "$($shortRabbitStr);publisherConfirms=true;timeout=5;virtualhost=/"
 
 $config.Serilog.WriteTo | % {
-    if ($_.Name = 'File' ){
+    if ($_.Name -eq 'File' ){
         $_.Args.path = "C:\Logs\AchievementService\AchievementService.log"
     }
 }
