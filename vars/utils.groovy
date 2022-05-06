@@ -2,6 +2,29 @@ import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
 import jenkins.model.Jenkins
 
+def kuberPortShift(Map config = [:]){          
+	return config.port + config.VM.replaceAll("\\D+","").toInteger()
+}
+
+def getKuberNodeLabel(Map config = [:]){
+	def nodes =(nodesByLabel label: 'test_minikube').sort()
+	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
+		return nodes[0]
+	}
+	else{
+		return nodes[1]
+	}
+}
+
+def getKuberNodeIP(Map config = [:]){
+	def nodes =(nodesByLabel label:'test_minikube').sort()
+	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
+		return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
+	}
+	else{
+		return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
+	}
+}
 
 def getLastSuccessfullTaskJobDescription(node){
 	def test_job = Jenkins.instance.getItemByFullName(JOB_NAME)
