@@ -5,21 +5,21 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 
 $ProgressPreference = 'SilentlyContinue'
 
-$release_bak_folder = "C:\inetpub\ClientWorkPlace\UniAdministrationDB\out"
+$release_bak_folder = "C:\inetpub\ClientWorkPlace\WebAdministrationDB\out"
 
-$Dbname =  "UniAdministration"
+$Dbname =  "WebAdministration"
 $dbs = @(
 	@{
 		DbName = $Dbname
 		BackupFile = "$release_bak_folder\init.bak" 
         RelocateFiles = @(
 			@{
-				SourceName = "UniAdministration"
-				FileName = "UniAdministration.mdf"
+				SourceName = "WebAdministration"
+				FileName = "WebAdministration.mdf"
 			}
 			@{
-				SourceName = "UniAdministration_log"
-				FileName = "UniAdministration_log.ldf"
+				SourceName = "WebAdministration_log"
+				FileName = "WebAdministration_log.ldf"
 			}
 		)    
 	}
