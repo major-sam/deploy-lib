@@ -7,19 +7,21 @@ def kuberPortShift(Map config = [:]){
 }
 
 def getKuberNodeLabel(Map config = [:]){
-	def nodes =(nodesByLabel label: 'test_minikube').sort()
+	def nodes =nodesByLabel config.nodeLabel
+	nodes=nodes.sort()
 	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
-		return nodes[0]
+		return nodes[1]
 	}
 	else{
-		return nodes[1]
+		return nodes[0]
 	}
 }
 
 def getKuberNodeIP(Map config = [:]){
-	def nodes =(nodesByLabel label:'test_minikube').sort()
+	def nodes =nodesByLabel config.nodeLabel
+	nodes=nodes.sort()
 	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
-		return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
+		return Jenkins.getInstance().getComputer(nodes[1]).getHostName()
 	}
 	else{
 		return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
