@@ -6,6 +6,18 @@ def kuberPortShift(Map config = [:]){
 	return config.port + config.VM.replaceAll("\\D+","").toInteger()
 }
 
+def getKuberNodeLabelv2(Map config = [:]){
+	def nodes =nodesByLabel config.nodeLabel
+	nodes=nodes.sort()
+	return nodes[config.KuberID]
+}
+
+def getKuberNodeIPv2(Map config = [:]){
+	def nodes =nodesByLabel config.nodeLabel
+	nodes=nodes.sort()
+	return Jenkins.getInstance().getComputer(nodes[config.KuberID]).getHostName()
+}
+
 def getKuberNodeLabel(Map config = [:]){
 	def nodes =nodesByLabel config.nodeLabel
 	nodes=nodes.sort()
