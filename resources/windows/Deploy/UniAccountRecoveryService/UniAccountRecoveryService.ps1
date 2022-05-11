@@ -9,7 +9,7 @@ $httpsUniRuPort = 4443
 $accKestrelPort = 56542
 $defaultDomain = "bb-webapps.com"
 $kernelDbName = "BaltBetM"
-$uniRuDbName = "UniRu"
+$uniRuAdminDbName = "UniAdministration"
 
 $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
@@ -43,7 +43,7 @@ $json_appsetings.Origins = $Origins
 
 # Настройки подключения
 Write-Host -ForegroundColor Green "[INFO] Change ConnectionStrings..."
-$json_appsetings.ConnectionStrings.UniSiteSettings = "data source=localhost;initial catalog=${uniRuDbName};Integrated Security=SSPI;MultipleActiveResultSets=True;"
+$json_appsetings.ConnectionStrings.UniSiteSettings = "data source=localhost;initial catalog=${uniRuAdminDbName};Integrated Security=SSPI;MultipleActiveResultSets=True;"
 $json_appsetings.ConnectionStrings.KernelDb = "data source=localhost;initial catalog=${kernelDbName};Integrated Security=SSPI;MultipleActiveResultSets=True;"
 $json_appsetings.ConnectionStrings.Redis = $shortRedisStr
 $json_appsetings.ConnectionStrings.RabbitMq = "$shortRabbitStr;publisherConfirms=true; timeout=100; requestedHeartbeat=0"
