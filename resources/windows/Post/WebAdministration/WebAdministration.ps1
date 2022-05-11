@@ -4,7 +4,7 @@ Import-module '.\scripts\sideFunctions.psm1'
 ###vars
 $targetDir = "C:\inetpub\ClientWorkPlace\UniRu"
 $webConfig = "$targetDir\Web.config"
-$dbname = "UniRu"
+$dbname = "WebAdministration"
 
 ###
 #XML values replace UniRu
