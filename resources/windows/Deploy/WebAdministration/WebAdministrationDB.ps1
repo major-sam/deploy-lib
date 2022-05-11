@@ -7,19 +7,19 @@ $ProgressPreference = 'SilentlyContinue'
 
 $release_bak_folder = "C:\inetpub\ClientWorkPlace\WebAdministrationDB\out"
 
-$Dbname =  "WebAdministration"
+$Dbname =  "UniAdministration"
 $dbs = @(
 	@{
 		DbName = $Dbname
 		BackupFile = "$release_bak_folder\init.bak" 
         RelocateFiles = @(
 			@{
-				SourceName = "WebAdministration"
-				FileName = "WebAdministration.mdf"
+				SourceName = $Dbname
+				FileName = "${Dbname}.mdf"
 			}
 			@{
-				SourceName = "WebAdministration_log"
-				FileName = "WebAdministration_log.ldf"
+				SourceName = "${Dbname}_log"
+				FileName = "${Dbname}_log.ldf"
 			}
 		)    
 	}

@@ -10,7 +10,7 @@ $targetDir = "C:\inetpub\ClientWorkPlace\${serviceName}"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
-$dbname = "UniRu"
+$dbname = "UniAdministration"
 $httpsWAport = 44331
 
 Write-host "[INFO] Start ${serviceName} deploy script"
