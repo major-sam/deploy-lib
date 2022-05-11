@@ -5,4 +5,6 @@ $kernelSettings.Settings.PushNotificationSettings.IsBetsEnabled = 'true'
 $kernelSettings.Save("C:\Kernel\Settings.xml")
 
 $serviceBin = Get-Item -Path "C:\Services\AchievementService\AchievementService.exe"
-RegisterWinService($serviceBin)
+$serviceName = RegisterWinService($serviceBin)
+
+Start-Service -Name $serviceName -Verbose

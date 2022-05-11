@@ -26,4 +26,4 @@ echo '==============================='
     --set memoryHighWatermark.enabled="true" \
     --set memoryHighWatermark.type="relative" \
     --set memoryHighWatermark.value="0.4" \
-    --set resources.limits.memory=1Gi \
+    --set resources.limits.memory=1Gi 
