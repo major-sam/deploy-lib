@@ -15,7 +15,7 @@ Write-Host -ForegroundColor Green "[INFO] Edit Photon plugin config"
 $kernelWebConfig = "C:\KernelWeb\KernelWeb.exe.config"
 $kernelUserName = (([xml](Get-Content -Encoding UTF8 -Path $kernelWebConfig)).configuration.appSettings.add | ? key -eq "ParserLogin").value
 $kernelPassword = (([xml](Get-Content -Encoding UTF8 -Path $kernelWebConfig)).configuration.appSettings.add | ? key -eq "ParserPassword").value
-$baseUri = ([xml](Get-Content -Encoding UTF8 -Path "C:\KernelWeb\Settings.xml")).Settings.Ports.Port[0]
+$baseUri = "http://localhost:" + ([xml](Get-Content -Encoding UTF8 -Path "C:\KernelWeb\Settings.xml")).Settings.Ports.Port[0]
 
 $configData.configuration.kernelService.kernelUserName = $kernelUserName
 $configData.configuration.kernelService.kernelPassword = $kernelPassword
@@ -30,3 +30,4 @@ Write-Host -ForegroundColor Green "[INFO] Add photon.json to WebsiteCom director
 $photonPort = ([xml](Get-Content -Encoding UTF8 -Path $PhotonServerConfig)).Configuration.PhotonServer.WebSocketListeners.WebSocketListener.Port
 $data = '{ "url": "wss://' + "$($env:COMPUTERNAME):$($photonPort)" + '" }'
 Set-Content -Encoding UTF8 -Path "$($sitesFolder)\WebsiteCom\photon.json" -Value $data
+
