@@ -1,5 +1,6 @@
 import-module '.\scripts\sideFunctions.psm1'
 
+$CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 $serviceName = "PhotonServer"
 $servicesFolder = "C:\Services"
 $sitesFolder = "C:\inetpub"
@@ -12,13 +13,14 @@ $PhotonPluginConfig = Join-Path -Path $PhotonPluginFolder -ChildPath "PhotonServ
 ## Edit Photon plugin config
 Write-Host -ForegroundColor Green "[INFO] Edit Photon plugin config"
 [xml]$configData = Get-Content -Encoding UTF8 -Path $PhotonPluginConfig
-$kernelWebConfig = "C:\KernelWeb\KernelWeb.exe.config"
-$kernelUserName = (([xml](Get-Content -Encoding UTF8 -Path $kernelWebConfig)).configuration.appSettings.add | ? key -eq "ParserLogin").value
-$kernelPassword = (([xml](Get-Content -Encoding UTF8 -Path $kernelWebConfig)).configuration.appSettings.add | ? key -eq "ParserPassword").value
-$baseUri = "http://localhost:" + ([xml](Get-Content -Encoding UTF8 -Path "C:\KernelWeb\Settings.xml")).Settings.Ports.Port[0]
+$kernelWebConfig = [xml](Get-Content -Encoding UTF8 -Path "C:\KernelWeb\KernelWeb.exe.config")
+$kernelWebUserName = ($kernelWebConfig.configuration.appSettings.add | ? key -eq "ParserLogin").value
+$kernelWebPassword = ($kernelWebConfig.configuration.appSettings.add | ? key -eq "ParserPassword").value
+$kernelWebUrl = ($kernelWebConfig.configuration.appSettings.add | ? key -eq "WebApi").value
+$baseUri = $kernelWebUrl.Replace("*",$CurrentIpAddr)
 
-$configData.configuration.kernelService.kernelUserName = $kernelUserName
-$configData.configuration.kernelService.kernelPassword = $kernelPassword
+$configData.configuration.kernelService.kernelUserName = $kernelWebUserName
+$configData.configuration.kernelService.kernelPassword = $kernelWebPassword
 $configData.configuration.kernelService.baseUri = $baseUri
 
 $configData.Save($PhotonPluginConfig)
