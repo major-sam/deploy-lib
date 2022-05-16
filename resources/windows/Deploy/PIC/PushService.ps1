@@ -3,10 +3,13 @@ $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)"
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $config = 	"C:\Services\PersonalInfoCenter\PushService\Log.config"
-$svc = get-item $config 
-$webdoc = [Xml](Get-Content $svc.Fullname)
-$webdoc.log4net.appender.file.value = "c:\logs\PersonalInfoCenter\$($svc.Directory.name)-"
-$webdoc.Save($svc.Fullname)
+if (test-path $config){
+        $svc = get-item $config 
+        $webdoc = [Xml](Get-Content $svc.Fullname)
+        $webdoc.log4net.appender.file.value = "c:\logs\PersonalInfoCenter\$($svc.Directory.name)-"
+        $webdoc.Save($svc.Fullname)
+}
+else{write-host  $config ' not exists'        }
 
 CreateSqlDatabase ("PushService")
 $file =	"C:\Services\PersonalInfoCenter\PushServiceDB\init.sql"

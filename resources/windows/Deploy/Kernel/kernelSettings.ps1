@@ -68,6 +68,17 @@ $webLogConfig  = "C:\KernelWeb\KernelWeb.exe.config"
 Write-Host "[INFO] Edit web.config of $webLogConfig"
 
 $webdoc = [Xml](Get-Content $webLogConfig)
+$webdoc.configuration.'system.serviceModel'.behaviors.serviceBehaviors.behavior | ? {
+	if ( $_.name -eq 'wcfSecureServiceBehavior') { 
+		$_.serviceCredentials.serviceCertificate.findValue = "test.wcf.host"
+		$_.serviceCredentials.serviceCertificate.x509FindType = "FindBySubjectName"
+	}
+}
+$webdoc.configuration.'system.serviceModel'.services.service | ? {
+	if ( $_.name -eq "KernelWeb.Services.Wcf.Uni.Slots.SlotService" ) {
+		$_.endpoint.address = "net.tcp://$($CurrentIpAddr):8300/uni/site/com/Slots/SlotService"
+	}
+}
 $webdoc.configuration.log4net.appender|%{$_.file.value = "c:\logs\kernelWeb\"}
 ($webdoc.configuration.connectionStrings.add| ?{$_.name -ilike 'RabbitMQ'}).connectionString =$shortRabbitStr
 
