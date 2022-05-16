@@ -44,7 +44,7 @@ $jsonAppsetings.Grpc.Services | % { if ($_.Name -like 'AuthenticationService') {
 }
 
 # Включаем логирование запросов
-$jsonAppsetings.ProtectedKeysFolder = $keyFolder
+if ( $null -ne $jsonAppsetings.ProtectedKeysFolder){ $jsonAppsetings.ProtectedKeysFolder = $keyFolder }
 
 # Включаем логирование запросов
 $jsonAppsetings.RequestResponseLogIsEnabled = $true
