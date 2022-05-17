@@ -25,7 +25,8 @@ $webdoc.configuration.connectionStrings.add | % {
 	}
 }
 Write-Host 'REDIS CONFIG'
-
+($webdoc.configuration.connectionStrings.add | 
+	Where-Object name -eq "Redis").connectionString = $shortRedisStr
 $webdoc.configuration."system.web".sessionState.providers.add.connectionString = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000"
 $webdoc.configuration."system.web".sessionState.providers.add.accessKey = $redispasswd
 $webdoc.configuration.cache.redis.connection = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000,ssl=False,abortConnect=False,connectRetry=10,proxy=None,configCheckSeconds=5"
