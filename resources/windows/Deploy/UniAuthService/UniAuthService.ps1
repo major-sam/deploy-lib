@@ -28,6 +28,7 @@ $jsonAppsetings = Get-Content -Raw -path $pathtojson  | % { $_ -replace '[\s^]//
 
 # Настраиваем секцию подключения к БД
 $jsonAppsetings.ConnectionStrings.AuthDb = "data source=localhost;initial catalog=${dbname};Integrated Security=SSPI;MultipleActiveResultSets=True;"
+$jsonAppsetings.ConnectionString.Redis = $shortRedisStr
 
 # Настраиваем секцию логирования
 $jsonAppsetings.Serilog.WriteTo | % { if ($_.Name -like 'File') {
@@ -44,7 +45,7 @@ $jsonAppsetings.Grpc.Services | % { if ($_.Name -like 'AuthenticationService') {
 }
 
 # Включаем логирование запросов
-$jsonAppsetings.ProtectedKeysFolder = $keyFolder
+if ( $null -ne $jsonAppsetings.ProtectedKeysFolder){ $jsonAppsetings.ProtectedKeysFolder = $keyFolder }
 
 # Включаем логирование запросов
 $jsonAppsetings.RequestResponseLogIsEnabled = $true
