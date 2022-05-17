@@ -18,7 +18,7 @@ Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
 $jsonAppsetings = Get-Content -Raw -path $pathtojson  | % { $_ -replace '[\s^]//.*', "" } | ConvertFrom-Json
 
 # Настраиваем секцию ADFS
-$jsonAppsetings.authentication.adfs.wtrealm = "https://${env:COMPUTERNAME}.bb-webapps.com:${httpsWAport}"
+$jsonAppsetings.authentication.adfs.wtrealm = "https://$($env:computername.ToLower()).bb-webapps.com:${httpsWAport}"
 
 # Настраиваем секцию подключения к БД
 $jsonAppsetings.ConnectionStrings.DataContext = "data source=localhost;initial catalog=${dbname};Integrated Security=true;MultipleActiveResultSets=True;"
