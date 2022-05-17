@@ -22,7 +22,13 @@ $json_appsetings.AdfsOptions.Issuer = "http://adfs-next.gkbaltbet.local/adfs/ser
 ($json_appsetings.Serilog.WriteTo | Where-Object {$_.Name -like 'File' }).Args.path = $logPath
 $json_appsetings.AdfsOptions.Audience = "http://localhost:50005/"
 $json_appsetings.ConnectionStrings.TradingToolDb =  "Data Source=localhost;Initial Catalog=TradingTool;Integrated Security=True"
-$json_appsetings.Rabbit.ConnectionString = "$shortRabbitStr;publisherConfirms=true; timeout=100"
+if ($json_appsetings.Rabbit.ConnectionString){
+    $json_appsetings.Rabbit.ConnectionString = "$shortRabbitStr;publisherConfirms=true; timeout=100"
+}
+else{
+    $json_appsetings.Rabbit.InternalConnectionString= "$shortRabbitStr;publisherConfirms=true; timeout=100"
+    $json_appsetings.Rabbit.KernelConnectionString= "$shortRabbitStr;publisherConfirms=true; timeout=100"
+}
 ## mayby to Env
 $json_appsetings.KernelConfiguration.ClientId = "10004"
 ConvertTo-Json $json_appsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8

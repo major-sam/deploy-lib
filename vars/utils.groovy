@@ -12,10 +12,9 @@ def getKuberNodeLabelv2(Map config = [:]){
 	return nodes[config.KuberID]
 }
 
-def getKuberNodeIPv2(Map config = [:]){
+def getNodeIP(Map config = [:]){
 	def nodes =nodesByLabel config.nodeLabel
-	nodes=nodes.sort()
-	return Jenkins.getInstance().getComputer(nodes[config.KuberID]).getHostName()
+	return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
 }
 
 def getKuberNodeLabel(Map config = [:]){
