@@ -26,6 +26,8 @@ $webdoc.configuration.appSettings.add | %{ if ($_.key -eq "ClientId"){
 	Where-Object key -eq "IsRegistrationCaptchaEnabled").value = "false"
 ($webdoc.configuration.connectionStrings.add | 
 	Where-Object name -eq "UniPaymentsServiceUrl").connectionString = "https://${env:COMPUTERNAME}.$($wildcardDomain):54381"
+($webdoc.configuration.connectionStrings.add | 
+	Where-Object name -eq "Redis").value = $shortRedisStr
 
 # Добавляем/изменяем параметр BaseRedirectUniUrl
 $BaseRedirectUniUrl = ($webdoc.configuration.appSettings.add | Where-Object key -eq "BaseRedirectUniUrl")
