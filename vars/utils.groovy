@@ -181,7 +181,7 @@ def doMavenDeploy(taskBranch){
 				fileId: 'mavenSettingsGlobal', 
 				targetLocation: 'MAVEN_SETTINGS.xml')
 			]){
-		powershell "mvn clean versions:use-latest-releases dependency:unpack -s MAVEN_SETTINGS.xml -f deployPom.xml ${deployParams}"
+		powershell "mvn clean versions:use-latest-releases dependency:unpack -s MAVEN_SETTINGS.xml -f deployPom.xml -U ${deployParams}"
 	}
 	result = powershell(
 			script:"""
@@ -210,7 +210,7 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 				)
 		powershell (
 				script: "mvn clean versions:use-latest-releases" +
-				" dependency:unpack -s MAVEN_SETTINGS.xml"+
+				" dependency:unpack  -U -s MAVEN_SETTINGS.xml"+
 				" -f pomxml ${deployParams}",
 				label: "Maven deploy ${config.groupId} branch ${taskBranch}"
 				)
