@@ -30,7 +30,9 @@ $webdoc.configuration.connectionStrings.AppendChild($ConnectionStringsAdd)
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService' }).host = $IPAddress
 #configuration.appSettings.SelectNodes add node enable swagger   
 Write-Host 'REDIS CONFIG'
-
+$webdoc.configuration.connectionStrings.add | % {
+	if ($_.name -eq "Redis") { $_.connectionString = $shortRedisStr } 
+}
 $webdoc.configuration."system.web".sessionState.providers.add.connectionString = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000"
 $webdoc.configuration."system.web".sessionState.providers.add.accessKey = $redispasswd
 $webdoc.configuration.cache.redis.connection = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000,ssl=False,abortConnect=False,connectRetry=10,proxy=None,configCheckSeconds=5"
