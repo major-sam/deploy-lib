@@ -1,7 +1,7 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 # Регистрируем сервис
-$serviceBinPath = "C:\Services\AccountStatisticsService\BaltBet.AccountStatisticsService.GrpcHost\BaltBet.AccountStatisticsService.GrpcHost.exe"
+$serviceBinPath = "C:\Services\AccountStatisticsService\BaltBet.AccountStatisticsService.Host\BaltBet.AccountStatisticsService.Host.exe"
 if (test-path $serviceBinPath){
     $serviceBin = Get-Item $serviceBinPath
     $sname = RegisterWinService($serviceBin)
