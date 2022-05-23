@@ -16,7 +16,7 @@ $httpWSPort = 6000
 $httpsWSPort = 6001
 $defaultDomain = "bb-webapps.com"
 
-if ($pathtojson) {
+if (Test-path($pathtojson)) {
     Write-host "[INFO] Start ${serviceName} deploy script"
     Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
     $jsonAppsetings = Get-Content -Raw -path $pathtojson  | % { $_ -replace '[\s^]//.*', "" } | ConvertFrom-Json 
