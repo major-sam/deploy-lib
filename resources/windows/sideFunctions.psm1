@@ -169,10 +169,11 @@ function RegisterIISSite($site){
         Set-ItemProperty $IISSite -name  Bindings -value $site.Bindings
         $bind = Get-WebBinding -Name $name -Protocol https
         if($bind){
-			$webServerCert = get-item $site.CertPath
-			$bind.AddSslCertificate($webServerCert.GetCertHashString(), "my")		
+            $webServerCert = get-item $site.CertPath
+            $bind.AddSslCertificate($webServerCert.GetCertHashString(), "my")		
         }
         Start-WebSite -Name "$name"
+        Start-WebAppPool -Name "$name"
     }
 }
 
