@@ -307,6 +307,19 @@ $IISPools = @(
 		rootDir = 'c:\Services\UniAuthService'
 		siteSubDir = $true
     }
+    @{
+        SiteName = 'WebAdministration'
+        RuntimeVersion = ''
+        DomainAuth =  @{
+            userName="$username";password="$pass";identitytype=3
+            }
+        Bindings= @(
+                @{protocol='https';bindingInformation="*:44331:$($env:COMPUTERNAME).$($wildcardDomain)"}
+            )
+		CertPath = 'Cert:\LocalMachine\My\38be86bcf49337804643a671c4c56bc4224c6606'
+		rootDir = 'c:\inetpub\ClientWorkPlace'
+		siteSubDir = $true
+    }
 )  
 
 

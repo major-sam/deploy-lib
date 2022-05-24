@@ -5,11 +5,13 @@ $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
+$uniRuAdminDbName = "UniAdministration"
+
 $ConfigPath = "c:\Services\UniPaymentsService\appsettings.json"
 Write-Host -ForegroundColor Green "[INFO] Change settings $ConfigPath"
 $config = Get-Content -Raw -path $ConfigPath 
 $json_appsettings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
-$json_appsettings.ConnectionStrings.UniSiteSettings = "data source=localhost;initial catalog=UniRu;Integrated Security=SSPI;MultipleActiveResultSets=True;"
+$json_appsettings.ConnectionStrings.UniSiteSettings = "data source=localhost;initial catalog=${uniRuAdminDbName};Integrated Security=SSPI;MultipleActiveResultSets=True;"
 $json_appsettings.Origins =@( 
 		"https://$($env:COMPUTERNAME).bb-webapps.com:4443",
 		"https://$($env:COMPUTERNAME).bb-webapps.com:4444",
