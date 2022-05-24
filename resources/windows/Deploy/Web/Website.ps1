@@ -28,7 +28,7 @@ $webdoc.configuration.appSettings.add | %{ if ($_.key -eq "ClientId"){
 	Where-Object name -eq "UniPaymentsServiceUrl").connectionString = "https://${env:COMPUTERNAME}.$($wildcardDomain):54381"
 
 $webdoc.configuration.connectionStrings.add | % {
-	if ($_.name = "Redis" ) { $_.connectionString = $shortRedisStr }
+	if ($_.name -eq "Redis" ) { $_.connectionString = $shortRedisStr }
 } 
 
 # Добавляем/изменяем параметр BaseRedirectUniUrl
