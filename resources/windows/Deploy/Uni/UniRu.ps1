@@ -26,17 +26,25 @@ if ($webdoc.configuration.connectionStrings.add | where { $_.name -eq "Redis"}){
 $webdoc.configuration."system.web".sessionState.providers.add.connectionString = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000"
 $webdoc.configuration."system.web".sessionState.providers.add.accessKey = $redispasswd
 $webdoc.configuration.cache.redis.connection = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000,ssl=False,abortConnect=False,connectRetry=10,proxy=None,configCheckSeconds=5"
+
 ($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'UniEventServiceUrl'
 	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
-$webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
+
+	$webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
+
 ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'DefaultService' }).host = $IPAddress
-($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService' }).host = $IPAddress
+
+if ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}){
+	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}).host = $IPAddress
+}
+
 #configuration.appSettings.SelectNodes add node enable swagger
 $targetNode = $webdoc.configuration.appSettings.SelectNodes("add[@key='webapi:EnableSwagger']")
 if($targetNode.Count){
 	write-host 'remove old nodes'
 	foreach($node in $targetNode){$node.ParentNode.RemoveChild($node)}
 }
+
 write-host 'creating node'
 $webdoc.configuration.appSettings.add| fc
 $new = $webdoc.CreateElement("add")
