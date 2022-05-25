@@ -42,8 +42,13 @@ $ConnectionStringsAdd = $webdoc.CreateElement('add')
 $ConnectionStringsAdd.SetAttribute("name", "OAuth.LastLogoutUrl")
 $ConnectionStringsAdd.SetAttribute("connectionString", "https://${env:COMPUTERNAME}.gkbaltbet.local:449/account/logout/last")
 $webdoc.configuration.connectionStrings.AppendChild($ConnectionStringsAdd)
+
 ($webdoc.configuration.Grpc.services.add | where { $_.name -eq 'DefaultService' }).host = $IPAddress
-($webdoc.configuration.Grpc.services.add | where { $_.name -eq 'PromocodeAdminService' }).host = $IPAddress
+
+if ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}){
+	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}).host = $IPAddress
+}
+
 #configuration.appSettings.SelectNodes add node enable swagger   
 Write-Host 'REDIS CONFIG'
 $webdoc.configuration.connectionStrings.add | % {
