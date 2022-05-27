@@ -10,7 +10,7 @@ $pathtojson = "C:\Services\PersonalInfoCenter\AdminMessageService\appsettings.js
 $config = Get-Content -Path $pathtojson -Encoding UTF8
 $json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
 
-$json_appsetings.CKFinder.Url = "https://$($env:COMPUTERNAME):44307/"
+$json_appsetings.CKFinder.Url = "https://$($env:COMPUTERNAME).bb-webapps.com:44307/".ToLower()
 $json_appsetings.Authorization.Realm = "https://$($env:COMPUTERNAME).bb-webapps.com:44307/".ToLower()
 ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
 
