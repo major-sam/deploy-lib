@@ -13,12 +13,3 @@ $config.DbOptions.ConnectionString = "data source=localhost;initial catalog=Cupi
 ConvertTo-Json $config -Depth 4| Format-Json | Set-Content $pathtojson -Encoding UTF8
 
 
-$reportval =@"
-[paysys]
-$webConfig
-    .Serilog.WriteTo[1].Args.path = "C:\logs\RestLog\Payment.Cupis-.log"
-    .Kestrel.Endpoints.Http.Url = "http://${IPAddress}:5001"
-    .PSHOptions.ServiceUrl = "http://localhost:88"
-    .DbOptions.ConnectionString = "data source=localhost;initial catalog=Cupis.GrpcHost;Integrated Security=true;MultipleActiveResultSets=True;"
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

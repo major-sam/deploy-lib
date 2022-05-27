@@ -25,16 +25,3 @@ $conf.Save($ConfigFilePath)
 
 Write-Host -ForegroundColor Green "[INFO] IdentificationService deployed"
 
-$reportVal =@"
-[IdentificationDocumentService]
-$ConfigFilePath
-    configuration.appSettings.add | Where-Object key -eq "BaseAddress").SetAttribute("value","http://localhost:8123")
-    configuration.appSettings.add | Where-Object key -eq "UploadFolder" ).SetAttribute("value","C:\DownloadsCPS")
-    configuration.appSettings.add | Where-Object key -eq "SQLServerComFilesPath").SetAttribute("value","C:\DownloadsCPS")
-    configuration.appSettings.add | Where-Object key -eq "SQLServerCpsFilesPath" ).SetAttribute("value","C:\DownloadsCPS")
-    configuration.log4net.appender | Where-Object name -eq "GlobalLogFileAppender" ).file.SetAttribute("value","C:\Logs\IdentificationDocumentService\")
-$('='*60)
-
-"@
-
-Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8

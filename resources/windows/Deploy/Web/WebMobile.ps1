@@ -23,27 +23,3 @@ $webdoc.configuration.appSettings.add | % { if ($_.key -eq "ServerAddress") {
     }
 }
 $webdoc.Save($SiteConfig)
-
-$reportval =@"
-[WebMobile]
-$SiteConfig
-
-    .configuration.appSettings.add | % { if (_.key -eq "MobileServerAddress") {  
-            _.value = "$($CurrentIpAddr):8082"
-        }
-    }
-    .configuration.appSettings.add | % { if (_.key -eq "SiteServerAddress") {  
-            _.value = "$($CurrentIpAddr):8088"
-        }
-    }
-    .configuration.appSettings.add | % { if (_.key -eq "ServerAddress") {  
-            _.value = "$($CurrentIpAddr):8082"
-        }
-    }
-$('='*60)
-
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
-
-Write-Host -ForegroundColor Green "[INFO] Done"
-

@@ -15,17 +15,3 @@ $webdoc.configuration."system.serviceModel".behaviors.serviceBehaviors.behavior.
 $webdoc.configuration."system.serviceModel".services |% {$_.service | % {
     $_.endpoint.address =$_.endpoint.address.replace('localhost', $CurrentIpAddr)}}
 $webdoc.Save($Config)
-
-$reportval =@"
-[PushServiceDB]
-$Config
-    .configuration.log4net| %{_.appender} |? {
-        _.name -like 'GlobalLogFileAppender'}).file.value =  'c:\Logs\ReportService\'
-    .configuration."system.serviceModel".behaviors.serviceBehaviors.behavior.serviceCredentials.serviceCertificate.findValue = "test.wcf.host"
-    .configuration."system.serviceModel".services |% {_.service | % { 
-        _.endpoint.address =_.endpoint.address.replace('localhost', $CurrentIpAddr)}}
-
-$('='*60)
-
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

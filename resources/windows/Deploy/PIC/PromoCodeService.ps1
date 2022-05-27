@@ -12,17 +12,3 @@ $config.Serilog.WriteTo|% {
 }
 
 ConvertTo-Json $config -Depth 4  | Format-Json | Set-Content $appSettings -Encoding UTF8
-
-
-$reportval =@"
-[PersonalInfoCenter]
-$appSettings
-	.Serilog.WriteTo|% {
-		if (_.Name -like 'File'){
-			_.Args.path=  "C:\logs\PersonalInfoCenter\PromoCodeService-{Date}.log"
-	}
-$('='*60)
-
-
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

@@ -39,18 +39,3 @@ $json_appsetings.AllowedUsers = $AllowedUsers
 
 ConvertTo-Json $json_appsetings -Depth 4 | Format-Json | Set-Content $pathtojson -Encoding UTF8
 
-$reportVal = @"
-[$ServiceName]
-$config
-	.Serilog.WriteTo| %{ if (_.Name -like 'File'){
-			_.Args.path = "C:\Logs\${ServiceName}\${ServiceName}.log" 
-		}
-    .Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${ccKestrelPort}/"
-    .Kestrel.EndPoints.Https.Certificate.Subject = "*.bb-webapps.com"
-    .Kestrel.EndPoints.GRPC.Url = "http://localhost:${ccGrpcPort}/"
-    .RatesSchedulerOptions.RunOnServiceStart = $true
-$('='*60)
-
-"@
-
-Add-Content -force -Path "$($env:WORKSPACE)\$($env:CONFIG_UPDATES)" -value $reportVal -Encoding utf8

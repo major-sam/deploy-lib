@@ -13,13 +13,3 @@ $json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?
 $json_appsetings.CKFinder.Url = "https://$($env:COMPUTERNAME).bb-webapps.com:44307/".ToLower()
 $json_appsetings.Authorization.Realm = "https://$($env:COMPUTERNAME).bb-webapps.com:44307/".ToLower()
 ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
-
-$reportval =@"
-[AdminMessageService]
-$config
-        .log4net.appender.file.value = "c:\logs\PersonalInfoCenter\$($svc.Directory.name)-"
-$('='*60)
-
-
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8

@@ -12,17 +12,3 @@ $webdoc = [Xml](Get-Content $SiteConfig)
 $webdoc.configuration.serverConfig.ServerAddress = "$($CurrentIpAddr):8082"
 $webdoc.configuration.serverConfig.SiteServerAddress = "$($CurrentIpAddr):8088"
 $webdoc.Save($SiteConfig)
-
-
-$reportval =@"
-[WebMobile]
-$SiteConfig
-    .configuration.serverConfig.ServerAddress = "$($CurrentIpAddr):8082"
-    .configuration.serverConfig.SiteServerAddress = "$($CurrentIpAddr):8088"
-$('='*60)
-
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
-
-Write-Host -ForegroundColor Green "[INFO] Done"
-

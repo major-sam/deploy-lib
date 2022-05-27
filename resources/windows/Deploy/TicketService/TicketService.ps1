@@ -19,13 +19,3 @@ $config = Get-Content -Path $pathtojson -Encoding UTF8
 $json_appsetings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
 $json_appsetings.Kestrel.EndPoints.Http.Url = "http://${IPAddress}:5037" 
 ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
-
-$reportval =@"
-[$ServiceName]
-$pathtojson
-       .ConnectionStrings.Kernel = "server=localhost;Integrated Security=SSPI;MultipleActiveResultSets=true;Initial Catalog=${DataSourceKernel}"
-       .ConnectionStrings.KernelWeb = "server=localhost;Integrated Security=SSPI;MultipleActiveResultSets=true;Initial Catalog=${DataSourceKernelWeb}"
-$('='*60)
-
-"@
-add-content -force -path "$($env:workspace)\$($env:config_updates)" -value $reportval -encoding utf8
