@@ -5,7 +5,7 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 
-$ServiceName = "PaymenSystemHandlers"
+$ServiceName = "PaymentSystemHandlers"
 $pshHttpPort = 88
 $pshHttpsPort = 89
 $kernelGrpcPort = 32419
