@@ -3,7 +3,7 @@ Import-module '.\scripts\sideFunctions.psm1'
 $dbname = 'MessageService' 
 if(Test-Path C:\Services\PersonalInfoCenter\MessageServiceDb\Tasks\*){
 	Write-host 'apply db Tasks'
-	$folder = "C:\Services\PersonalInfoCenter\MessageService\DB"
+	$folder = "C:\Services\PersonalInfoCenter\MessageServiceDB\Tasks"
 	ApplyTasks -ScriptFolder $folder -TargetDB $dbname -DBServer $env:COMPUTERNAME
 }elseif(Test-Path C:\Services\PersonalInfoCenter\MessageService\DB){
 	Write-host 'apply old db Tasks'
