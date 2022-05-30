@@ -5,7 +5,7 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 
-$ServiceName = "PaymenSystemHandlers"
+$ServiceName = "PaymentSystemHandlers"
 
 # Регистрируем сервис
 $serviceBinPath = "C:\Services\$ServiceName\PaymentSystemHandlers.exe"
