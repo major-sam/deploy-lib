@@ -25,6 +25,9 @@ if (Test-path($pathtojson)) {
     $jsonAppsetings.ConnectionStrings.ParserRabbit = "$shortRabbitStr"
     $jsonAppsetings.ConsumerService.SubscriptionId = "WidgetConsumer-$($env:COMPUTERNAME)"
 
+    # Настраиваем секцию DataConfiguration
+    $jsonAppsetings.DataConfiguration.UseSwagger = $true
+
     # Настраиваем секцию Kestrel
     $jsonAppsetings.Kestrel.Endpoints.Http.Url = "http://$($env:COMPUTERNAME).$($defaultDomain):${httpWSPort}"
     $jsonAppsetings.Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($defaultDomain):${httpsWSPort}"
