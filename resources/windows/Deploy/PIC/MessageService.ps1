@@ -6,23 +6,18 @@ $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 ## vars
-$release_bak_folder = '\\server\tcbuild$\Testers\DB'
 
+if(Test-Path  "C:\Services\PersonalInfoCenter\MessageServiceDb\init.bak"){
+	$BackupPath =   "C:\Services\PersonalInfoCenter\MessageServiceDb\init.bak"
+}
+else{
+	$BackupPath = "\\server\tcbuild$\Testers\DB\MessageService.bak" 
+}
 
 $dbs = @(
 	@{
 		DbName = "MessageService"
-		BackupFile = "$release_bak_folder\MessageService.bak" 
-        RelocateFiles = @(
-			@{
-				SourceName = "MessageService"
-				FileName = "MessageService.mdf"
-			}
-			@{
-				SourceName = "MessageService_log"
-				FileName = "MessageService_log.ldf"
-			}
-        )      
+		BackupFile = $BackupPath
 	}
 )
 ###restore DB
@@ -38,5 +33,3 @@ $json_appsetings.Serilog.WriteTo| %{ if ($_.Name -like 'File'){
 $json_appsetings.RabbitMqConnection.Host ="$shortRabbitStr; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
 $json_appsetings.ConnectionStrings.Redis = $shortRedisStr
 ConvertTo-Json $json_appsetings -Depth 4  | Format-Json | Set-Content $pathtojson -Encoding UTF8
-
-
