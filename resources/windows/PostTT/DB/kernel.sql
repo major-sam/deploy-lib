@@ -82,6 +82,7 @@ set IDENTITY_INSERT LineMemberBind OFF
 GO
 
 PRINT 'insert into EventTCoefTBind'
+set IDENTITY_INSERT EventTCoefTBind ON
 insert into EventTCoefTBind( [EventTypesCoefTypesBindId]
       ,[CoefTypeID]
       ,[EventTypeId]
@@ -116,6 +117,7 @@ select [EventTypesCoefTypesBindId]
       ,[DateCreate]
 	  from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.EventTCoefTBind
 PRINT 'insert into EventTCoefTBind done'
+set IDENTITY_INSERT EventTCoefTBind OFF
 go
 
 PRINT 'insert into CoefTypes'
