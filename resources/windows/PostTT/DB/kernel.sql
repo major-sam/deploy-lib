@@ -236,8 +236,9 @@ SELECT  [LineMemberId]
       ,[MaxExpressCount]
       ,[SortOrder]
       ,[DateCreate] 
-	  from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMembers
+      from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMembers
 
+set IDENTITY_INSERT LineMembers OFF
 PRINT 'insert into LineMembers done'
 go
 set IDENTITY_INSERT Federations ON
