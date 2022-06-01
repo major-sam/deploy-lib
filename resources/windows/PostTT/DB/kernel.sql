@@ -61,6 +61,7 @@ set IDENTITY_INSERT MARKEt OFF
 go
 PRINT 'insert into Market done'
 
+set IDENTITY_INSERT LineMemberBind ON
 PRINT 'insert into LineMemberBind'
 insert into LineMemberBind
 select [LineMemberBindId]
@@ -71,6 +72,7 @@ select [LineMemberBindId]
       ,[DateCreate]	  
 	from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMemberBind
 PRINT 'insert into LineMemberBind done'
+set IDENTITY_INSERT LineMemberBind OFF
 GO
 
 PRINT 'insert into EventTCoefTBind'
