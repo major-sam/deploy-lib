@@ -175,6 +175,7 @@ where ev.EVENTSTARTTIME > GETDATE() -3 AND ev.Live = 0
 PRINT 'insert into EventMembers done'
 go
 PRINT 'insert into LineMembers'
+set IDENTITY_INSERT LineMembers ON
 INSERT INTO LineMembers([LineMemberId]
       ,[LineMemberTypeId]
       ,[LineMemberText]
