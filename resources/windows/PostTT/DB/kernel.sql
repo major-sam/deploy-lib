@@ -185,7 +185,6 @@ where ev.EVENTSTARTTIME > GETDATE() -3 AND ev.Live = 0
 PRINT 'insert into EventMembers done'
 go
 PRINT 'insert into LineMembers'
-set IDENTITY_INSERT LineMembers ON
 INSERT INTO LineMembers([LineMemberId]
       ,[LineMemberTypeId]
       ,[LineMemberText]
@@ -248,7 +247,6 @@ SELECT  [LineMemberId]
       ,[DateCreate] 
       from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMembers
 
-set IDENTITY_INSERT LineMembers OFF
 PRINT 'insert into LineMembers done'
 go
 set IDENTITY_INSERT Federations ON
