@@ -64,13 +64,19 @@ PRINT 'insert into Market done'
 set IDENTITY_INSERT LineMemberBind ON
 PRINT 'insert into LineMemberBind'
 insert into LineMemberBind
+ ([LineMemberBindId]
+      ,[LineMemberBindTypeId]
+      ,[LineMemberId1]
+      ,[LineMemberId2]
+      ,[LineMemberBindVisible]
+      ,[DateCreate] )
 select [LineMemberBindId]
       ,[LineMemberBindTypeId]
       ,[LineMemberId1]
       ,[LineMemberId2]
       ,[LineMemberBindVisible]
-      ,[DateCreate]	  
-	from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMemberBind
+      ,[DateCreate] 
+      from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMemberBind
 PRINT 'insert into LineMemberBind done'
 set IDENTITY_INSERT LineMemberBind OFF
 GO
