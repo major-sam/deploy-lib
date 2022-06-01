@@ -61,19 +61,28 @@ set IDENTITY_INSERT MARKEt OFF
 go
 PRINT 'insert into Market done'
 
+set IDENTITY_INSERT LineMemberBind ON
 PRINT 'insert into LineMemberBind'
 insert into LineMemberBind
+ ([LineMemberBindId]
+      ,[LineMemberBindTypeId]
+      ,[LineMemberId1]
+      ,[LineMemberId2]
+      ,[LineMemberBindVisible]
+      ,[DateCreate] )
 select [LineMemberBindId]
       ,[LineMemberBindTypeId]
       ,[LineMemberId1]
       ,[LineMemberId2]
       ,[LineMemberBindVisible]
-      ,[DateCreate]	  
-	from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMemberBind
+      ,[DateCreate] 
+      from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMemberBind
 PRINT 'insert into LineMemberBind done'
+set IDENTITY_INSERT LineMemberBind OFF
 GO
 
 PRINT 'insert into EventTCoefTBind'
+set IDENTITY_INSERT EventTCoefTBind ON
 insert into EventTCoefTBind( [EventTypesCoefTypesBindId]
       ,[CoefTypeID]
       ,[EventTypeId]
@@ -108,6 +117,7 @@ select [EventTypesCoefTypesBindId]
       ,[DateCreate]
 	  from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.EventTCoefTBind
 PRINT 'insert into EventTCoefTBind done'
+set IDENTITY_INSERT EventTCoefTBind OFF
 go
 
 PRINT 'insert into CoefTypes'
@@ -235,7 +245,7 @@ SELECT  [LineMemberId]
       ,[MaxExpressCount]
       ,[SortOrder]
       ,[DateCreate] 
-	  from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMembers
+      from [srvapkbb5.gkbaltbet.local].BaltBetM.dbo.LineMembers
 
 PRINT 'insert into LineMembers done'
 go
