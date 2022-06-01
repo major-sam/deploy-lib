@@ -11,5 +11,5 @@ ConvertTo-Json $json_config -Depth 4| Format-Json | Set-Content $pathtojson -Enc
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"
 
 
-Write-Host -ForegroundColor Green "Invoke InitDB.sql"
-Invoke-Sqlcmd -Database UpdateApkService -InputFile "$($serviceFolder)\DB\InitDB.sql"
+# Write-Host -ForegroundColor Green "Invoke InitDB.sql"
+# Invoke-Sqlcmd -Database UpdateApkService -InputFile "$($serviceFolder)\DB\InitDB.sql"
