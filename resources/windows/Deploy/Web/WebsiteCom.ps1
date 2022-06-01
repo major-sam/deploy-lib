@@ -27,6 +27,10 @@ $webdoc = [Xml](Get-Content -Encoding UTF8 $webConfig)
 	$_.key -like "SiteServerAddressLogin"}).value = $CurrentIpAddr+":8088"
 ($webdoc.configuration.appSettings.add | where {
 	$_.key -like "IsSuperexpressEnabled"}).value = "true"
+
+($webdoc.configuration.connectionStrings.add | where {
+	$_.name -like "RedisChatStorage" }).connectionString = $shortRedisStr	
+
 $webdoc.configuration.'system.serviceModel'.client.endpoint | ForEach-Object {
 	$_.address = ($_.address).replace("localhost","$($CurrentIpAddr)") }
 $webdoc.configuration.Grpc.Services.add | %{ if ($_.name -eq "TicketService"){
