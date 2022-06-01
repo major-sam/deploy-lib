@@ -12,4 +12,4 @@ Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDept
 
 
 Write-Host -ForegroundColor Green "Invoke InitDB.sql"
-Invoke-Sqlcmd -Database UpdateApkService -InputFile "$($serviceFolder)\InitDB.sql" -
+Invoke-Sqlcmd -Database UpdateApkService -InputFile "$($serviceFolder)\InitDB.sql"
