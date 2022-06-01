@@ -1,27 +1,27 @@
-PRINT 'DROP SEQUENCE dbo.EventMembersSequence'; DROP SEQUENCE dbo.EventMembersSequence
-PRINT 'DROP SEQUENCE dbo.AccountSequence'; DROP SEQUENCE dbo.AccountSequence
-PRINT 'DROP SEQUENCE dbo.AccountAccountGroupsSequence'; DROP SEQUENCE dbo.AccountAccountGroupsSequence
-PRINT 'DROP SEQUENCE dbo.AccountCommentsSequence'; DROP SEQUENCE dbo.AccountCommentsSequence
-PRINT 'DROP SEQUENCE dbo.EventsSequence'; DROP SEQUENCE dbo.EventsSequence
-PRINT 'DROP SEQUENCE dbo.AccountGroupsSequence'; DROP SEQUENCE dbo.AccountGroupsSequence
-PRINT 'DROP SEQUENCE dbo.AccountLogsSequence'; DROP SEQUENCE dbo.AccountLogsSequence
-PRINT 'DROP SEQUENCE dbo.ActionDestinationsSequence'; DROP SEQUENCE dbo.ActionDestinationsSequence
-PRINT 'DROP SEQUENCE dbo.ActionLogsSequence'; DROP SEQUENCE dbo.ActionLogsSequence
-PRINT 'DROP SEQUENCE dbo.BetEventsSequence'; DROP SEQUENCE dbo.BetEventsSequence
-PRINT 'DROP SEQUENCE dbo.ClientSequence'; DROP SEQUENCE dbo.ClientSequence
-PRINT 'DROP SEQUENCE dbo.CoefPropertiesSequence'; DROP SEQUENCE dbo.CoefPropertiesSequence
-PRINT 'DROP SEQUENCE dbo.CoefTypesSequence'; DROP SEQUENCE dbo.CoefTypesSequence
-PRINT 'DROP SEQUENCE dbo.EventCommentParametersSequence'; DROP SEQUENCE dbo.EventCommentParametersSequence
-PRINT 'DROP SEQUENCE dbo.EventLogsSequence'; DROP SEQUENCE dbo.EventLogsSequence
-PRINT 'DROP SEQUENCE dbo.EventResultsSequence'; DROP SEQUENCE dbo.EventResultsSequence
-PRINT 'DROP SEQUENCE dbo.EventTypesSequence'; DROP SEQUENCE dbo.EventTypesSequence
-PRINT 'DROP SEQUENCE dbo.ExchangeSequence'; DROP SEQUENCE dbo.ExchangeSequence
-PRINT 'DROP SEQUENCE dbo.GlobalTranslateSequence'; DROP SEQUENCE dbo.GlobalTranslateSequence
-PRINT 'DROP SEQUENCE dbo.LineMembersSequence'; DROP SEQUENCE dbo.LineMembersSequence
-PRINT 'DROP SEQUENCE dbo.TransactionAddsSequence'; DROP SEQUENCE dbo.TransactionAddsSequence
-PRINT 'DROP SEQUENCE dbo.TransactionDocumentsSequence'; DROP SEQUENCE dbo.TransactionDocumentsSequence
-PRINT 'DROP SEQUENCE dbo.TransactionsSequence'; DROP SEQUENCE dbo.TransactionsSequence
-PRINT 'DROP SEQUENCE dbo.WorkersSequence'; DROP SEQUENCE dbo.WorkersSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.EventMembersSequence'; DROP SEQUENCE IF EXISTS dbo.EventMembersSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.AccountSequence'; DROP SEQUENCE IF EXISTS dbo.AccountSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.AccountAccountGroupsSequence'; DROP SEQUENCE IF EXISTS dbo.AccountAccountGroupsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.AccountCommentsSequence'; DROP SEQUENCE IF EXISTS dbo.AccountCommentsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.EventsSequence'; DROP SEQUENCE IF EXISTS dbo.EventsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.AccountGroupsSequence'; DROP SEQUENCE IF EXISTS dbo.AccountGroupsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.AccountLogsSequence'; DROP SEQUENCE IF EXISTS dbo.AccountLogsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.ActionDestinationsSequence'; DROP SEQUENCE IF EXISTS dbo.ActionDestinationsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.ActionLogsSequence'; DROP SEQUENCE IF EXISTS dbo.ActionLogsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.BetEventsSequence'; DROP SEQUENCE IF EXISTS dbo.BetEventsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.ClientSequence'; DROP SEQUENCE IF EXISTS dbo.ClientSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.CoefPropertiesSequence'; DROP SEQUENCE IF EXISTS dbo.CoefPropertiesSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.CoefTypesSequence'; DROP SEQUENCE IF EXISTS dbo.CoefTypesSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.EventCommentParametersSequence'; DROP SEQUENCE IF EXISTS dbo.EventCommentParametersSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.EventLogsSequence'; DROP SEQUENCE IF EXISTS dbo.EventLogsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.EventResultsSequence'; DROP SEQUENCE IF EXISTS dbo.EventResultsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.EventTypesSequence'; DROP SEQUENCE IF EXISTS dbo.EventTypesSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.ExchangeSequence'; DROP SEQUENCE IF EXISTS dbo.ExchangeSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.GlobalTranslateSequence'; DROP SEQUENCE IF EXISTS dbo.GlobalTranslateSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.LineMembersSequence'; DROP SEQUENCE IF EXISTS dbo.LineMembersSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.TransactionAddsSequence'; DROP SEQUENCE IF EXISTS dbo.TransactionAddsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.TransactionDocumentsSequence'; DROP SEQUENCE IF EXISTS dbo.TransactionDocumentsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.TransactionsSequence'; DROP SEQUENCE IF EXISTS dbo.TransactionsSequence
+PRINT 'DROP SEQUENCE IF EXISTS dbo.WorkersSequence'; DROP SEQUENCE IF EXISTS dbo.WorkersSequence
 GO
 DECLARE @Id int, @TextId nvarchar(20)
 DECLARE @sql varchar(1000)
