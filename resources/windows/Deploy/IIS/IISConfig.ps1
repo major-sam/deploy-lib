@@ -321,7 +321,7 @@ $IISPools = @(
 		siteSubDir = $true
     }
     @{
-        SiteName = 'WebAdministration'
+        SiteName = 'UniAdministration'
         RuntimeVersion = ''
         DomainAuth =  @{
             userName="$username";password="$pass";identitytype=3

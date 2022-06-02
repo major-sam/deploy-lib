@@ -5,13 +5,13 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 
 $ProgressPreference = 'SilentlyContinue'
 
-$release_bak_folder = "C:\inetpub\ClientWorkPlace\WebAdministrationDB\out"
+$release_bak_folder = "\\server\tcbuild$\Testers\DB"
 
 $Dbname =  "UniAdministration"
 $dbs = @(
 	@{
 		DbName = $Dbname
-		BackupFile = "$release_bak_folder\init.bak" 
+		BackupFile = "$release_bak_folder\UniAdministration_empty.bak" 
         RelocateFiles = @(
 			@{
 				SourceName = $Dbname
