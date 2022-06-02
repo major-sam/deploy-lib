@@ -1,3 +1,5 @@
+USE BaltBetM
+go
 PRINT 'DROP SEQUENCE IF EXISTS dbo.EventMembersSequence'; DROP SEQUENCE IF EXISTS dbo.EventMembersSequence
 PRINT 'DROP SEQUENCE IF EXISTS dbo.AccountSequence'; DROP SEQUENCE IF EXISTS dbo.AccountSequence
 PRINT 'DROP SEQUENCE IF EXISTS dbo.AccountAccountGroupsSequence'; DROP SEQUENCE IF EXISTS dbo.AccountAccountGroupsSequence
