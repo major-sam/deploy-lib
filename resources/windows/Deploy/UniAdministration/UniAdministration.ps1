@@ -6,7 +6,7 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 $serviceName = "UniAdministration"
-$targetDir = "C:\inetpub\ClientWorkPlace\${serviceName}"
+$targetDir = "C:\Services\${serviceName}"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5

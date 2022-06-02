@@ -330,7 +330,7 @@ $IISPools = @(
                 @{protocol='https';bindingInformation="*:44331:$($env:COMPUTERNAME).$($wildcardDomain)"}
             )
 		CertPath = 'Cert:\LocalMachine\My\38be86bcf49337804643a671c4c56bc4224c6606'
-		rootDir = 'c:\inetpub\ClientWorkPlace'
+		rootDir = 'c:\Services'
 		siteSubDir = $true
     }
 )  
