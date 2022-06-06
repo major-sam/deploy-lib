@@ -1,7 +1,7 @@
 # меняем в админке урл до старого веб апи
 
 $query = "
-UPDATE UniAdministration.Settings.SiteOptions
+UPDATE UniRu.Settings.SiteOptions
 SET Value = '/oauth/token'
 WHERE Name = 'OAuth.TokenUrl'
 
