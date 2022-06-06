@@ -7,7 +7,8 @@ $sitesFolder = "C:\inetpub"
 $PhotonFolder = Join-Path -Path $servicesFolder -ChildPath $serviceName
 $DeployPhotonFolder = Join-Path -Path $PhotonFolder -ChildPath "deploy"
 $PhotonPluginFolder = Join-Path -Path $DeployPhotonFolder -ChildPath "$($serviceName)\bin"
-$PhotonServerConfig = Join-Path -Path $DeployPhotonFolder -ChildPath "bin_Win64\PhotonServer.config"
+$PhotonServerFolder = Join-Path -Path $DeployPhotonFolder -ChildPath "bin_Win64"
+$PhotonServerConfig = Join-Path -Path $PhotonServerFolder -ChildPath "PhotonServer.config"
 $PhotonPluginConfig = Join-Path -Path $PhotonPluginFolder -ChildPath "PhotonServer.dll.config"
 
 ## Edit Photon plugin config
@@ -32,4 +33,5 @@ Write-Host -ForegroundColor Green "[INFO] Add photon.json to WebsiteCom director
 $photonPort = ([xml](Get-Content -Encoding UTF8 -Path $PhotonServerConfig)).Configuration.PhotonServer.WebSocketListeners.WebSocketListener.Port
 $data = '{ "url": "wss://' + "$($env:COMPUTERNAME):$($photonPort)" + '" }'
 Set-Content -Encoding UTF8 -Path "$($sitesFolder)\WebsiteCom\photon.json" -Value $data
+
 
