@@ -24,7 +24,7 @@ foreach ($gameFolder in $gamesFolder) {
         "scriptUrl" = $scriptUrls.FullName 
         "jsonUrl"   = $jsonUrl.FullName
         "banner"    = $banner.FullName
-        "tittle"    = $gameFolder.Name
+        "title"    = $gameFolder.Name
     }
     
     # Проверяем, существует ли элемент в конфиге
