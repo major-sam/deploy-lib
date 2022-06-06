@@ -19,6 +19,7 @@ $counter = 0
 foreach ($gameFolder in $gamesFolder) {
     $scriptUrls = Get-Item -Path "$($gamesFolder.FullName)\*" -Include "*.js"
     $jsonUrl = Get-Item -Path "$($gamesFolder.FullName)\*" -Include "*.json"
+    $banner = Get-Item -Path "$($gamesFolder.FullName)\*" -Include "*.jpg"
     $changeParams = @{
         "name"      = $gameFolder.Name
         "url"       = $gameFolder.Name
