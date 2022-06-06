@@ -5,8 +5,8 @@ $gamesDestFolder = Join-Path -Path $websiteComFolder -ChildPath "Scripts\Games"
 if (!(Test-Path $gamesDestFolder)){ New-Item -Type Directory -Path $gamesDestFolder -Verbose }
 Copy-Item `
     -Path "\\server\tcbuild$\BaltCasino\GaltonBoard\V18_prod\Client\RockClimberSlots_V1" `
-    -Destination $gamesDestFolder
-    -Verbose
+    -Destination $gamesDestFolder `
+    -Verbose 
 
 [xml]$config = Get-Content -Encoding utf8 -Path "$($websiteComFolder)\Web.config"
 $config.configuration.'casino-games'.enabled = "true"
