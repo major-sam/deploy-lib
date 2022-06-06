@@ -1,10 +1,10 @@
+$pcname= "$env:COMPUTERNAME".ToLower()
 $query = "
 -- Установить для всех СОМ аккунтов свойство 116 для доступа на сайт СОМ
 
 DECLARE @MyUrl nvarchar(1024);
--- copy your vm url without port and https:// (like wrote in the example ).
-SET @MyUrl = '$("$env:COMPUTERNAME".ToLower()).bb-webapps.com';
 
+SET @MyUrl = N'$pcname.bb-webapps.com';
 
 set IDENTITY_INSERT [BaltBetDomain].[dbo].[ParentDomains] ON
 insert into [BaltBetDomain].[dbo].[ParentDomains] (Id , Name, Address, IsActive, ActivationDate, State)
