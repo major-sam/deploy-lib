@@ -5,6 +5,7 @@ $gamesDestFolder = Join-Path -Path $websiteComFolder -ChildPath "Scripts\Games"
 if (!(Test-Path $gamesDestFolder)){ New-Item -Type Directory -Path $gamesDestFolder -Verbose }
 Copy-Item `
     -Path "\\server\tcbuild$\BaltCasino\GaltonBoard\V18_prod\Client\RockClimberSlots_V1" `
+    -Recurse `
     -Destination $gamesDestFolder `
     -Verbose 
 
