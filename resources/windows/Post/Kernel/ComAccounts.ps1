@@ -3,7 +3,7 @@ $q = "
 
 DECLARE @MyUrl nvarchar(1024);
 -- copy your vm url without port and https:// (like wrote in the example ).
-SET @MyUrl = '$(MY_URL).bb-webapps.com';
+SET @MyUrl = '$("$env:COMPUTERNAME".ToLower()).bb-webapps.com';
 
 
 set IDENTITY_INSERT [BaltBetDomain].[dbo].[ParentDomains] ON
@@ -17,6 +17,5 @@ WHERE AccountPropertyTypeId like '116' and PropertyValueEx like '%#VM_URL%'
 "
 
 
-$MyUrl = "$env:COMPUTERNAME".ToLower()
 Write-Host -ForegroundColor Green "[INFO] Execute COMAccounts.sql on BaltBetDomain"
-Invoke-Sqlcmd -verbose -QueryTimeout 720  -Variable @("MY_URL=${MyUrl}") -ServerInstance $env:COMPUTERNAME -Query $query -ErrorAction continue
+Invoke-Sqlcmd -verbose -QueryTimeout 720 -ServerInstance $env:COMPUTERNAME -Query $query -ErrorAction continue

@@ -5,8 +5,9 @@ $gamesDestFolder = Join-Path -Path $websiteComFolder -ChildPath "Scripts\Games"
 if (!(Test-Path $gamesDestFolder)){ New-Item -Type Directory -Path $gamesDestFolder -Verbose }
 Copy-Item `
     -Path "\\server\tcbuild$\BaltCasino\GaltonBoard\V18_prod\Client\RockClimberSlots_V1" `
-    -Destination $gamesDestFolder
-    -Verbose
+    -Recurse `
+    -Destination $gamesDestFolder `
+    -Verbose 
 
 [xml]$config = Get-Content -Encoding utf8 -Path "$($websiteComFolder)\Web.config"
 $config.configuration.'casino-games'.enabled = "true"
@@ -18,13 +19,14 @@ $counter = 0
 foreach ($gameFolder in $gamesFolder) {
     $scriptUrls = Get-Item -Path "$($gamesFolder.FullName)\*" -Include "*.js"
     $jsonUrl = Get-Item -Path "$($gamesFolder.FullName)\*" -Include "*.json"
+    $banner = Get-Item -Path "$($gamesFolder.FullName)\*" -Include "*.jpg"
     $changeParams = @{
         "name"      = $gameFolder.Name
         "url"       = $gameFolder.Name
         "scriptUrl" = $scriptUrls.FullName 
         "jsonUrl"   = $jsonUrl.FullName
         "banner"    = $banner.FullName
-        "tittle"    = $gameFolder.Name
+        "title"    = $gameFolder.Name
     }
     
     # Проверяем, существует ли элемент в конфиге
