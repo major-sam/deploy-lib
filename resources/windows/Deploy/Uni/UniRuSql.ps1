@@ -205,6 +205,98 @@ IF NOT EXISTS (SELECT * FROM UniRu.Settings.SiteOptions	WHERE Name = 'Global.Rab
 	VALUES (1,'Global.RabbitMq.PicBus.Exchange','Exchange.Pic.Ru',0)	
 "
 
+$query_unicom_222 = "
+--удалим дубликаты
+;with pref as
+(
+    select *, rn = row_number() over (partition by AccountId order by Id desc) 
+	from [Accounts].[AccountPreferences]
+)
+delete from pref where rn <> 1
+go
+
+-- добавим таймзоне
+alter table [Accounts].[AccountPreferences] add TimeZoneId nvarchar(7)
+go
+
+-- проапдейтим ключи
+GO
+PRINT N'Dropping Default Constraint unnamed constraint on [Accounts].[AccountPreferences]...';
+
+GO
+PRINT N'Starting rebuilding table [Accounts].[AccountPreferences]...';
+
+GO
+BEGIN TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+
+SET XACT_ABORT ON;
+
+CREATE TABLE [Accounts].[tmp_ms_xx_AccountPreferences] (
+    [AccountId]                              INT            NOT NULL,
+    [IsPersonalDataVisible]                  BIT            NOT NULL,
+    [IsBalanceVisible]                       BIT            NOT NULL,
+    [IsLearningTipsVisible]                  BIT            NOT NULL,
+    [UiTheme]                                INT            NOT NULL,
+    [BetDisplayMode]                         INT            NOT NULL,
+    [BetAcceptMode]                          INT            NOT NULL,
+    [BetDeletionMode]                        INT            NOT NULL,
+    [FavouriteSportsJson]                    NVARCHAR (MAX) NULL,
+    [IsDefaultFavouriteSportsSortingEnabled] BIT            NOT NULL,
+    [BetDefaultAmount]                       INT            NOT NULL,
+    [BetAdditionalAmountsSerialized]         NVARCHAR (MAX) NULL,
+    [IsNotificationBetStatusEnabled]         BIT            NOT NULL,
+    [IsNotificationFavoriteEventsEnabled]    BIT            NOT NULL,
+    [IsNotificationNewCampaignsEnabled]      BIT            NOT NULL,
+    [UseDefaultAdditionalAmounts]            BIT            DEFAULT ((0)) NOT NULL,
+    [IncludeOptionalMessages]                BIT            DEFAULT ((1)) NOT NULL,
+    [IsRegistrationNotificationSubmitted]    BIT            NOT NULL,
+    [TimeZoneId]                             NVARCHAR (7)   NULL,
+    CONSTRAINT [tmp_ms_xx_constraint_PK_Accounts.AccountPreferences1] PRIMARY KEY CLUSTERED ([AccountId] ASC)
+);
+
+IF EXISTS (SELECT TOP 1 1 
+           FROM   [Accounts].[AccountPreferences])
+    BEGIN
+        INSERT INTO [Accounts].[tmp_ms_xx_AccountPreferences] ([AccountId], [IsPersonalDataVisible], [IsBalanceVisible], [IsLearningTipsVisible], [UiTheme], [BetDisplayMode], [BetAcceptMode], [BetDeletionMode], [FavouriteSportsJson], [IsDefaultFavouriteSportsSortingEnabled], [BetDefaultAmount], [BetAdditionalAmountsSerialized], [IsNotificationBetStatusEnabled], [IsNotificationFavoriteEventsEnabled], [IsNotificationNewCampaignsEnabled], [UseDefaultAdditionalAmounts], [IncludeOptionalMessages], [IsRegistrationNotificationSubmitted], [TimeZoneId])
+        SELECT   [AccountId],
+                 [IsPersonalDataVisible],
+                 [IsBalanceVisible],
+                 [IsLearningTipsVisible],
+                 [UiTheme],
+                 [BetDisplayMode],
+                 [BetAcceptMode],
+                 [BetDeletionMode],
+                 [FavouriteSportsJson],
+                 [IsDefaultFavouriteSportsSortingEnabled],
+                 [BetDefaultAmount],
+                 [BetAdditionalAmountsSerialized],
+                 [IsNotificationBetStatusEnabled],
+                 [IsNotificationFavoriteEventsEnabled],
+                 [IsNotificationNewCampaignsEnabled],
+                 [UseDefaultAdditionalAmounts],
+                 [IncludeOptionalMessages],
+                 [IsRegistrationNotificationSubmitted],
+                 [TimeZoneId]
+        FROM     [Accounts].[AccountPreferences]
+        ORDER BY [AccountId] ASC;
+    END
+DROP TABLE [Accounts].[AccountPreferences];
+
+EXECUTE sp_rename N'[Accounts].[tmp_ms_xx_AccountPreferences]', N'AccountPreferences';
+
+EXECUTE sp_rename N'[Accounts].[tmp_ms_xx_constraint_PK_Accounts.AccountPreferences1]', N'PK_Accounts.AccountPreferences', N'OBJECT';
+
+COMMIT TRANSACTION;
+
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+
+GO
+PRINT N'Update complete.';
+
+GO
+"
 $release_bak_folder = "\\server\tcbuild$\Testers\DB"
 $queryTimeout = 720
 
@@ -232,4 +324,5 @@ RestoreSqlDb -db_params $dbs
 
 
 Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $dbs[0].DbName -query $query -ErrorAction Stop
+Invoke-Sqlcmd -verbose -ServerInstance $env:COMPUTERNAME -Database $dbs[0].DbName -query $query_unicom_222 -ErrorAction Stop
 Set-Location C:\

@@ -9,7 +9,10 @@ Copy-Item `
     -Destination $gamesDestFolder `
     -Verbose 
 
+Write-Host -ForegroundColor Green "[INFO] Load WebsiteCom Web.config..."
 [xml]$config = Get-Content -Encoding utf8 -Path "$($websiteComFolder)\Web.config"
+
+Write-Host -ForegroundColor Green "[INFO] Change settings in WebsiteCom Web.config..."
 $config.configuration.'casino-games'.enabled = "true"
 $config.configuration.'casino-games'.SetAttribute("isDebugPhoton", "true")
 $config.configuration.'casino-games'.games
@@ -43,6 +46,6 @@ foreach ($gameFolder in $gamesFolder) {
 
     $counter += 1
 }
-$scriptUrls = Get-Item -Path $gamesDestFolder
 
-
+Write-Host -ForegroundColor Green "[INFO] Save Web.config changes..."
+$config.Save("$($websiteComFolder)\Web.config")
