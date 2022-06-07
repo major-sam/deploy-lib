@@ -45,4 +45,4 @@ foreach ($gameFolder in $gamesFolder) {
 }
 $scriptUrls = Get-Item -Path $gamesDestFolder
 
-
+$config.Save("$($websiteComFolder)\Web.config")
