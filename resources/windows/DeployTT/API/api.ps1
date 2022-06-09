@@ -18,6 +18,7 @@ $json_appsetings = $configFile -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace
 
 $json_appsetings.Kestrel.EndPoints.Http.Url =  "http://$($apiAddr):$($apiPort)"
 $json_appsetings.AdfsOptions.Authenticate = "true"
+$json_appsetings.AdfsOptions.SigningCertThumbprint = "$($ENV:TTADFS_THUMBPRINT)"
 $json_appsetings.AdfsOptions.Issuer = "http://adfs-next.gkbaltbet.local/adfs/services/trust"
 ($json_appsetings.Serilog.WriteTo | Where-Object {$_.Name -like 'File' }).Args.path = $logPath
 $json_appsetings.AdfsOptions.Audience = "http://localhost:50005/"

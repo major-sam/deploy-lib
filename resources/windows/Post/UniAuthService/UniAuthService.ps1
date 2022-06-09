@@ -34,11 +34,3 @@ $logoutService = $webdoc.configuration.Grpc.Services.add | Where-Object name -eq
 $logoutService.host = $IPAddress
 $logoutService.port = "5307"
 $webdoc.Save($WebsiteRuConfig)
-
-
-Import-Module -Force WebAdministration
-$IISSite = "IIS:\Sites\UniAuthService"
-$Bindings= @(
-                @{protocol='https';bindingInformation="*:449:$($env:COMPUTERNAME).bb-webapps.com"}
-            )
-Set-ItemProperty $IISSite -name  Bindings -value $Bindings
