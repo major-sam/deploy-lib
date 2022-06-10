@@ -9,7 +9,7 @@ Get-Service RabbitMQ,Memurai | %{
     Write-Host "disable service "$_.ServiceName
     Set-Service $_.ServiceName -StartupType Disabled
 }
-Add-LocalGroupMember -Group "Administrators" -Member "GKBALTBET\JenkinsUsers"
+Add-LocalGroupMember -Group "Administrators" -Member "GKBALTBET\JenkinsUsers" -ErrorAction SilentlyContinue
 #$usernames = @("GKBALTBET\TestKernel_svc")
 #
 #foreach($username in $usernames){
