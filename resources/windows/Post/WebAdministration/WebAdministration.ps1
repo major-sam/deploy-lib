@@ -1,5 +1,7 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
+
+Start-Sleep -Second 60
 #get release params
 ###vars
 $targetDir = "C:\inetpub\ClientWorkPlace\UniRu"
