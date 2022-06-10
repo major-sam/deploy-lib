@@ -24,75 +24,24 @@ WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '$($IPAddress)'
 WHEN 'OAuth.LastLogoutUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:449/account/logout/last'
 WHEN 'OAuth.TokenUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:449/oauth/token'
 WHEN 'Global.RabbitMq.NotificationGateWayBus.IsEnabled' THEN 'false'
+WHEN 'Payment.IsCupisPaymentsEnabled' THEN 'true'
+WHEN N'PlayerIdentificationSettings.ECupisAddressЕСИА' THEN 'https://wallet.1cupis.ru/auth'
+WHEN 'Asterisk.IpAddress' THEN '172.16.0.54'
+WHEN 'Asterisk.Port' THEN '5038'
+WHEN 'Asterisk.Login' THEN 'site'
+WHEN 'Asterisk.Secret' THEN '$($env:AsteriskSecret)'
+WHEN 'Pages.Prematch.IsHotEventsEnabled' THEN 'true'
+WHEN 'Pages.Events.IsMarketsClientSideRenderingEnabled' THEN 'true'
+WHEN 'Global.RemoteWebApi.PrematchService.Uri' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4435'
+WHEN 'PlayerIdentificationSettings.WrongAttemptCount' THEN '5'
+WHEN 'BroadcastSettings.SetkaCup.StreamUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4443/broadcast/setkacup/{matchId}'
+WHEN 'BroadcastSettings.MatchTv.StreamUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4443/dm-mobileapp/broadcast/matchtv/{matchId}'
+WHEN 'BroadcastSettings.Rfpl.StreamUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4443/dm-mobileapp/broadcast/umamedia/{matchId}'
+WHEN 'Global.RabbitMq.PicBus.ConnectionString' THEN 'host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PSW)$($ENV:VM_ID); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
+WHEN 'Global.RabbitMq.PicBus.IsEnabled' THEN 'true'
+WHEN 'Global.RabbitMq.PicBus.Exchange' THEN 'Exchange.Pic.Ru'
 ELSE Value END
 
-IF EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Payment.IsCupisPaymentsEnabled')
-    UPDATE $dbname.Settings.SiteOptions SET Value = 'true'
-	    WHERE Name = 'Payment.IsCupisPaymentsEnabled'
-ELSE INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1, 'Payment.IsCupisPaymentsEnabled', 'true', 0)
-
-	
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = N'PlayerIdentificationSettings.ECupisAddressЕСИА')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,N'PlayerIdentificationSettings.ECupisAddressЕСИА','https://wallet.1cupis.ru/auth',0)
-
-
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Asterisk.IpAddress')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Asterisk.IpAddress','172.16.0.54',0)
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Asterisk.Port')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Asterisk.Port','5038',0)
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Asterisk.Login')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Asterisk.Login','site',0)
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Asterisk.Secret')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Asterisk.Secret','$($env:AsteriskSecret)',0)
-
-
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Pages.Prematch.IsHotEventsEnabled')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Pages.Prematch.IsHotEventsEnabled','true',0)
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Pages.Events.IsMarketsClientSideRenderingEnabled')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Pages.Events.IsMarketsClientSideRenderingEnabled','true',0)
-
-
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Global.RemoteWebApi.PrematchService.Uri')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Global.RemoteWebApi.PrematchService.Uri','https://$($env:computername.ToLower()).bb-webapps.com:4435',0)
-	
-	
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'PlayerIdentificationSettings.WrongAttemptCount')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'PlayerIdentificationSettings.WrongAttemptCount','5',0)
-
-DELETE FROM $dbname.Settings.SiteOptions WHERE NAME like '%RemoteWebApi%'
-
-
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.SetkaCup.StreamUrl')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'BroadcastSettings.SetkaCup.StreamUrl','https://$($env:computername.ToLower()).bb-webapps.com:4443/broadcast/setkacup/{matchId}',0)
-
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.MatchTv.StreamUrl')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'BroadcastSettings.MatchTv.StreamUrl','https://$($env:computername.ToLower()).bb-webapps.com:4443/dm-mobileapp/broadcast/matchtv/{matchId}',0)
-
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'BroadcastSettings.Rfpl.StreamUrl')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'BroadcastSettings.Rfpl.StreamUrl','https://$($env:computername.ToLower()).bb-webapps.com:4443/dm-mobileapp/broadcast/umamedia/{matchId}',0)
-
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.ConnectionString')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Global.RabbitMq.PicBus.ConnectionString','host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PSW)$($ENV:VM_ID); publisherConfirms=true; timeout=100; requestedHeartbeat=0',0)
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.IsEnabled')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Global.RabbitMq.PicBus.IsEnabled','true',0)
-IF NOT EXISTS (SELECT * FROM $dbname.Settings.SiteOptions	WHERE Name = 'Global.RabbitMq.PicBus.Exchange')
-	INSERT INTO $dbname.Settings.SiteOptions (GroupId, Name, Value, IsInherited)
-	VALUES (1,'Global.RabbitMq.PicBus.Exchange','Exchange.Pic.Ru',0)	
 "
 ###vars
 $ProgressPreference = 'SilentlyContinue'
