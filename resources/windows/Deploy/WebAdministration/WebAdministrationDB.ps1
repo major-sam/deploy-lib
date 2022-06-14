@@ -22,7 +22,7 @@ WHEN 'UpdateApk.AndroidUrl' THEN 'https://apkupdater.baltbet.ru:1415/com.baltbet
 WHEN 'UpdateApk.CheckUrl' THEN 'https://apkupdater-test.bb-webapps.com:1443/api/check/'
 WHEN 'Global.WcfClient.WcfServicesHostAddress' THEN '$($IPAddress)'
 WHEN 'OAuth.LastLogoutUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:449/account/logout/last'
-WHEN 'OAuth.TokenUrl' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:449/oauth/token'
+WHEN 'OAuth.TokenUrl' THEN '/oauth/token'
 WHEN 'Global.RabbitMq.NotificationGateWayBus.IsEnabled' THEN 'false'
 WHEN 'Payment.IsCupisPaymentsEnabled' THEN 'true'
 WHEN N'PlayerIdentificationSettings.ECupisAddressЕСИА' THEN 'https://wallet.1cupis.ru/auth'
