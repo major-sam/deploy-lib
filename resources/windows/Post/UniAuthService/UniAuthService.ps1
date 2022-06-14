@@ -11,7 +11,7 @@ $logoutService.host = $IPAddress
 $logoutService.port = "5307"
 
 $authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "UniAuthServiceUrl"
-$authUrl.connectionString = "https://$($env:COMPUTERNAME).bb-webapps.com:${uasPort}"
+$authUrl.connectionString = "https://$($env:COMPUTERNAME.ToLower()).bb-webapps.com:${uasPort}"
 $webdoc.Save($UniRuConfig)
 
 # Меняем строки соединений в конфиге UniRuWebApi
@@ -22,7 +22,7 @@ $logoutService.host = $IPAddress
 $logoutService.port = "5307"
 
 $authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "UniAuthServiceUrl"
-$authUrl.connectionString = "https://$($env:COMPUTERNAME).bb-webapps.com:${uasPort}"
+$authUrl.connectionString = "https://$($env:COMPUTERNAME.ToLower()).bb-webapps.com:${uasPort}"
 $authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "OAuth.LastLogoutUrl"
 $authUrl.connectionString = "http://$($IPAddress):5307"
 $webdoc.Save($WebApiConfig)
