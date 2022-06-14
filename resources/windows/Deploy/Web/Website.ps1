@@ -49,7 +49,7 @@ $webdoc.configuration.Grpc.Services.add | %{ if ($_.name -eq "TicketService"){
 	$_.host = $CurrentIpAddr; $_.port = "5037"}}
 
 $logoutService = $webdoc.configuration.Grpc.Services.add | Where-Object name -eq "LogoutServiceClient"
-$logoutService.host = $IPAddress
+$logoutService.host = $CurrentIpAddr
 $logoutService.port = "5307"
 	
 if(Get-Member -inputobject $webdoc.configuration -name 'system.serviceModel' -Membertype Properties){
