@@ -157,6 +157,46 @@ def getPomServices(){
 	return services.sort()
 }
 
+def doMavenDeploy_v2(taskBranch){
+	def resultList = []
+	def xmlfile =readFile('deployPom.xml')
+	pom = new XmlParser(false,false).parseText(xmlfile)
+	println pom
+		.build
+		.plugins
+		.plugin
+		.find{it.artifactId.text() == 'maven-dependency-plugin'}
+		.configuration
+		.artifactItems
+		.artifactItem
+		.collect{it.groupId.text()}
+	error ('stop exec')
+//	services = getPomServices()
+//	updatePom(services,taskBranch)
+	def deployParams = "\"-Dmaven.repo.local=${env.WORKSPACE}\\.mvn\\\" "
+	configFileProvider(
+			[
+			configFile(
+				fileId: 'mavenSettingsGlobal', 
+				targetLocation: 'MAVEN_SETTINGS.xml')
+			]){
+		powershell "mvn clean versions:use-latest-releases dependency:unpack -s MAVEN_SETTINGS.xml -f deployPom.xml -U ${deployParams}"
+	}
+	result = powershell(
+			script:"""
+				\$svc = "${services.join(',')}".Split(',')
+				Get-ChildItem -Directory .\\.mvn | % {
+					if (\$_ -iin \$svc){
+						\$branch =  Get-ChildItem -Directory \$_.FullName
+						\$ver = Get-ChildItem -Directory \$branch.FullName
+						write-output "=========`n\$_ :`n`t\$branch - \$ver"
+					}
+				}
+			""", 
+			label: 'get bundle',
+			returnStdout: true)
+	return """$result"""
+}
 def doMavenDeploy(taskBranch){
 	def resultList = []
 	services = getPomServices()

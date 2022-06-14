@@ -7,6 +7,7 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $redisPwdStr = "password=$redispasswd"
 $shortRedisStr = "$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
+$uasPort = 449
 ###
 #XML values replace UniruWebApi
 ####
@@ -37,10 +38,18 @@ $webdoc = [Xml](Get-Content $apiWebConfig)
 	$_.name -eq 'UniIdentServiceUrl' 
 }).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:44351".ToLower()
 
+$logoutService = $webdoc.configuration.Grpc.Services.add | Where-Object name -eq "LogoutServiceClient"
+$logoutService.host = $IPAddress
+$logoutService.port = "5307"
+
+$authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "UniAuthServiceUrl"
+$authUrl.connectionString = "https://$($env:COMPUTERNAME.ToLower()).bb-webapps.com:${uasPort}"
+
 $webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
+
 $ConnectionStringsAdd = $webdoc.CreateElement('add')
 $ConnectionStringsAdd.SetAttribute("name", "OAuth.LastLogoutUrl")
-$ConnectionStringsAdd.SetAttribute("connectionString", "https://${env:COMPUTERNAME}.gkbaltbet.local:449/account/logout/last")
+$ConnectionStringsAdd.SetAttribute("connectionString", "http://$($IPAddress):5307")
 $webdoc.configuration.connectionStrings.AppendChild($ConnectionStringsAdd)
 
 ($webdoc.configuration.Grpc.services.add | where { $_.name -eq 'DefaultService' }).host = $IPAddress
