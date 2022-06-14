@@ -29,27 +29,14 @@ def getKuberNodeIP(Map config = [:]){
 	return Jenkins.getInstance().getComputer(nodes[config.KuberID]).getHostName()
 }
 
-//def getKuberNodeLabel(Map config = [:]){
-//	def nodes =nodesByLabel config.nodeLabel
-//	nodes=nodes.sort()
-//	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
-//		return nodes[1]
-//	}
-//	else{
-//		return nodes[0]
-//	}
-//}
-//
-//def getKuberNodeIP(Map config = [:]){
-//	def nodes =nodesByLabel config.nodeLabel
-//	nodes=nodes.sort()
-//	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
-//		return Jenkins.getInstance().getComputer(nodes[1]).getHostName()
-//	}
-//	else{
-//		return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
-//	}
-//}
+def getNodeList(label = 'windows'){
+	return Jenkins
+		.instance
+		.getNodes()
+		.findAll{ it.getLabelString().contains(label) }
+		.findAll{ it.toComputer().isOnline() }
+		.name as List
+}
 
 def getLastSuccessfullTaskJobDescription(node){
 	def test_job = Jenkins.instance.getItemByFullName(JOB_NAME)
