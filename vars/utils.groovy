@@ -1,6 +1,8 @@
-import groovy.json.JsonSlurperClassic
+import groovy.json.*
+import groovy.xml.*
 import groovy.json.JsonOutput
 import jenkins.model.Jenkins
+import java.util.stream.*
 
 def kuberPortShift(Map config = [:]){          
 	return config.port + config.VM.replaceAll("\\D+","").toInteger()
@@ -29,27 +31,14 @@ def getKuberNodeIP(Map config = [:]){
 	return Jenkins.getInstance().getComputer(nodes[config.KuberID]).getHostName()
 }
 
-//def getKuberNodeLabel(Map config = [:]){
-//	def nodes =nodesByLabel config.nodeLabel
-//	nodes=nodes.sort()
-//	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
-//		return nodes[1]
-//	}
-//	else{
-//		return nodes[0]
-//	}
-//}
-//
-//def getKuberNodeIP(Map config = [:]){
-//	def nodes =nodesByLabel config.nodeLabel
-//	nodes=nodes.sort()
-//	if (config.VM.replaceAll("\\D+","").toInteger() % 2 == 0){
-//		return Jenkins.getInstance().getComputer(nodes[1]).getHostName()
-//	}
-//	else{
-//		return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
-//	}
-//}
+def getNodeList(label = 'windows'){
+	return Jenkins
+		.instance
+		.getNodes()
+		.findAll{ it.getLabelString().contains(label) }
+		.findAll{ it.toComputer().isOnline() }
+		.name as List
+}
 
 def getLastSuccessfullTaskJobDescription(node){
 	def test_job = Jenkins.instance.getItemByFullName(JOB_NAME)
@@ -92,31 +81,24 @@ def	addToDescription(Map config = [:]){
 
 
 def lookupBranchInNexus (repoName, task){
-	withCredentials([file(credentialsId: 'NexusNetRC', variable: 'NexusNetRC')]){
-		def text = powershell (
-				returnStdout: true,
-				label: 'Lookup branch ' + task + ' in repo ' + repoName ,
-				script : '''
-				curl.exe --netrc-file "$env:NexusNetRC" `
-					-X GET "http://nexus:8081/service/rest/v1/search/assets?repository=''' +
+	def nexusUrl = "https://nexus.gkbaltbet.local/service/rest/v1/search/assets?repository="+
 					repoName +'&maven.groupId='+repoName+
 					'&maven.artifactId=' +task +
-					'''&maven.extension=zip" `
-					-H "accept: application/json" 4>&1 2>$null
-				'''
-				)
-		def repoMap = new JsonSlurperClassic().parseText(text)
-		def boolean foundIt = repoMap.items.size() > 0
-		return foundIt
-	}
+					'&maven.extension=zip'
+	def response = httpRequest (
+							authentication: 'jenkinsAD',
+							ignoreSslErrors: true,
+							validResponseCodes: '200,404',
+							quiet: true,
+							url: nexusUrl)
+	def json = new JsonSlurper().parseText(response.getContent())
+	return (json.items.size() > 0)
 }
 
-def getNexusBranch (repoName, userTask){
+def updatePom(repoName, userTask){
 	if (userTask =~ /^[A-Z]{2,}-\d+$/){
 		if (lookupBranchInNexus(repoName , userTask)) { return userTask }
-        if (lookupBranchInNexus(repoName , "feature-${userTask}")) {
-			return  "feature-${userTask}" 
-			}
+		if (lookupBranchInNexus(repoName , "feature-${userTask}")) { return  "feature-${userTask}" }
 	}
 	def NotFeatureTask =  defaultNexusNaming(userTask) 
 	def hasMaster = lookupBranchInNexus(repoName, 'master')
@@ -128,49 +110,72 @@ def getNexusBranch (repoName, userTask){
 	}
 }
 
-
-def updatePom(services, branchTask){
-	services.each{ 
-		nexusLookup = getNexusBranch(it, branchTask)
-		if (nexusLookup == 'master'){
-			return
-		}
-		else if (nexusLookup){
-			powershell (
-				script: '''
-				\$pom= "'''+ "${env.WORKSPACE}\\deployPom.xml" +'''"
-				\$xml= [Xml] (Get-Content \$pom)
-				((\$xml.project.build.plugins.plugin  |? {
-					\$_.artifactId -like 'maven-dependency-plugin' }).configuration.artifactItems.artifactItem| ? {
-						\$_.groupId -like "'''+ it +'''"}).artifactId = "'''+ nexusLookup  +'''"
-				\$xml.Save(\$pom)
-				''',
-				label: 'Update pom '+ it + ' with ' + nexusLookup, 
-				returnStdout:true
-				)
-		} 
-		else{
-			error ("${it} has no master in nexus!")
-		}
-	}	
-}
-
-def getPomServices(){
-	def services = powershell(
-		returnStdout: true,
-		script:'''
-			\$pom= "'''+ "${env.WORKSPACE}\\deployPom.xml" +'''"
-			\$xml= [Xml] (Get-Content \$pom)
-			\$artifacts=(\$xml.project.build.plugins.plugin  |? {
-					 \$_.artifactId -like 'maven-dependency-plugin' }).configuration.artifactItems.artifactItem| % {
-									 \$_.groupId} 
-			 Write-Output ($artifacts -join ",")''',
-		 encoding: 'UTF8').split(',') as List
-	services[-1] = services[-1].replaceAll("[^A-Za-z0-9]", "")
-	return services.sort()
+@NonCPS
+def replaceArtifactId(pom, service, nexusGroupId){
+	pom.build
+		.plugins
+		.plugin
+		.find{it.artifactId.text() == 'maven-dependency-plugin'}
+	.configuration
+		.artifactItems
+		.artifactItem
+		.find{it.groupId.text() == service}
+	.artifactId[0].setValue(nexusGroupId)
 }
 
 def doMavenDeploy(taskBranch){
+	def resultList = []
+	def xmlfile =readFile('deployPom.xml')
+	pom = new XmlParser(false,false).parseText(xmlfile)
+	services = pom.build
+		.plugins
+		.plugin
+		.find{it.artifactId.text() == 'maven-dependency-plugin'}
+		.configuration
+		.artifactItems
+		.artifactItem
+		.collect{it.groupId.text()}.sort()
+	def stepsForParallel = [:]
+	services.each{service ->
+		def stepName = "$service step"
+		stepsForParallel[stepName] = { 
+			def String nexusGroupId =  updatePom(service,taskBranch)
+			if (nexusGroupId == 'master'){
+				println 'master is default groupId'
+			}
+			else if (nexusGroupId){
+				println "GroupId: ${nexusGroupId}"
+				replaceArtifactId(pom, service, nexusGroupId)
+			}else{ error("$service has no master")}
+		}
+	}
+	parallel stepsForParallel
+	writeFile encoding: 'UTF8', file:'deployPom.xml', text: groovy.xml.XmlUtil.serialize(pom)
+	withMaven(
+		globalMavenSettingsConfig: 'mavenSettingsGlobal',
+		jdk: '11',
+		maven: 'maven382',
+		mavenLocalRepo: '.mvn',
+		mavenSettingsConfig: 'mavenSettings') {
+		bat "mvn clean versions:use-latest-releases dependency:unpack -f deployPom.xml -U "
+	}
+	result = powershell(
+			script:"""
+				\$svc = "${services.join(',')}".Split(',')
+				Get-ChildItem -Directory .\\.mvn | % {
+					if (\$_ -iin \$svc){
+						\$branch =  Get-ChildItem -Directory \$_.FullName
+						\$ver = Get-ChildItem -Directory \$branch.FullName
+						write-output "=========`n\$_ :`n`t\$branch - \$ver"
+					}
+				}
+			""", 
+			label: 'get bundle',
+			returnStdout: true)
+	return """$result"""
+}
+
+def doMavenDeploy_legacy(taskBranch){
 	def resultList = []
 	services = getPomServices()
 	updatePom(services,taskBranch)
