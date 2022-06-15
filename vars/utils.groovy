@@ -181,18 +181,19 @@ def doMavenDeploy(taskBranch){
 def doSingleServiceMavenDeploy(Map config = [:]){
 	def taskBranch = getNexusGroupID (config.groupId, config.branch)
 	if (taskBranch){
-		def deployParams = (
-				"\"-Dmaven.repo.local=" + config.repo + "\" " +
-				"\"-Ddeploy.groupid=" + config.groupId+ "\" " +
-				"\"-Ddeploy.dir=" + config.deployDir +  "\" " +
-				"\"-Ddeploy.branch=" + taskBranch +  "\""
-				)
-		powershell (
-				script: "mvn clean versions:use-latest-releases" +
-				" dependency:unpack  -U -s MAVEN_SETTINGS.xml"+
-				" -f pomxml ${deployParams}",
-				label: "Maven deploy ${config.groupId} branch ${taskBranch}"
-				)
+		def deployParams = [
+				"\"-Ddeploy.groupid=${config.groupId}\"",
+				"\"-Ddeploy.dir=${config.deployDir}\"",
+				"\"-Ddeploy.branch=${taskBranch}\"",
+				"\"-DartifactName=${config.groupId}\""].join(' ')
+		withMaven(
+				globalMavenSettingsConfig: 'mavenSettingsGlobal',
+				jdk: '11',
+				maven: 'maven382',
+				mavenLocalRepo: config.repo,
+				mavenSettingsConfig: 'mavenSettings') {
+			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
+		}
 		def packageVersion = powershell (
 				script:"(Get-ChildItem -Directory "+ 
 				config.repo +"\\"+config.groupId+"\\"+
