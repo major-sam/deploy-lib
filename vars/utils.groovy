@@ -102,7 +102,7 @@ def lookupBranchInNexus (repoName, task){
 	return (json.items.size() > 0)
 }
 
-def updatePom(repoName, userTask){
+def getNexusGroupID(repoName, userTask){
 	if (userTask =~ /^[A-Z]{2,}-\d+$/){
 		if (lookupBranchInNexus(repoName , userTask)) { return userTask }
 		if (lookupBranchInNexus(repoName , "feature-${userTask}")) { return  "feature-${userTask}" }
@@ -146,7 +146,7 @@ def doMavenDeploy(taskBranch){
 	services.each{service ->
 		def stepName = "$service step"
 		stepsForParallel[stepName] = { 
-			def String nexusGroupId =  updatePom(service,taskBranch)
+			def String nexusGroupId =  getNexusGroupID(service,taskBranch)
 			if (nexusGroupId == 'master'){
 				println 'master is default groupId'
 			}
@@ -212,7 +212,7 @@ def doMavenDeploy_legacy(taskBranch){
 }
 
 def doSingleServiceMavenDeploy(Map config = [:]){
-	def taskBranch = getNexusBranch (config.groupId, config.branch)
+	def taskBranch = getNexusGroupID (config.groupId, config.branch)
 	if (taskBranch){
 		def deployParams = (
 				"\"-Dmaven.repo.local=" + config.repo + "\" " +
