@@ -12,8 +12,8 @@ $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
 $dbname = "UniAdministration"
 
-$ldapHost = "gkbaltbet.local:389"
-$baseDN = "OU=Технические,OU=Santorin,OU=GKBALTBET,DC=gkbaltbet,DC=local"
+$ldapHost = "gkbaltbet.local"
+$baseDN = "OU=technical,OU=APK-Test,DC=gkbaltbet,DC=local"
 $contentGroup = "Webtest-Content"
 $contentViewGroup = "Webtest-ContentView"
 $settingsViewGroup = "Webtest-SettingsView"
