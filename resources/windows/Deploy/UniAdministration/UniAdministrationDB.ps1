@@ -44,7 +44,7 @@ ELSE Value END
 
 UPDATE [$dbname].Settings.SiteOptionsGroups SET Host = CASE Instance
 WHEN 'UniRu' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4443'
-ELSE Value END
+ELSE Host END
 "
 ###vars
 $ProgressPreference = 'SilentlyContinue'
