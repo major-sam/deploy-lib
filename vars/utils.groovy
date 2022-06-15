@@ -88,9 +88,16 @@ def lookupBranchInNexus (repoName, task){
 	def response = httpRequest (
 							authentication: 'jenkinsAD',
 							ignoreSslErrors: true,
-							validResponseCodes: '200,404',
+							validResponseCodes: '200,404,500',
 							quiet: true,
 							url: nexusUrl)
+	if (response.status == '500'){
+		response = httpRequest (
+							authentication: 'jenkinsAD',
+							ignoreSslErrors: true,
+							validResponseCodes: '200,404',
+							url: nexusUrl)
+	}
 	def json = new JsonSlurper().parseText(response.getContent())
 	return (json.items.size() > 0)
 }
