@@ -137,20 +137,20 @@ def doMavenDeploy(taskBranch){
 		.collect{it.groupId.text()}.sort()
 	def stepsForParallel = [:]
 	services.each{service ->
-		def stepName = "service $service step"
+		def stepName = "$service step"
 		stepsForParallel[stepName] = { 
 			def String nexusGroupId =  updatePom(service,taskBranch)
 			if (nexusGroupId == 'master'){
-				println 'master is default'
+				println 'master is default groupId'
 			}
 			else if (nexusGroupId){
+				println "GroupId: ${nexusGroupId}"
 				replaceArtifactId(pom, service, nexusGroupId)
 			}else{ error("$service has no master")}
 		}
 	}
 	parallel stepsForParallel
 	writeFile encoding: 'UTF8', file:'deployPom.xml', text: groovy.xml.XmlUtil.serialize(pom)
-	powershell "get-content .\\deployPom.xml"
 	withMaven(
 		globalMavenSettingsConfig: 'mavenSettingsGlobal',
 		jdk: '11',
