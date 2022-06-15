@@ -42,6 +42,9 @@ WHEN 'Global.RabbitMq.PicBus.IsEnabled' THEN 'true'
 WHEN 'Global.RabbitMq.PicBus.Exchange' THEN 'Exchange.Pic.Ru'
 ELSE Value END
 
+UPDATE [$dbname].Settings.SiteOptionsGroups SET Host = CASE Instance
+WHEN 'UniRu' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4443'
+ELSE Value END
 "
 ###vars
 $ProgressPreference = 'SilentlyContinue'
