@@ -143,17 +143,15 @@ def doMavenDeploy(taskBranch){
 		.artifactItem
 		.collect{it.groupId.text()}.sort()
 	services.each{service ->
-		stepsForParallel[stepName] = { 
-			def String nexusGroupId =  getNexusGroupID(service,taskBranch)
-			if (nexusGroupId == 'master'){
-				println 'master is default groupId'
-			}
-			else if (nexusGroupId){
-				println "GroupId: ${nexusGroupId}"
-				replaceArtifactId(pom, service, nexusGroupId)
-			}else{ error("$service has no master")}
+		def String nexusGroupId =  getNexusGroupID(service,taskBranch)
+		if (nexusGroupId == 'master'){
+			println 'master is default groupId'
 		}
-	}
+		else if (nexusGroupId){
+			println "GroupId: ${nexusGroupId}"
+				replaceArtifactId(pom, service, nexusGroupId)
+		}else{ error("$service has no master")}
+}
 	writeFile encoding: 'UTF8', file:'deployPom.xml', text: groovy.xml.XmlUtil.serialize(pom)
 	withMaven(
 		globalMavenSettingsConfig: 'mavenSettingsGlobal',
@@ -179,34 +177,6 @@ def doMavenDeploy(taskBranch){
 	return """$result"""
 }
 
-def doMavenDeploy_legacy(taskBranch){
-	def resultList = []
-	services = getPomServices()
-	updatePom(services,taskBranch)
-	def deployParams = "\"-Dmaven.repo.local=${env.WORKSPACE}\\.mvn\\\" "
-	configFileProvider(
-			[
-			configFile(
-				fileId: 'mavenSettingsGlobal', 
-				targetLocation: 'MAVEN_SETTINGS.xml')
-			]){
-		powershell "mvn clean versions:use-latest-releases dependency:unpack -s MAVEN_SETTINGS.xml -f deployPom.xml -U ${deployParams}"
-	}
-	result = powershell(
-			script:"""
-				\$svc = "${services.join(',')}".Split(',')
-				Get-ChildItem -Directory .\\.mvn | % {
-					if (\$_ -iin \$svc){
-						\$branch =  Get-ChildItem -Directory \$_.FullName
-						\$ver = Get-ChildItem -Directory \$branch.FullName
-						write-output "=========`n\$_ :`n`t\$branch - \$ver"
-					}
-				}
-			""", 
-			label: 'get bundle',
-			returnStdout: true)
-	return """$result"""
-}
 
 def doSingleServiceMavenDeploy(Map config = [:]){
 	def taskBranch = getNexusGroupID (config.groupId, config.branch)
