@@ -5,7 +5,7 @@ $credentials = New-Object System.Management.Automation.PSCredential ($ENV:SERVIC
 
 $params = @{
     Name           = "Consul"
-    BinaryPathName = "$CONSUL_DIR\consul.exe agent -bind=`"0.0.0.0`" -client=`"0.0.0.0`" -dev -ui"
+    BinaryPathName = "$CONSUL_DIR\consul.exe agent -bind=`"0.0.0.0`" -client=`"0.0.0.0`" -log-file=`".\log`" -log-level=`"INFO`" -dev -ui"
     DisplayName    = "Consul"
     StartupType    = "Automatic"
     Description    = "Consul Hashicorp Service - DEV mode"
