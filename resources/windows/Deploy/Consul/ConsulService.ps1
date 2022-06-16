@@ -1,15 +1,6 @@
 $CONSUL_DIR = "C:\Consul"
 $consul_distr = "\\server\tcbuild$\testers\consul\consul.exe"
-
-$params = @{
-    Name           = "Consul"
-    BinaryPathName = "$CONSUL_DIR\consul.exe agent -dev -ui"
-    DisplayName    = "Consul"
-    StartupType    = "Automatic"
-    Description    = "Consul Hashicorp Service - DEV mode"
-}
-
-$sname = $params.Name
+$sname = "Consul"
 
 # Stop consul service, if exists
 if (get-service -Name $sname -ErrorAction SilentlyContinue) {
