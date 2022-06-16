@@ -11,21 +11,22 @@ $params = @{
     Description    = "Consul Hashicorp Service - DEV mode"
 }
 
+$sname = $params.Name
 
 # Register Consul as a WindowsService
-if (!(get-service -Name $params.Name -ErrorAction SilentlyContinue)) {
+if (!(get-service -Name $sname -ErrorAction SilentlyContinue)) {
     Write-Host "[INFO] Add $CONSUL_DIR path to ENV"
     $env:path += ";${CONSUL_DIR}"
     [Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "Machine") + ";${CONSUL_DIR}", "Machine")
     Write-Host "[INFO] Register Consul service"
     New-Service @params
-    Write-Host "[INFO] Set $params.Name credentials"
-    $service = gwmi win32_service -filter "name='$params.Name'"
+    Write-Host "[INFO] Set $sname credentials"
+    $service = gwmi win32_service -filter "name='$sname'"
     $service.Change($Null, $Null, $Null, $Null, $Null, $Null, $ENV:SERVICE_CREDS_USR, $ENV:SERVICE_CREDS_PSW) | Out-Null
-    return $params.Name
+    return $sname
 }
 else {
     Write-Host "[INFO] Consul service already exists"
 }
 Write-Host "[INFO] Starting Consul service in DEV mode"
-Start-Service -Name $params.Name
+Start-Service -Name $sname
