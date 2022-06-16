@@ -13,11 +13,18 @@ $params = @{
 
 $sname = $params.Name
 
-# Register Consul as a WindowsService
-if (!(get-service -Name $sname -ErrorAction SilentlyContinue)) {
+# Check or add env:Path
+$envPath = [Environment]::GetEnvironmentVariable("Path", "Machine").Split(";")
+if (!($envPath -contains $CONSUL_DIR)) {
     Write-Host "[INFO] Add $CONSUL_DIR path to ENV"
     $env:path += ";${CONSUL_DIR}"
     [Environment]::SetEnvironmentVariable("Path", [Environment]::GetEnvironmentVariable("Path", "Machine") + ";${CONSUL_DIR}", "Machine")
+} else {
+    Write-Host "[INFO] $CONSUL_DIR path already exists in ENV"
+}
+
+# Register Consul as a WindowsService
+if (!(get-service -Name $sname -ErrorAction SilentlyContinue)) {    
     Write-Host "[INFO] Register Consul service"
     New-Service @params
     Write-Host "[INFO] Set $sname credentials"
