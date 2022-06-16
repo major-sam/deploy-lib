@@ -18,6 +18,8 @@ if (get-service -Name $params.Name -ErrorAction SilentlyContinue) {
     }
     until((Get-Service -Name $params.name).status -eq 'Stopped')
     start-sleep 1
+    Write-Host "[INFO] Delete $params.Name service"
+    SC.EXE DELETE $params.Name
 } else {
     Write-Host "[INFO] Nothing to stop. Consul service does not exist"
 }
