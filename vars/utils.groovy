@@ -182,10 +182,10 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 	def taskBranch = getNexusGroupID (config.groupId, config.branch)
 	if (taskBranch){
 		def deployParams = [
-				"\"-Ddeploy.groupid=${config.groupId}\"",
-				"\"-Ddeploy.dir=${config.deployDir}\"",
-				"\"-Ddeploy.branch=${taskBranch}\"",
-				"\"-DartifactName=${config.groupId}\""].join(' ')
+				"-Ddeploy.groupid=${config.groupId}",
+				"-Ddeploy.dir=${config.deployDir}",
+				"-Ddeploy.branch=${taskBranch}",
+				"-DartifactName=${config.groupId}"].join(' ')
 		withMaven(
 				globalMavenSettingsConfig: 'mavenSettingsGlobal',
 				jdk: '11',
