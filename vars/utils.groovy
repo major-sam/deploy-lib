@@ -145,10 +145,10 @@ def doMavenDeploy(taskBranch){
 	services.each{service ->
 		def String nexusGroupId =  getNexusGroupID(service,taskBranch)
 		if (nexusGroupId == 'master'){
-			println 'master is default groupId'
+			println "${service} GroupId: master"
 		}
 		else if (nexusGroupId){
-			println "GroupId: ${nexusGroupId}"
+			println "${service} GroupId: ${nexusGroupId}"
 				replaceArtifactId(pom, service, nexusGroupId)
 		}else{ error("$service has no master")}
 }
