@@ -5,7 +5,7 @@ $credentials = New-Object System.Management.Automation.PSCredential ($ENV:SERVIC
 
 $params = @{
     Name           = "Consul"
-    BinaryPathName = "$CONSUL_DIR\consul.exe agent -dev -ui"
+    BinaryPathName = "$CONSUL_DIR\consul.exe agent -bind='0.0.0.0' -client='0.0.0.0' -dev -ui"
     DisplayName    = "Consul"
     StartupType    = "Automatic"
     Description    = "Consul Hashicorp Service - DEV mode"
@@ -23,7 +23,7 @@ if (!(get-service -Name $sname -ErrorAction SilentlyContinue)) {
     Write-Host "[INFO] Set $sname credentials"
     $service = gwmi win32_service -filter "name='$sname'"
     $service.Change($Null, $Null, $Null, $Null, $Null, $Null, $ENV:SERVICE_CREDS_USR, $ENV:SERVICE_CREDS_PSW) | Out-Null
-    return $sname
+    #return $sname
 }
 else {
     Write-Host "[INFO] Consul service already exists"
