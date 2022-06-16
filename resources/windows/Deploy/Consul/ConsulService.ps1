@@ -9,17 +9,19 @@ $params = @{
     Description    = "Consul Hashicorp Service - DEV mode"
 }
 
+$sname = $params.Name
+
 # Stop consul service, if exists
-if (get-service -Name $params.Name -ErrorAction SilentlyContinue) {
+if (get-service -Name $sname -ErrorAction SilentlyContinue) {
     Write-Host "[INFO] Stop Consul service"
-    Stop-Service -Name $params.Name -Force
+    Stop-Service -Name $sname -Force
     do {
         Start-sleep 1
     }
-    until((Get-Service -Name $params.name).status -eq 'Stopped')
+    until((Get-Service -Name $sname).status -eq 'Stopped')
     start-sleep 1
-    Write-Host "[INFO] Delete $params.Name service"
-    SC.EXE DELETE $params.Name
+    Write-Host "[INFO] Delete $sname service"
+    SC.EXE DELETE $sname
 } else {
     Write-Host "[INFO] Nothing to stop. Consul service does not exist"
 }
