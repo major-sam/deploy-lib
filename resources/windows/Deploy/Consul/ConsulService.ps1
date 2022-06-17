@@ -17,13 +17,21 @@ if (get-service -Name $sname -ErrorAction SilentlyContinue) {
     Write-Host "[INFO] Nothing to stop. Consul service does not exist"
 }
 
-# Create Consul Folder
+# Create Consul Folders
 if (!(Test-Path $CONSUL_DIR)) {
     Write-Host "[INFO] Create Consul folder"
-    New-Item -ItemType Directory $CONSUL_DIR
+    New-Item -ItemType Directory -Path "$CONSUL_DIR"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\consul.d"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\data"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\log"
 }
 else {
     Write-Host "[INFO] $CONSUL_DIR exists"
+    Write-Host "[INFO] Remove all data in $CONSUL_DIR"
+    Remove-Item -Path "$CONSUL_DIR\*" -Recurse -Force -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\consul.d"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\data"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\log"
 }
 
 # Copy binary from network folder
