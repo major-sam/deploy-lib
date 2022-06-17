@@ -32,9 +32,6 @@ else {
     New-Item -ItemType Directory -Path "$CONSUL_DIR\consul.d"
     New-Item -ItemType Directory -Path "$CONSUL_DIR\data"
     New-Item -ItemType Directory -Path "$CONSUL_DIR\log"
-    #Remove-Item -Path "$CONSUL_DIR\consul.d\*" -Recurse -Force -ErrorAction SilentlyContinue
-    #Remove-Item -Path "$CONSUL_DIR\data\*" -Recurse -Force -ErrorAction SilentlyContinue
-    #Remove-Item -Path "$CONSUL_DIR\log\*" -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 # Copy binary from network folder
