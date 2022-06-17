@@ -16,4 +16,4 @@ Invoke-Sqlcmd -QueryTimeout $queryTimeout -verbose -ServerInstance $env:COMPUTER
 
 $url = "https://${env:COMPUTERNAME}.bb-webapps.com:449".ToLower()
 Write-Host "get request for uniauth " $url
-curl.exe $url
+curl.exe $url --verbose
