@@ -26,7 +26,8 @@ if (Test-path($pathtojson)) {
     $jsonAppsetings.ConsumerService.SubscriptionId = "WidgetConsumer-$($env:COMPUTERNAME)"
 
     # Настраиваем секцию DataConfiguration
-    $jsonAppsetings.DataConfiguration.UseSwagger = $true
+    try { $jsonAppsetings.DataConfiguration.UseSwagger = $true } 
+    catch { Write-host "[WARN] UseSwagger option doesn't exist" }
 
     # Настраиваем секцию Kestrel
     $jsonAppsetings.Kestrel.Endpoints.Http.Url = "http://$($env:COMPUTERNAME).$($defaultDomain):${httpWSPort}"
