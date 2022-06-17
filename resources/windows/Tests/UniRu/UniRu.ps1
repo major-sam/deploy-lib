@@ -12,3 +12,8 @@ GO
 "
 Write-Host -ForegroundColor Green "[INFO] Insert settings to UniRu"
 Invoke-Sqlcmd -QueryTimeout $queryTimeout -verbose -ServerInstance $env:COMPUTERNAME -Database $dbname -query $query_insert_settings -ErrorAction continue
+
+
+$url = "https://${env:COMPUTERNAME}.bb-webapps.com:449".ToLower()
+Write-Host "get request for uniauth " $url
+curl.exe $url
