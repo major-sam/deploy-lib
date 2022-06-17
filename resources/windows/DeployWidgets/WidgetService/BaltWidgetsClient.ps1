@@ -13,7 +13,7 @@ if (Test-path($pathtojson)) {
     Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
     $jsonAppsetings = Get-Content -Raw -path $pathtojson  | % { $_ -replace '[\s^]//.*', "" } | ConvertFrom-Json 
 
-    $jsonAppsetings.BackendUrl = "https://$($env:COMPUTERNAME).$($wildcardDomain):6001"
+    $jsonAppsetings.BackendUrl = "https://$($env:COMPUTERNAME.ToLower()).$($wildcardDomain):6001/EventWidget"
     
     ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
     Write-Host -ForegroundColor Green "[INFO] $pathtojson renewed with json depth $jsonDepth"
