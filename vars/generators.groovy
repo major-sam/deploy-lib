@@ -12,27 +12,26 @@ def getParralelStagesMap(Map config = [:]){
 	}
 	return result
 }
-@NonCPS
+
 def generateStages(Map config = [:] ) {
 	Closure stagesResults = {}
 	if (config.job.stages){
-		config.job.stages.each{stageScript ->  
+		for (stageScript in config.job.stages){
 			def libScriptPath = [
 				config.envOS,
 				config.stageName,
 				config.job.name,
 				stageScript ].join('/')
 			def libScript = libraryResource libScriptPath 
-			def stagesResult = getSubStage(
+			stagesResults << getSubStage(
 				scriptCase:stageScript.split('\\.')[-1],
 				stageName: stageScript.split('\\.')[0],
 				script: libScript,
 				scriptPath:libScriptPath)
-			stagesResults << stagesResult
 		}
 	}
 	if (config.job.inCodeStages){
-		config.job.inCodeStage.each{ inCodeStageScript ->  
+		for ( inCodeStageScript in config.job.inCodeStages){
 			def libScriptPath = [
 				config.artifactItems[config.job.name],
 				'Deploy',
@@ -40,12 +39,12 @@ def generateStages(Map config = [:] ) {
 				inCodeStageScript 
 			].join('/')
 			println "${config.job.name} will be use in code deploy scripts from ${config.artifactItems[$config.job.name]}/Deploy"
-			def stagesResult = getSubStage(
+			libScript = readFile (libScriptPath)
+			stagesResults << getSubStage(
 				scriptCase:inCodeStageScript.split('\\.')[-1],
 				stageName: inCodeStageScript.split('\\.')[0],
-				script: readFile (libScriptPath),
+				script: libScript,
 				scriptPath:libScriptPath)
-			stagesResults << stagesResult
 		}
 	return stagesResults
 	}

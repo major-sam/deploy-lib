@@ -132,8 +132,9 @@ def replaceArtifactId(pom, service, nexusGroupId){
 
 def getArtifacts(){
 	def xmlfile =readFile('deployPom.xml')
-	pom = new XmlParser(false,false).parseText(xmlfile)
-	return pom.build
+	def pom = new XmlParser(false,false).parseText(xmlfile)
+	Map result =  pom
+		.build
 		.plugins
 		.plugin
 		.find{it.artifactId.text() == 'maven-dependency-plugin'}
@@ -141,6 +142,8 @@ def getArtifacts(){
 		.artifactItems
 		.artifactItem
 		.collectEntries{[it.groupId.text(), it.outputDirectory.text()]}
+	println result
+	return result
 }
 
 def doMavenDeploy(taskBranch){
@@ -170,7 +173,7 @@ def doMavenDeploy(taskBranch){
 		globalMavenSettingsConfig: 'mavenSettingsGlobal',
 		jdk: '11',
 		maven: 'maven382',
-		mavenLocalRepo: 'JENKINS_HOME/.mvn',
+		mavenLocalRepo: ".mvn",
 		mavenSettingsConfig: 'mavenSettings') {
 		bat "mvn clean versions:use-latest-releases dependency:unpack -f deployPom.xml -U "
 	}
@@ -203,13 +206,13 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 				globalMavenSettingsConfig: 'mavenSettingsGlobal',
 				jdk: '11',
 				maven: 'maven382',
-				mavenLocalRepo: 'JENKINS_HOME/.mvn',
+				mavenLocalRepo: ".mvn",
 				mavenSettingsConfig: 'mavenSettings') {
 			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
 		}
 		def packageVersion = powershell (
-				script:"(Get-ChildItem -Directory "+
-				config.repo +"\\"+config.groupId+"\\"+
+				script:"(Get-ChildItem -Directory .mvn"+
+				"\\"+config.groupId+"\\"+
 				taskBranch+" | Select-Object -First 1).name",
 				returnStdout: true
 				)
