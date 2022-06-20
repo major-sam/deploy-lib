@@ -22,18 +22,6 @@ $IISPools = @(
 		sitesubdir = $true
     }
     @{
-        sitename = 'PaymenSystemHandlers'
-        RuntimeVersion = 'v4.0'
-        domainauth =  @{
-            username="$username";password="$pass";identitytype=3
-            }
-        bindings= @(
-                @{protocol='http';bindinginformation="*:88:"}
-            )
-		rootdir = 'c:\inetpub'
-		sitesubdir = $true
-    }
-    @{
         sitename = 'websitecom'
         RuntimeVersion = 'v4.0'
         domainauth =  @{
