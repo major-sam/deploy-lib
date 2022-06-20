@@ -1,5 +1,5 @@
 $CONSUL_DIR = "C:\Consul"
-
+$consul_distr = "\\server\tcbuild$\testers\consul\consul.exe"
 $passVar = ConvertTo-SecureString $ENV:SERVICE_CREDS_PSW -AsPlainText -Force
 $credentials = New-Object System.Management.Automation.PSCredential ($ENV:SERVICE_CREDS_USR , $passVar)
 
@@ -12,6 +12,25 @@ $params = @{
 }
 
 $sname = $params.Name
+
+# Create Consul Folders
+if (!(Test-Path $CONSUL_DIR)) {
+    Write-Host "[INFO] Create Consul folder"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\consul.d"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\data"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\log"
+}
+else {
+    Write-Host "[INFO] $CONSUL_DIR exists"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\consul.d"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\data"
+    New-Item -ItemType Directory -Path "$CONSUL_DIR\log"
+}
+
+# Copy binary from network folder
+Write-Host "[INFO] Copy Consul binary to $CONSUL_DIR"
+Copy-Item -Path $consul_distr -Destination $CONSUL_DIR -Force
 
 # Check or add env:Path
 $envPath = [Environment]::GetEnvironmentVariable("Path", "Machine").Split(";")
