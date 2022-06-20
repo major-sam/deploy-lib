@@ -4,7 +4,7 @@ import groovy.json.JsonOutput
 import jenkins.model.Jenkins
 import java.util.stream.*
 
-def kuberPortShift(Map config = [:]){          
+def kuberPortShift(Map config = [:]){
 	return config.port + config.VM.replaceAll("\\D+","").toInteger()
 }
 
@@ -47,10 +47,10 @@ def getLastSuccessfullTaskJobDescription(node){
 		prev_sucessful_build_descr=prev_sucessful_build.getDescription()
 		if(prev_sucessful_build_descr){
 			if (prev_sucessful_build_descr.contains("${node}")){
-				def matches = (prev_sucessful_build_descr =~ /Task\(Branch\):.*$/) 
+				def matches = (prev_sucessful_build_descr =~ /Task\(Branch\):.*$/)
 				return [
-					matches[0], 
-					prev_sucessful_build.getId(), 
+					matches[0],
+					prev_sucessful_build.getId(),
 					prev_sucessful_build.getCauses()[0].shortDescription as String
 				]
 			}
@@ -107,7 +107,7 @@ def getNexusGroupID(repoName, userTask){
 		if (lookupBranchInNexus(repoName , userTask)) { return userTask }
 		if (lookupBranchInNexus(repoName , "feature-${userTask}")) { return  "feature-${userTask}" }
 	}
-	def NotFeatureTask =  defaultNexusNaming(userTask) 
+	def NotFeatureTask =  defaultNexusNaming(userTask)
 	def hasMaster = lookupBranchInNexus(repoName, 'master')
 	if(NotFeatureTask && (lookupBranchInNexus(repoName, NotFeatureTask)) ){
 		return NotFeatureTask
@@ -128,6 +128,19 @@ def replaceArtifactId(pom, service, nexusGroupId){
 		.artifactItem
 		.find{it.groupId.text() == service}
 	.artifactId[0].setValue(nexusGroupId)
+}
+
+def getArtifacts(){
+	def xmlfile =readFile('deployPom.xml')
+	pom = new XmlParser(false,false).parseText(xmlfile)
+	return pom.build
+		.plugins
+		.plugin
+		.find{it.artifactId.text() == 'maven-dependency-plugin'}
+		.configuration
+		.artifactItems
+		.artifactItem
+		.collectEntries{[it.groupId.text(), it.outputDirectory.text()]}
 }
 
 def doMavenDeploy(taskBranch){
@@ -157,7 +170,7 @@ def doMavenDeploy(taskBranch){
 		globalMavenSettingsConfig: 'mavenSettingsGlobal',
 		jdk: '11',
 		maven: 'maven382',
-		mavenLocalRepo: '.mvn',
+		mavenLocalRepo: 'JENKINS_HOME/.mvn',
 		mavenSettingsConfig: 'mavenSettings') {
 		bat "mvn clean versions:use-latest-releases dependency:unpack -f deployPom.xml -U "
 	}
@@ -171,7 +184,7 @@ def doMavenDeploy(taskBranch){
 						write-output "=========`n\$_ :`n`t\$branch - \$ver"
 					}
 				}
-			""", 
+			""",
 			label: 'get bundle',
 			returnStdout: true)
 	return """$result"""
@@ -190,14 +203,14 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 				globalMavenSettingsConfig: 'mavenSettingsGlobal',
 				jdk: '11',
 				maven: 'maven382',
-				mavenLocalRepo: config.repo,
+				mavenLocalRepo: 'JENKINS_HOME/.mvn',
 				mavenSettingsConfig: 'mavenSettings') {
 			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
 		}
 		def packageVersion = powershell (
-				script:"(Get-ChildItem -Directory "+ 
+				script:"(Get-ChildItem -Directory "+
 				config.repo +"\\"+config.groupId+"\\"+
-				taskBranch+" | Select-Object -First 1).name", 
+				taskBranch+" | Select-Object -First 1).name",
 				returnStdout: true
 				)
 		return """
