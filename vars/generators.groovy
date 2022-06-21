@@ -40,12 +40,15 @@ def generateStages(Map config = [:] ) {
 				inCodeStageScript 
 			].join('/')
 			println "${config.job.name} will be use in code deploy scripts from ${config.artifactItems[config.job.name]}/Deploy"
-			libScript = readFile (libScriptPath)
-			stagesResults << getSubStage(
-				scriptCase:inCodeStageScript.split('\\.')[-1],
-				stageName: inCodeStageScript.split('\\.')[0],
-				script: libScript,
-				scriptPath:libScriptPath)
+			if(fileExists(libScriptPath)){
+				libScript = readFile (libScriptPath)
+				stagesResults << getSubStage(
+					scriptCase:inCodeStageScript.split('\\.')[-1],
+					stageName: inCodeStageScript.split('\\.')[0],
+					script: libScript,
+					scriptPath:libScriptPath)
+				}
+			else{error("$libScriptPath not exists")}
 		}
 	return stagesResults
 	}
