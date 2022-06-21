@@ -10,7 +10,7 @@ WHEN 'Global.GlobalLog.BaltBetClientStatistics.StatisticsHandlerUrl' THEN 'https
 WHEN 'Global.GlobalLog.RabbitMq.DefaultConnectionString' THEN 'host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PSW)$($ENV:VM_ID); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
 WHEN 'Global.GlobalLog.RabbitMq.GlobalLogger.ConnectionString' THEN 'host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PSW)$($ENV:VM_ID); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
 WHEN 'Global.RabbitMq.AccountBus.ConnectionString' THEN 'host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PSW)$($ENV:VM_ID); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
-WHEN 'Global.KernelRedisConnectionString' THEN '$($ENV:REDIS_HOST):$($ENV:REDIS_PORT),syncTimeout=10000,allowAdmin=True,connectTimeout=10000,ssl=False,abortConnect=False,connectRetry=10,proxy=None'
+WHEN 'Global.KernelRedisConnectionString' THEN '$($ENV:REDIS_HOST):$($ENV:REDIS_PORT),password=$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID),syncTimeout=10000,allowAdmin=True,connectTimeout=10000,ssl=False,abortConnect=False,connectRetry=10,proxy=None'
 WHEN 'PlayerIdentificationSettings.DocumentUploadSettings.RecognitionCompletingPassportAddress' THEN 'http://localhost:8123/api/AccountFiles/Cps/completingPassportData/{0}'
 WHEN 'PlayerIdentificationSettings.DocumentUploadSettings.RecognitionResultsAddress' THEN 'http://localhost:8123/api/AccountFiles/Cps/passports/{0}'
 WHEN 'PlayerIdentificationSettings.DocumentUploadSettings.UploadingDocumentAddress' THEN 'http://localhost:8123/api/AccountFiles/Cps/Upload/{0}/{1}/{2}/{3}'
@@ -42,16 +42,19 @@ WHEN 'Global.RabbitMq.PicBus.IsEnabled' THEN 'true'
 WHEN 'Global.RabbitMq.PicBus.Exchange' THEN 'Exchange.Pic.Ru'
 ELSE Value END
 
+UPDATE [$dbname].Settings.SiteOptionsGroups SET Host = CASE Instance
+WHEN 'UniRu' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4443'
+ELSE Host END
 "
 ###vars
 $ProgressPreference = 'SilentlyContinue'
 
-$release_bak_folder = "C:\inetpub\ClientWorkPlace\DB"
+$release_bak_folder = "C:\Services\UniAdministrationDB"
 
 $dbs = @(
 	@{
 		DbName = $Dbname
-		BackupFile = Join-Path $release_bak_folder "init_admin.bak" 
+		BackupFile = Join-Path $release_bak_folder "init_Admin.bak" 
 	}
 )
 

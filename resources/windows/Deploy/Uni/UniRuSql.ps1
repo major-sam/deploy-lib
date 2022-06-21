@@ -2,8 +2,6 @@ Import-module '.\scripts\sideFunctions.psm1'
 
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 $query = "
-
-
 IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = N'PreRegistrationData')
 BEGIN
 	DROP TABLE dbo.PreRegistrationData;
