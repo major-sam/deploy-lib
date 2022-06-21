@@ -62,12 +62,13 @@ def getSubStage(Map config = [:]){
 			}
 		case 'sql':
 			def PsScript = """
-			Invoke-Sqlcmd -Query ({ ${config.script} }.ToString()) `
+			Invoke-Sqlcmd -Query @"
+			${config.script}
+"@ `
 				-verbose `
 				-QueryTimeout 0 `
 				-ServerInstance localhost `
 				-ErrorAction stop"""
-				println PsScript
 				return stage(config.stageName){
 					println "SQL SCRIPTS RUNS ON MASTER! \n For other db USE statment requered"
 						powershell (
