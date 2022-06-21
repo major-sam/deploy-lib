@@ -6,6 +6,7 @@ def getParralelStagesMap(Map config = [:]){
 				generateStages(
 					job:it,
 					stageName: config.stage,
+					artifactItems: config.artifactItems,
 					envOS: (isUnix() ? "linux" : "windows"))
 			}
 		}]
@@ -38,7 +39,7 @@ def generateStages(Map config = [:] ) {
 				config.envOS,
 				inCodeStageScript 
 			].join('/')
-			println "${config.job.name} will be use in code deploy scripts from ${config.artifactItems[$config.job.name]}/Deploy"
+			println "${config.job.name} will be use in code deploy scripts from ${config.artifactItems[config.job.name]}/Deploy"
 			libScript = readFile (libScriptPath)
 			stagesResults << getSubStage(
 				scriptCase:inCodeStageScript.split('\\.')[-1],
@@ -60,11 +61,15 @@ def getSubStage(Map config = [:]){
 						label: config.scriptPath)
 			}
 		case 'sql':
-			def PsScript = """ Invoke-Sqlcmd -Query {$config.script} `
+			def PsScript = """
+			Invoke-Sqlcmd -Query ({
+					${config.script}
+					}.ToString()) `
 				-verbose `
 				-QueryTimeout 0 `
 				-ServerInstance localhost `
 				-ErrorAction stop"""
+				println PsScript
 				return stage(config.stageName){
 					println "SQL SCRIPTS RUNS ON MASTER! \n For other db USE statment requered"
 						powershell (
