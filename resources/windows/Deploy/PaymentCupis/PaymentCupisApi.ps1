@@ -6,7 +6,7 @@ $pacThumbprint = $env:PAC_CERT_THUMBPRINT
 
 $config = Get-Content -Path $pathtojson -Encoding UTF8
 $config = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
-$config.Serilog.WriteTo[1].Args.path = "C:\logs\RestLog\Payment.Cupis-.log"
+$config.Serilog.WriteTo[1].Args.path = "C:\Logs\Payments\Payment.Cupis\PaymentCupis.RestApi.Host\PaymentCupis.RestApi.Host-.log"
 $config.Kestrel.Endpoints.Http.Url = "http://${IPAddress}:5001"
 $config.DbOptions.ConnectionString = "data source=localhost;initial catalog=Cupis.GrpcHost;Integrated Security=true;MultipleActiveResultSets=True;"
 

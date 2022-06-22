@@ -4,7 +4,8 @@ $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
-$targetDir  = "C:\Services\NotificationGateWay"
+$ServiceName = "NotificationGateWay"
+$targetDir  = "C:\Services\$($ServiceName)"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appsettings.json"
 $jsonDepth = 5
@@ -15,6 +16,16 @@ $jsonAppsetings = Get-Content -Raw -path $pathtojson  | % {$_ -replace  '\s*\/\*
 ###
 #Json values replace
 ####
+
+$node = '{
+    "Name": "File",
+    "Args": {
+        "path": "C:\\Logs\\'+"$($ServiceName)\\$($ServiceName)"+'-{Date}.log",
+        "rollingInterval": 3,
+        "retainedFileCountLimit": 7
+    }
+}' | ConvertFrom-Json
+$jsonAppsetings.Serilog.WriteTo += $node
 
 # Настраиваем default email 
 $jsonAppsetings.AppSettings.EmailSettings.Default.From = "reg@baltbet.ru"
