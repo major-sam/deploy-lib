@@ -7,6 +7,7 @@ $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)"
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$websitecomLogsPath = "C:\Logs\WebSiteCom"
 
 $attrs = @{
  'cookieless' =  "UseCookies"
@@ -19,6 +20,19 @@ $attrs = @{
 #XML values replace
 ####
 $webdoc = [Xml](Get-Content -Encoding UTF8 $webConfig)
+
+Write-Host "####  Edit log file path"
+try {
+	$logPath = @{
+		"RootFileAppender"						= "$($websitecomLogsPath)\com-"
+	}
+	foreach ($key in $logPath.Keys) {
+		($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
+	}
+} catch {
+	Write-Host "[WARN] Log settings doesn't find...."
+}
+
 ($webdoc.configuration.appSettings.add | where {
 	$_.key -like "ServerAddress" }).value = $CurrentIpAddr+":8082"
 ($webdoc.configuration.appSettings.add | where {
