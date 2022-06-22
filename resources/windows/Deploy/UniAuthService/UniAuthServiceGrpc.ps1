@@ -22,7 +22,7 @@ $jsonAppsetings = Get-Content -Raw -path $pathtojson  | % { $_ -replace '[\s^]//
 
 # Настраиваем секцию логирования
 $jsonAppsetings.Serilog.WriteTo | % { if ($_.Name -like 'File') {
-    $_.Args.path = "C:\\Logs\\Uni.AuthService.GrpcHost\\Uni.AuthService.GrpcHost.txt"  
+    $_.Args.path = "C:\Logs\Uni.AuthService.GrpcHost\Uni.AuthService.GrpcHost.txt"  
     $_.Args.restrictedToMinimumLevel = "Debug" 
     }
 }
