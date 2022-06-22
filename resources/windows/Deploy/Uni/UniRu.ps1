@@ -17,15 +17,20 @@ Write-Host -ForegroundColor Green "[INFO] Edit web.config of $webConfig"
 $webdoc = [Xml](Get-Content $webConfig)
 
 Write-Host "####  Edit log file path"
-$logPath = @{
-	"globallog-deadletter_global-appender" 	= "$($uniruLogsPath)\%property{site}\global-log\global-dead-"
-	"RootFileAppender"						= "$($uniruLogsPath)\%property{site}\"
-	"EasyNetQAppender"						= "$($uniruLogsPath)\%property{site}\bus\"
-	"SignalRAppender"						= "$($uniruLogsPath)\%property{site}\SignalR\"
+try {
+	$logPath = @{
+		"globallog-deadletter_global-appender" 	= "$($uniruLogsPath)\%property{site}\global-log\global-dead-"
+		"RootFileAppender"						= "$($uniruLogsPath)\%property{site}\"
+		"EasyNetQAppender"						= "$($uniruLogsPath)\%property{site}\bus\"
+		"SignalRAppender"						= "$($uniruLogsPath)\%property{site}\SignalR\"
+	}
+	foreach ($key in $logPath.Keys) {
+		($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
+	}
+} catch {
+	Write-Host "[WARN] Log settings doesn't find...."
 }
-foreach ($key in $logPath.Keys) {
-	($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
-}
+
 
 ($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'DataContext'
 	}).connectionString = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"

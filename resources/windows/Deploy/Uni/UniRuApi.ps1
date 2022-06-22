@@ -16,14 +16,18 @@ Write-Host -ForegroundColor Green "[INFO] Edit web.config of $apiWebConfig"
 $webdoc = [Xml](Get-Content $apiWebConfig)
 
 Write-Host "####  Edit log file path"
-$logPath = @{
-	"globallog-deadletter_global-appender" 	= "$($uniruwebapiLogsPath)\%property{site}\global-log\global-dead-"
-	"RootFileAppender"						= "$($uniruwebapiLogsPath)\%property{site}\"
-	"EasyNetQAppender"						= "$($uniruwebapiLogsPath)\%property{site}\bus\"
-	"SignalRAppender"						= "$($uniruwebapiLogsPath)\%property{site}\SignalR\"
-}
-foreach ($key in $logPath.Keys) {
-	($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
+try {
+	$logPath = @{
+		"globallog-deadletter_global-appender" 	= "$($uniruwebapiLogsPath)\%property{site}\global-log\global-dead-"
+		"RootFileAppender"						= "$($uniruwebapiLogsPath)\%property{site}\"
+		"EasyNetQAppender"						= "$($uniruwebapiLogsPath)\%property{site}\bus\"
+		"SignalRAppender"						= "$($uniruwebapiLogsPath)\%property{site}\SignalR\"
+	}
+	foreach ($key in $logPath.Keys) {
+		($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
+	}
+} catch {
+	Write-Host "[WARN] Log settings doesn't find...."
 }
 
 ($webdoc.configuration.connectionStrings.add | where {
