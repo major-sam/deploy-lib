@@ -7,12 +7,24 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $redisPwdStr = "password=$redispasswd"
 $shortRedisStr = "$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
+$uniruwebapiLogsPath = "C:\Logs\ClientWorkPlace\uniruwebapi"
 $uasPort = 449
 ###
 #XML values replace UniruWebApi
 ####
 Write-Host -ForegroundColor Green "[INFO] Edit web.config of $apiWebConfig"
 $webdoc = [Xml](Get-Content $apiWebConfig)
+
+Write-Host "####  Edit log file path"
+$logPath = @{
+	"globallog-deadletter_global-appender" 	= "$($uniruwebapiLogsPath)\%property{site}\global-log\global-dead-"
+	"RootFileAppender"						= "$($uniruwebapiLogsPath)\%property{site}\"
+	"EasyNetQAppender"						= "$($uniruwebapiLogsPath)\%property{site}\bus\"
+	"SignalRAppender"						= "$($uniruwebapiLogsPath)\%property{site}\SignalR\"
+}
+foreach ($key in $logPath.Keys) {
+	($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
+}
 
 ($webdoc.configuration.connectionStrings.add | where {
 	$_.name -eq 'UniPaymentsServiceUrl' 
