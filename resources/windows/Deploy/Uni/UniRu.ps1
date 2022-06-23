@@ -8,12 +8,30 @@ $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript
 $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)"
 $redisPwdStr= "password=$redispasswd"
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
+$uniruLogsPath = "C:\Logs\ClientWorkPlace\uniru"
 $uasPort = 449
 ###
 #XML values replace UniRu
 ####
 Write-Host -ForegroundColor Green "[INFO] Edit web.config of $webConfig"
 $webdoc = [Xml](Get-Content $webConfig)
+
+Write-Host "####  Edit log file path"
+try {
+	$logPath = @{
+		"globallog-deadletter_global-appender" 	= "$($uniruLogsPath)\%property{site}\global-log\global-dead-"
+		"RootFileAppender"						= "$($uniruLogsPath)\%property{site}\"
+		"EasyNetQAppender"						= "$($uniruLogsPath)\%property{site}\bus\"
+		"SignalRAppender"						= "$($uniruLogsPath)\%property{site}\SignalR\"
+	}
+	foreach ($key in $logPath.Keys) {
+		($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
+	}
+} catch {
+	Write-Host "[WARN] Log settings doesn't find...."
+}
+
+
 ($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'DataContext'
 	}).connectionString = "data source=localhost;initial catalog=UniRu;Integrated Security=true;MultipleActiveResultSets=True;"
 ($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'UniPaymentsServiceUrl'
