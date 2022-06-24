@@ -226,7 +226,7 @@ function RegisterWinService_v2{
 
     if ($Service.GetType() -eq [string] ) {
         $ServiceBin = Get-item $Service}
-    elseif($Service.GetType() -eq [System.IO.FileSystemInfo] ){
+    elseif($Service.GetType() -in ( [System.IO.FileSystemInfo], [System.IO.FileInfo] )){
         $ServiceBin = $Service}
     else{
         Write-Error 'The var type not supported.V alid types: String,FileSystemInfo' -ErrorAction Stop}
