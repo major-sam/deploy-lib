@@ -34,5 +34,8 @@ def getBranches(Map config = [:] ){
         json = jsonSlurper.parseText(resp)
         result.addAll(json.items*.maven2.artifactId.unique())
     }
-    return result.unique().sort().reverse()
+    if (config.regexFilter){
+        return result.unique().sort().reverse().findAll {it ==~ config.regexFilter} }
+    else{
+        return result.unique().sort().reverse()}
 }
