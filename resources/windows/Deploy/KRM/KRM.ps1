@@ -31,7 +31,7 @@ if($xmlconfig.configuration."system.web".sessionState.providers.add.host) {
 
 # Для WEB-6904
 if($xmlconfig.configuration."system.web".sessionState.providers.add.connectionString) {
-	$xmlconfig.configuration."system.web".sessionState.providers.add.connectionString = "$($env:REDIS_HOST):$($env:REDIS_Port)"
+	$xmlconfig.configuration."system.web".sessionState.providers.add.connectionString = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000"
 }
 
 $xmlconfig.configuration."system.web".sessionState.providers.add.accessKey = $redispasswd
