@@ -177,6 +177,79 @@ function RegisterIISSite($site){
     }
 }
 
+function RegisterWinService_v2{
+    <#
+        .SYNOPSIS
+        Register windows service.
+        .DESCRIPTION
+        Register Service function(ASP 3+ service update)
+        .PARAMETER Service
+        Path to service binary
+        .PARAMETER UserName
+        Service creds(default provided by jenkins)
+        .PARAMETER Password
+        Service creds(default provided by jenkins)
+        .PARAMETER AddExecDisplayName
+        add displayName param as binary kwargs(for topshelf)
+        .PARAMETER AddExecServiceName
+        add serviceName param as binary kwargs(for topshelf)
+        .PARAMETER AddExecContentRoot
+        add contentroot param as binary kwargs(for ASP.core)
+        .PARAMETER ServiceBinParams 
+        extra args&kwargs for binary
+        .PARAMETER ServiceParams
+        extra params for New-Service powershell cmdlet
+        .EXAMPLE
+        C:\PS>RegisterWinService_v2 -Service '\myservice\myservice.exe' -username test -password TesT -AddExecContentRoot $true  
+        .NOTES
+        Author: vrebiachikh
+        Date:   24.06.2022
+#>
+    param(
+        [object]
+        [Parameter(Mandatory,HelpMessage='Path to binary')]
+            $Service,
+        [string]
+            $UserName = $ENV:SERVICE_CREDS_USR,
+        [string]
+            $Password = $ENV:SERVICE_CREDS_PSW,
+        [bool]
+            $AddExecDisplayName = $true,
+        [bool]
+            $AddExecServiceName = $true,
+        [bool]
+            $AddExecContentRoot = $false,
+        [string]
+            $ServiceBinParams = '',
+        [string]
+            $ServiceParams = '')
+
+    if ($Service.GetType() -eq [string] ) {
+        $ServiceBin = Get-item $Service}
+    elseif($Service.GetType() -eq [System.IO.FileSystemInfo] ){
+        $ServiceBin = $Service}
+    else{
+        Write-Error 'The var type not supported.V alid types: String,FileSystemInfo' -ErrorAction Stop}
+
+    if ($serviceBin.BaseName -like 'baltbet*'){$sname = "$($serviceBin.BaseName)" }
+    else{$sname = "Baltbet.$($serviceBin.BaseName)"}
+    if ($AddExecDisplayName){$ServiceBinParams += " --DisplayName `"$sname`""}
+    if ($AddExecServiceName){$ServiceBinParams += " --ServiceName `"$snane`""}
+    if ($AddExecContentRoot){$ServiceBinParams += " --ContentRoot `"$($ServiceBin.Directory.FullName)`""}
+
+    [String]$BinStr = "$($ServiceBin.FullName) $ServiceBinParams"
+
+    write-host "Add new service $sname with bin params: $BinStr"
+    if ([string]::IsNullOrEmpty($ServiceParams)){
+        New-Service -name $sname -BinaryPathName $BinStr -DisplayName $sname | OUT-Null
+    }else{
+        New-Service -name $sname -BinaryPathName $BinStr -DisplayName $sname $ServiceParams| OUT-Null
+    }
+    $service = gwmi win32_service -filter "name='$sname'"
+    $service.Change($Null, $Null, $Null, $Null, $Null, $Null, $UserName, $Password)| Out-Null
+    return $sname
+}
+
 function RegisterWinService($serviceBin){
 	##Credential provided by jenkins
 	write-host "Register service:"
