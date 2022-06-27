@@ -9,6 +9,9 @@ $dbname = "Cupis.GrpcHost"
 $pathtojson = "C:\Services\Payments\PaymentCupisService\BaltBet.PaymentCupis.Grpc.Host\appsettings.json"
 $DataSource = "localhost"
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 | Where-Object -FilterScript { $_.interfaceindex -ne 1 }).IPAddress.trim()
+$defaultDomain = "bb-webapps.com"
+$httpsAFServicePort = 7157
+$AntifraudService = "https://$($env:COMPUTERNAME).$($defaultDomain):$httpsAFServicePort".ToLower()
 
 $config = Get-Content -Path $pathtojson -Encoding UTF8
 $config = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
@@ -21,5 +24,11 @@ $config.AggregatorGrpcOptions.ServiceAddress = "http://172.16.1.70:32421"
 $config.AggregatorGrpcOptions.NotificationUrl = "http://${IPAddress}:5001/api/v1/notifications/aggregator"
 $config.AggregatorGrpcOptions.CheckWithdrawUrl = "http://${IPAddress}:5001/api/v1/payout/checkwithdraw"
 $config.RabbitBusOptions.ConnectionString = $shortRabbitStr
+
+# PAY-725
+if($config.ConnectionStrings.AntifraudService) {
+    Write-Host "[INFO] Found ConnectionStrings.AntifraudService"
+    $config.ConnectionStrings.AntifraudService = $AntifraudService
+}
 
 ConvertTo-Json $config -Depth 4| Format-Json | Set-Content $pathtojson -Encoding UTF8
