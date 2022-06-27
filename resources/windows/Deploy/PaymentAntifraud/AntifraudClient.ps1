@@ -12,7 +12,7 @@ $defaultDomain = "bb-webapps.com"
 
 # LDAP settings
 $ldapHost = "gkbaltbet.local"
-$baseDN = "DC=gkbaltbet,DC=local"
+$baseDN = "OU=Офис СПб,OU=Santorin,OU=GKBALTBET,DC=gkbaltbet,DC=local"
 $userQuery = "(`&(objectClass=user)(sAMAccountName={0}))"
 $accessGroupNames = @(
     "CN=devops_testers,OU=ГРУППЫ,OU=GKBALTBET,DC=gkbaltbet,DC=local",
@@ -39,7 +39,7 @@ $jsonAppsetings.ConnectionStrings.AntifraudService = "https://$($env:COMPUTERNAM
 
 # Настраиваем секцию LdapOptions
 $jsonAppsetings.LdapOptions.Host = $ldapHost
-$jsonAppsetings.LdapOptions.BaseDns = $baseDN
+$jsonAppsetings.LdapOptions.BaseDn = $baseDN
 $jsonAppsetings.LdapOptions.UserQuery = $userQuery
 
 # Настраиваем секцию AuthOptions
