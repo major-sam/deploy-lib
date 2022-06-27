@@ -1,4 +1,3 @@
-
 Import-module '.\scripts\sideFunctions.psm1'
 
 ###vars
