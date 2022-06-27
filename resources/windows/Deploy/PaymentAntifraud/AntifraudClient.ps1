@@ -13,7 +13,7 @@ $defaultDomain = "bb-webapps.com"
 # LDAP settings
 $ldapHost = "gkbaltbet.local"
 $baseDN = "DC=gkbaltbet,DC=local"
-$userQuery = "(&(objectClass=user)(sAMAccountName={0}))"
+$userQuery = "(`&(objectClass=user)(sAMAccountName={0}))"
 $accessGroupNames = @(
     "CN=devops_testers,OU=ГРУППЫ,OU=GKBALTBET,DC=gkbaltbet,DC=local",
     "CN=devops_dev,OU=ГРУППЫ,OU=GKBALTBET,DC=gkbaltbet,DC=local",
