@@ -28,8 +28,8 @@ $jsonAppsetings.Kestrel.Endpoints.Https.Url = "https://$($env:COMPUTERNAME).$($d
 $jsonAppsetings.Kestrel.Endpoints.Https.Certificate.Subject = "*.bb-webapps.com"
 
 # Настраиваем секцию подключения к БД
-$jsonAppsetings.ConnectionStrings.Db = "data source=localhost;initial catalog=${dbname};Integrated Security=true;MultipleActiveResultSets=True;"
-$jsonAppsetings.ConnectionStrings.AggregatorDb = "data source=${AggregatorDbServer};initial catalog=${AggregatorDb};Integrated Security=true;MultipleActiveResultSets=True;"
+$jsonAppsetings.ConnectionStrings.Db = "data source=localhost;initial catalog=${dbname};Integrated Security=true;MultipleActiveResultSets=True;Encrypt=false"
+$jsonAppsetings.ConnectionStrings.AggregatorDb = "data source=${AggregatorDbServer};initial catalog=${AggregatorDb};Integrated Security=true;MultipleActiveResultSets=True;Encrypt=false"
 
 
 ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
