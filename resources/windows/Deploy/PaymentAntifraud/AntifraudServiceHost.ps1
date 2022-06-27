@@ -1,4 +1,3 @@
-# UNR-725
 Import-module '.\scripts\sideFunctions.psm1'
 
 $serviceName = "Service"
