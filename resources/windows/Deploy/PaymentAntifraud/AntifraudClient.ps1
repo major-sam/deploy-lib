@@ -45,5 +45,5 @@ $jsonAppsetings.LdapOptions.UserQuery = $userQuery
 # Настраиваем секцию AuthOptions
 $jsonAppsetings.AuthOptions.ServiceAccessGroupNames = $accessGroupNames
 
-ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
+ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | % { [System.Text.RegularExpressions.Regex]::Unescape($_) } | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "[INFO] $pathtojson renewed with json depth $jsonDepth"
