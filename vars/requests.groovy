@@ -44,7 +44,7 @@ def updateConfluence(Map config = [:] ){
         httpRequest (
                 authentication: config.auth,
                 consoleLogResponseBody: true,
-                contentType: 'APPLICATION_JSON',
+                contentType: 'APPLICATION_JSON_UTF8',
                 httpMode: 'PUT',
                 requestBody:reqBody,
                 responseHandle: 'NONE',
@@ -54,7 +54,7 @@ def updateConfluence(Map config = [:] ){
         def req = httpRequest (
                 authentication: config.auth,
                 consoleLogResponseBody: true,
-                contentType: 'APPLICATION_JSON',
+                contentType: 'APPLICATION_JSON_UTF8',
                 httpMode: 'POST',
                 requestBody: """
                 {"type":"page",""title":${config.vm}",
