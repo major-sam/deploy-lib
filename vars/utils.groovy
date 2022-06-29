@@ -142,7 +142,7 @@ def getArtifacts(){
 		.artifactItems
 		.artifactItem
 		.collectEntries{[it.groupId.text(), it.outputDirectory.text()]}
-	println result
+	println JsonOutput.prettyPrint(JsonOutput.toJson(result))
 	return result
 }
 

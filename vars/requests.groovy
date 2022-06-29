@@ -27,17 +27,26 @@ def updateConfluence(Map config = [:] ){
         wrapAsMultipart: false)
     def text = rootChilds.getContent()
     def json = readJSON text: text
-    if (vm in json.results*.title){
-        id = json.results.find{it.title == vm}.id
-        int version = (json.results.find{it.title == vm}.version) ? json.results.find{it.title == vm}.version as Integer : 1 
+    if (config.vm in json.results*.title){
+        id = json.results.find{it.title == config.vm}.id
+        def versionReq =  httpRequest (
+                consoleLogResponseBody: true,
+                authentication: config.auth,
+                responseHandle: 'NONE',
+                url:"https://confluence.baltbet.ru:8444/rest/api/content/${id}?expand=body.storage,version",
+                wrapAsMultipart: false)
+        def versionMap = readJSON text:versionReq.getContent()
+        int version = versionMap.version.number as Integer
+        def reqBody = """{"id":"${id}","type":"page",
+                "title":"${config.vm}","space":{"key":"${config.spacekey}"},"body":{"storage":{"value":
+                "${config.body}","representation":"storage"}},"version":{"number":${version + 1}}}"""
+        println reqBody
         httpRequest (
                 authentication: config.auth,
-                consoleLogResponseBody: false,
+                consoleLogResponseBody: true,
                 contentType: 'APPLICATION_JSON',
                 httpMode: 'PUT',
-                requestBody: """{"id":"${id}","type":"page",
-                "title":"${config.vm}","space":{"key":"${config.spacekey}"},"body":{"storage":{"value":
-                "${config.body}","representation":"storage"}},"version":{"number":${version + 1}}}""",
+                requestBody:reqBody,
                 responseHandle: 'NONE',
                 url: "https://confluence.baltbet.ru:8444/rest/api/content/${id}",
                 wrapAsMultipart: false)
