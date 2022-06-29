@@ -329,7 +329,7 @@ function ApplyTasks{
                     -ServerInstance $DBServer`
                     -Database $TargetDB `
                     -InputFile $script `
-                    -ErrorAction continue
+                    -ErrorAction stop
             }    
         }
         else{
