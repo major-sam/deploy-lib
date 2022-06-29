@@ -17,6 +17,46 @@ def makeGetReq(requestUrl,basicAuth){
     }
 }
 
+def updateConfluence(Map config = [:] ){
+    def url = "https://confluence.baltbet.ru:8444/rest/api/content/${config.root}/child/page"
+    def rootChilds = httpRequest (
+        consoleLogResponseBody: true,
+        authentication: config.auth,
+        responseHandle: 'NONE',
+        url: url,
+        wrapAsMultipart: false)
+    def text = rootChilds.getContent()
+    def json = readJSON text: text
+    if (vm in json.results*.title){
+        id = json.results.find{it.title == vm}.id
+        int version = (json.results.find{it.title == vm}.version) ? json.results.find{it.title == vm}.version as Integer : 1 
+        httpRequest (
+                authentication: config.auth,
+                consoleLogResponseBody: false,
+                contentType: 'APPLICATION_JSON',
+                httpMode: 'PUT',
+                requestBody: """{"id":"${id}","type":"page",
+                "title":"${config.vm}","space":{"key":"${config.spacekey}"},"body":{"storage":{"value":
+                "${config.body}","representation":"storage"}},"version":{"number":${version + 1}}}""",
+                responseHandle: 'NONE',
+                url: "https://confluence.baltbet.ru:8444/rest/api/content/${id}",
+                wrapAsMultipart: false)
+    }else{
+        def req = httpRequest (
+                authentication: config.auth,
+                consoleLogResponseBody: true,
+                contentType: 'APPLICATION_JSON',
+                httpMode: 'POST',
+                requestBody: """
+                {"type":"page",""title":${config.vm}",
+                "ancestors":[{"id":${config.root}}], "space":{"key":"${config.spacekey}"},"body":{"storage":{"value":
+                "${config.body}","representation":"storage"}}}""",
+                responseHandle: 'NONE',
+                url: "https://confluence.baltbet.ru:8444/rest/api/content/",
+                wrapAsMultipart: false)
+    }
+}
+
 def getBranches(Map config = [:] ){
     def authStr = "Basic " + new String(Base64.getEncoder().encode(config.creds.getBytes()))
     def filterStr = "repository=${config.repo}&maven.groupId=${config.groupid}&maven.extension=zip"
