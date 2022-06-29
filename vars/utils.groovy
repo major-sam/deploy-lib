@@ -69,12 +69,12 @@ def getLastSuccessfullTaskJobDescription(node){
 def	addToDescription(Map config = [:]){
 	def String result = ""
 	if (config.position instanceof Integer){
-		def splitedDescr = config.description.split('<br>') as List
+		def splitedDescr = config.description.split('<br/>') as List
 		splitedDescr.add(config.position, config.html)
-		result = splitedDescr.join('<br>')
+		result = splitedDescr.join('<br/>')
 	}
 	else{
-		result = "$config.description <br> $config.html"
+		result = "$config.description <br/> $config.html"
 	}
 	return result
 }
