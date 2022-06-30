@@ -329,8 +329,8 @@ function ApplyTasks{
                     -ServerInstance $DBServer`
                     -Database $TargetDB `
                     -InputFile $script `
-                    -ErrorAction continue
-            }    
+                    -ErrorAction stop
+            }
         }
         else{
             Write-Host -ForegroundColor Yellow "[INFO] There is no Tasks for this build"
