@@ -19,8 +19,8 @@ if (get-service -Name $sname -ErrorAction SilentlyContinue) {
 # Cleanup Consul Folders
 if ((Test-Path $CONSUL_DIR)) {
     Write-Host "[INFO] $CONSUL_DIR exists"
-    Write-Host "[INFO] Remove all data in $CONSUL_DIR"
-    Remove-Item -Path "$CONSUL_DIR\*" -Recurse -Force -ErrorAction SilentlyContinue
+    Write-Host "[INFO] Remove $CONSUL_DIR"
+    Remove-Item -Path $CONSUL_DIR -Recurse -Force -ErrorAction SilentlyContinue
 }
 else {
     Write-Host "[INFO] $CONSUL_DIR does not exist. Nothing to cleanup."
