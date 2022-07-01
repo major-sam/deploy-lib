@@ -30,5 +30,9 @@ if($config.ConnectionStrings.AntifraudService) {
     Write-Host "[INFO] Found ConnectionStrings.AntifraudService"
     $config.ConnectionStrings.AntifraudService = $AntifraudService
 }
+if($config.AntifraudOptions.IsEnabled) {
+    Write-Host "[INFO] Found AntifraudOptions.IsEnabled"
+    $config.AntifraudOptions.IsEnabled = $false
+}
 
 ConvertTo-Json $config -Depth 4| Format-Json | Set-Content $pathtojson -Encoding UTF8
