@@ -18,7 +18,7 @@ def makeGetReq(requestUrl,basicAuth){
 }
 
 def updateConfluence(Map config = [:] ){
-    def url = "https://confluence.baltbet.ru:8444/rest/api/content/${config.root}/child/page"
+    def url = "https://confluence.baltbet.ru:8444/rest/api/content/${config.root}/child/page?limit=100"
     def rootChilds = httpRequest (
         consoleLogResponseBody: true,
         authentication: config.auth,
