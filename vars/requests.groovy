@@ -54,7 +54,7 @@ def updateConfluence(Map config = [:] ){
         def reqBody =  """
         {"type":"page","title":"${config.vm}",
         "ancestors":[{"id":${config.root}}], "space":{"key":"${config.spacekey}"},"body":{"storage":{"value":
-        "${config.body.trim().replaceAll("[\r\n]+","<br/>")}","representation":"storage"}}}"""
+        "${config.body.trim().replaceAll("[\r\n]+","<br/>").replaceAll("\t","")},"representation":"st,"representation":"storage"}}}"""
         println reqBody
         def req = httpRequest (
                 authentication: config.auth,
