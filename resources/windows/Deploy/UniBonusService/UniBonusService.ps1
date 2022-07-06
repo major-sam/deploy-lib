@@ -17,7 +17,7 @@ $json_appsetings = Get-Content -Raw -path $pathtojson | % { $_ -replace '[\s^]//
 
 $json_appsetings.Origins = $origins
 try {
-    $json_appsetings.ConnectionStrings = $shortRedisStr
+    $json_appsetings.ConnectionStrings.Redis = $shortRedisStr
 } catch {
     Write-Host "[WARN] redis ConnectionStrings field not found..."
 }
