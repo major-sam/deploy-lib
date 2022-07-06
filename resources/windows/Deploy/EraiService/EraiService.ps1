@@ -8,7 +8,7 @@
 Import-module '.\scripts\sideFunctions.psm1'
 
 $serviceName = "EraiService"
-$targetDir = "C:\Services\${serviceName}"
+$targetDir = "C:\Services\ERAI\${serviceName}"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5

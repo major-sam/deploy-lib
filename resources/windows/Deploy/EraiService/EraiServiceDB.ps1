@@ -3,7 +3,7 @@ Import-module '.\scripts\sideFunctions.psm1'
 $ProgressPreference = 'SilentlyContinue'
 
 $Dbname =  "EraiDB"
-$release_bak_folder = "C:\Services\EraiServiceDb"
+$release_bak_folder = "C:\Services\ERAI\EraiServiceDb"
 
 $dbs = @(
 	@{
