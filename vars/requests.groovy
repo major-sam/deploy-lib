@@ -31,6 +31,7 @@ def makeHttpReq(Map config = [:]){
         }
         else{
             throw new Exception("Response Code $getRC is not expceted")
+        }
     }
     catch(Exception e) {
         println("ERROR: " + e.toString()); 
