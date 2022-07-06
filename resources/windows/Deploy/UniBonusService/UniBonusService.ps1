@@ -18,6 +18,10 @@ $json_appsetings = Get-Content -Raw -path $pathtojson | % { $_ -replace '[\s^]//
 $json_appsetings.Origins = $origins
 try {
     $json_appsetings.ConnectionStrings = $shortRedisStr
+} catch {
+    Write-Host "[WARN] redis ConnectionStrings field not found..."
+}
+try {
     $json_appsetings.LegacyTokenAuthentication.DecryptionKey = $env:UniDecryptionKey
     $json_appsetings.LegacyTokenAuthentication.ValidationKey = $env:UniValidationKey
 } catch {
