@@ -16,8 +16,13 @@ Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
 $json_appsetings = Get-Content -Raw -path $pathtojson | % { $_ -replace '[\s^]//.*', "" } | ConvertFrom-Json 
 
 $json_appsetings.Origins = $origins
-$json_appsetings.ConnectionStrings = $shortRedisStr
-$json_appsetings.LegacyTokenAuthentication.DecryptionKey = $env:UniDecryptionKey
-$json_appsetings.LegacyTokenAuthentication.ValidationKey = $env:UniValidationKey
+try {
+    $json_appsetings.ConnectionStrings = $shortRedisStr
+    $json_appsetings.LegacyTokenAuthentication.DecryptionKey = $env:UniDecryptionKey
+    $json_appsetings.LegacyTokenAuthentication.ValidationKey = $env:UniValidationKey
+} catch {
+    Write-Host "[WARN] LegacyTokenAuthentication field not found..."
+}
+
 $json_appsetings.GlobalLog.Rabbitmq_.DefaultConnectionString = "$shortRabbitStr; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
 ConvertTo-Json $json_appsetings -Depth 4 | Format-Json | Set-Content $pathtojson -Encoding UTF8
