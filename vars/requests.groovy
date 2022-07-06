@@ -17,6 +17,27 @@ def makeGetReq(requestUrl,basicAuth){
     }
 }
 
+def makeHttpReq(Map config = [:]){
+    try {
+        def url = new URL(requestUrl)
+        def get = url.openConnection()
+        get.requestMethod = config.requestMethod
+        config.RequestProperties.each{ prop, value ->
+            get.setRequestProperty(prop, value)
+        }
+        def getRC = get.getResponseCode()
+        if (getRC in config.responseCode) {
+            return get.getInputStream().getText()
+        }
+        else{
+            throw new Exception("Response Code $getRC is not expceted")
+        }
+    }
+    catch(Exception e) {
+        println("ERROR: " + e.toString()); 
+    }
+}
+
 def updateConfluence(Map config = [:] ){
     def url = "https://confluence.baltbet.ru:8444/rest/api/content/${config.root}/child/page?limit=100"
     def rootChilds = httpRequest (
