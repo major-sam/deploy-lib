@@ -16,6 +16,7 @@ Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"
 $json_appsetings = Get-Content -Raw -path $pathtojson | % { $_ -replace '[\s^]//.*', "" } | ConvertFrom-Json 
 
 $json_appsetings.Origins = $origins
+$json_appsetings.ConnectionStrings = $shortRedisStr
 $json_appsetings.LegacyTokenAuthentication.DecryptionKey = $env:UniDecryptionKey
 $json_appsetings.LegacyTokenAuthentication.ValidationKey = $env:UniValidationKey
 $json_appsetings.GlobalLog.Rabbitmq_.DefaultConnectionString = "$shortRabbitStr; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
