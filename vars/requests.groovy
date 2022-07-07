@@ -60,7 +60,7 @@ def updateConfluence(Map config = [:] ){
         int version = versionMap.version.number as Integer
         def reqBody = """{"id":"${id}","type":"page",
                 "title":"${config.vm}","space":{"key":"${config.spacekey}"},"body":{"storage":{"value":
-                "${config.body}","representation":"storage"}},"version":{"number":${version + 1}}}"""
+                "${config.body.trim().replaceAll("[\r\n]+","<br/>").replaceAll("\t","")}","representation":"storage"}},"version":{"number":${version + 1}}}"""
         println reqBody
         httpRequest (
                 authentication: config.auth,
