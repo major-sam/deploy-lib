@@ -32,3 +32,10 @@ $Secure_String_Pwd = ConvertTo-SecureString "123456" -AsPlainText -Force
 Import-PfxCertificate -FilePath $env:TESTPAYMENTSERVICE -CertStoreLocation Cert:\LocalMachine\My -Password $Secure_String_Pwd
 
 Push-Location $env:WORKSPACE
+
+# Добавляем сертификат ERAI TEST в Windows
+Write-Host -ForegroundColor Green "[INFO] Add new erai_test.pfx certificate"
+$Secure_String_Pwd = ConvertTo-SecureString "Baltbet*123" -AsPlainText -Force
+Import-PfxCertificate -FilePath $env:TESTERAICERT -CertStoreLocation Cert:\LocalMachine\My -Password $Secure_String_Pwd
+
+Push-Location $env:WORKSPACE
