@@ -90,6 +90,7 @@ def updateConfluence(Map config = [:] ){
 }
 
 def getBranches(Map config = [:] ){
+    println config.creds.getClass()
     def authStr = "Basic " + new String(Base64.getEncoder().encode(config.creds.getBytes()))
     def filterStr = "repository=${config.repo}&maven.groupId=${config.groupid}&maven.extension=zip"
     def result = []
