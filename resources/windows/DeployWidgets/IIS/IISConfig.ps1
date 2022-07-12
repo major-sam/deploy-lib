@@ -31,7 +31,7 @@ $IISPools = @(
             @{protocol = 'https'; ; bindingInformation = "*:6001:$($env:COMPUTERNAME).$($wildcardDomain)" }
         )
         CertPath       = 'Cert:\LocalMachine\My\38be86bcf49337804643a671c4c56bc4224c6606'
-        rootDir        = 'C:\Services\BaltWidgets\WidgetService'
+        rootDir        = 'C:\Services\BaltWidgets\WidgetsService'
         siteSubDir     = $false
     }
 )
