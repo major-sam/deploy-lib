@@ -195,7 +195,8 @@ def doMavenDeploy(taskBranch){
 
 
 def doSingleServiceMavenDeploy(Map config = [:]){
-	def taskBranch = getNexusGroupID (config.groupId, config.branch)
+	def taskBranch = config.skipCheck ? config.branch :
+		getNexusGroupID (config.groupId, config.branch) 
 	if (taskBranch){
 		def deployParams = [
 				"-Ddeploy.groupid=${config.groupId}",
