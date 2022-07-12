@@ -7,7 +7,7 @@ Import-module '.\scripts\sideFunctions.psm1'
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr = "host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
-$serviceName = "WidgetService"
+$serviceName = "BaltWidgetsService"
 $targetDir = "C:\Services\BaltWidgets\${serviceName}"
 $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appSettings.json"
