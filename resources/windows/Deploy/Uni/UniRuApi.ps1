@@ -20,7 +20,7 @@ if(Test-Path 'env:Zone') {
 	$zone = "Ru"
 	$dbName = "Uni${zone}"
 	$serverInstance = "Uni${zone}"
-	$apitargetDir = "C:\inetpub\ClientWorkPlace\Uni${zone}"
+	$apitargetDir = "C:\inetpub\ClientWorkPlace\Uni${zone}WebApi"
 	$logsPath = "C:\Logs\ClientWorkPlace\Uni${zone}WebApi"
 }
 
