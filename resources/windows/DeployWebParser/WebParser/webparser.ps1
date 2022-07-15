@@ -9,18 +9,31 @@ $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RA
 
 Write-Host "[INFO] EDIT WebParser.exe.config..."
 [xml]$config = Get-Content -Path $PathToExeConfig
-$ServiceWebParser = $config.configuration.'system.serviceModel'.services.service | Where-Object name -eq "WebParser.ServiceWebParser"
-$ServiceWebParser.endpoint.address = "http://$($env:COMPUTERNAME):9011"
+$config.configuration.'system.serviceModel'.services.service |% { if ( $_.name -eq "WebParser.ServiceWebParser")
+    {$_.endpoint.address = "http://$($env:COMPUTERNAME):9011"}}
 
-$BaseParserContext = $config.configuration.connectionStrings.add | Where-Object name -eq "Parser.Base.Line.ParserContext"
-$BaseParserContext.connectionString = "data source=$($env:COMPUTERNAME);Integrated Security=SSPI;initial catalog=Parser;MultipleActiveResultSets=True;"
+$BaseParserContext = $config.configuration.connectionStrings.add | %{
+    if ($_.name -eq "Parser.Base.Line.ParserContext"){
+        $_.connectionString =
+            "data source=$($env:COMPUTERNAME);"+
+            "Integrated Security=SSPI;"+
+            "initial catalog=Parser;"+
+            "MultipleActiveResultSets=True;"}
 
-$RabbitConnection = $config.configuration.connectionStrings.add | Where-Object name -eq "RabbitConnection"
-$RabbitConnection.connectionString = "$shortRabbitStr; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
+    if ($_.name -eq "RabbitConnection"){
+        $_.connectionString = 
+            "$shortRabbitStr; "+
+            "publisherConfirms=true; "
+            "timeout=100; " +
+            "requestedHeartbeat=0"}
 
-$RabbitClientAPK = $config.configuration.connectionStrings.add | Where-Object name -eq "RabbitClientAPK"
-$RabbitClientAPK.connectionString = "$shortRabbitStr; publisherConfirms=true; timeout=100; requestedHeartbeat=0"
-
+    if ($_.name -eq "RabbitClientAPK"){
+        $_.connectionString = 
+            "$shortRabbitStr; "+
+            "publisherConfirms=true; "+
+            "timeout=100; "+
+            "requestedHeartbeat=0"}
+}
 $config.Save($PathToExeConfig)
 
 Write-Host "[INFO] EDIT Settings.xml..."

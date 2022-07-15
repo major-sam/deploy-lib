@@ -14,7 +14,7 @@ def setAllowDescr(Map config = [:]){
 		"vm: ${TESTVM}<br/>${BUILD_TRIGGER_BY}" +
 		"<br/>CommitMsg: ${GIT_COMMIT_MSG}" +
 		"<br/>CommitHash: ${GIT_COMMIT}"+
-		"<br/>Task(Branch): ${params.Task}"
+		"<br/>Task(Branch): ${params.Task ? params.Task : config.task}"
 }
 
 def setDenyDescr(lastDescr){

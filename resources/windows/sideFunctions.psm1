@@ -234,7 +234,7 @@ function RegisterWinService_v2{
     if ($serviceBin.BaseName -like 'baltbet*'){$sname = "$($serviceBin.BaseName)" }
     else{$sname = "Baltbet.$($serviceBin.BaseName)"}
     if ($AddExecDisplayName){$ServiceBinParams += " --DisplayName `"$sname`""}
-    if ($AddExecServiceName){$ServiceBinParams += " --ServiceName `"$snane`""}
+    if ($AddExecServiceName){$ServiceBinParams += " --ServiceName `"$sname`""}
     if ($AddExecContentRoot){$ServiceBinParams += " --ContentRoot `"$($ServiceBin.Directory.FullName)`""}
 
     [String]$BinStr = "$($ServiceBin.FullName) $ServiceBinParams"
