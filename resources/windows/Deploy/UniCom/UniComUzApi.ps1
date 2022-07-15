@@ -1,50 +1,35 @@
 Import-module '.\scripts\sideFunctions.psm1'
 #get release params
 ###vars
-Write-Host "[INFO] Check if 'env:Zone' exists"
-if(Test-Path 'env:Zone') {
-	$zone = $env:Zone
-	$zonePath = $env:Zonepath
-	$defaultDir = "uniruwebapi"
-	$dbName = "Uni${zone}"
-	$serverInstance = "Uni${zone}"
-	$apitargetDir = "${zonePath}\uni${zone}WebApi"
-	$logsPath = "C:\Logs\Uni${zone}\uni${zone}WebApi"
-	Write-Host "[INFO] Zone: ${zone}, Path: ${zonePath}, dbname: ${dbName}, instance: ${serverInstance}, apitargetDir: ${apitargetDir}"
-	if(!($zone -eq "Ru")){
-		Write-Host -ForegroundColor Green "[INFO] Rename catalogs"
-		Rename-Item -Path "${zonePath}\${defaultDir}" -NewName "Uni${zone}WebApi" -Force	
-	}
-} else {
-	Write-Host "[INFO] 'env:Zone' does not exist. Set default zone RU."
-	$zone = "Ru"
-	$dbName = "Uni${zone}"
-	$serverInstance = "Uni${zone}"
-	$apitargetDir = "C:\inetpub\ClientWorkPlace\Uni${zone}"
-	$logsPath = "C:\Logs\ClientWorkPlace\Uni${zone}WebApi"
-}
-
+$apiSourceDir = "C:\inetpub\UniComUz\uniruwebapi"
+$newDir = "UniComUzWebApi"
+$apiTargetDir = "C:\inetpub\UniComUz\${newDir}"
 $apiWebConfig = "$apiTargetDir\Web.config"
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1 }).IPAddress.trim()
 $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
 $redisPwdStr = "password=$redispasswd"
 $shortRedisStr = "$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
+$UniComUzWebApiLogsPath = "C:\Logs\UniComUz\UniComUzWebApi"
 $uasPort = 449
-$ticketServicePort = "5037"
+$dbName = "UniComUz"
+$serverInstance = "UniComUz"
 
 ###
-#XML values replace UniruWebApi
+#XML values replace UniComUzWebApi
 ####
+Write-Host -ForegroundColor Green "[INFO] Rename catalog $apiSourceDir"
+Rename-Item -Path $apiSourceDir -NewName $newDir -Force
+
 Write-Host -ForegroundColor Green "[INFO] Edit web.config of $apiWebConfig"
 $webdoc = [Xml](Get-Content $apiWebConfig)
 
 Write-Host "####  Edit log file path"
 try {
 	$logPath = @{
-		"globallog-deadletter_global-appender" 	= "$($logsPath)\%property{site}\global-log\global-dead-"
-		"RootFileAppender"						= "$($logsPath)\%property{site}\"
-		"EasyNetQAppender"						= "$($logsPath)\%property{site}\bus\"
-		"SignalRAppender"						= "$($logsPath)\%property{site}\SignalR\"
+		"globallog-deadletter_global-appender" 	= "$($UniComUzWebApiLogsPath)\%property{site}\global-log\global-dead-"
+		"RootFileAppender"						= "$($UniComUzWebApiLogsPath)\%property{site}\"
+		"EasyNetQAppender"						= "$($UniComUzWebApiLogsPath)\%property{site}\bus\"
+		"SignalRAppender"						= "$($UniComUzWebApiLogsPath)\%property{site}\SignalR\"
 	}
 	foreach ($key in $logPath.Keys) {
 		($webdoc.configuration.log4net.appender | where {$_.name -eq $key}).file.value = $logPath.$key
@@ -95,11 +80,6 @@ $webdoc.configuration.connectionStrings.AppendChild($ConnectionStringsAdd)
 
 if ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}){
 	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}).host = $IPAddress
-}
-
-if ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'TicketService'}){
-	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'TicketService'}).host = $IPAddress
-	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'TicketService'}).port = $ticketServicePort
 }
 
 #configuration.appSettings.SelectNodes add node enable swagger   

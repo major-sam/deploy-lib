@@ -44,6 +44,8 @@ ELSE Value END
 
 UPDATE [$dbname].Settings.SiteOptionsGroups SET Host = CASE Instance
 WHEN 'UniRu' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:4443'
+WHEN 'UniComUz' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:5443'
+WHEN 'UniComKyz' THEN 'https://$($env:computername.ToLower()).bb-webapps.com:5445'
 ELSE Host END
 "
 ###vars

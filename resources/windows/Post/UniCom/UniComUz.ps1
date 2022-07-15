@@ -25,11 +25,11 @@ function Replace-StringInArray
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 
 Write-Host -ForegroundColor Green "[INFO] Change ${inetpub}\${site}\Web.config ..."
-$inetpub = "C:\inetpub\ClientWorkPlace"
-$site = "UniRu"
+$inetpub = "C:\inetpub\UniComUz"
+$site = "UniComUz"
 
 # Меняем настройки для TicketService
 Replace-StringInArray -ConfigPath "${inetpub}\${site}\Web.config" -ContainsString "TicketService" -OldString "localhost" -NewString $IPAddress
 Replace-StringInArray -ConfigPath "${inetpub}\${site}\Web.config" -ContainsString "TicketService" -OldString "5000" -NewString "5037"
 
-Start-WebAppPool "UniRu"
+Start-WebAppPool "UniComUz"
