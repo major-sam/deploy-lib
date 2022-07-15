@@ -56,42 +56,73 @@ try {
 }
 
 
-($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'DataContext'
-	}).connectionString = "data source=localhost;initial catalog=${dbName};Integrated Security=true;MultipleActiveResultSets=True;"
-($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'UniPaymentsServiceUrl'
-	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:54381".ToLower()
-($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'UniBonusServiceUrl'
-	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4437".ToLower()
-Write-Host 'REDIS CONFIG'
-if ($webdoc.configuration.connectionStrings.add | where { $_.name -eq "Redis"}){
-	($webdoc.configuration.connectionStrings.add | where { $_.name -eq "Redis"}).connectionString = $shortRedisStr 
+$webdoc.configuration.connectionStrings.add | % { 
+	if ( $_.name -eq 'DataContext'){
+		$_.connectionString = 
+			"data source=localhost;"+
+			"initial catalog=${dbName};"+
+			"Integrated Security=true;"+
+			"MultipleActiveResultSets=True;"
+	}
+	if ($_.name -eq 'UniPaymentsServiceUrl'){
+		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:54381".ToLower()
+	}
+	if ($_.name -eq 'UniBonusServiceUrl'){
+		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4437".ToLower()
+	}
+	if ( $_.name -eq "Redis"){
+		Write-Host 'REDIS CONFIG'
+			$_.connectionString = $shortRedisStr 
+	}
+	if ($_.name -eq "UniAuthServiceUrl"){
+		$_.connectionString = "https://$($env:COMPUTERNAME).bb-webapps.com:${uasPort}".ToLower()
+	}
+	if ($_.name -eq 'UniEventServiceUrl'){
+		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
+	}
 }
 
-$logoutService = $webdoc.configuration.Grpc.Services.add | Where-Object name -eq "LogoutServiceClient"
-$logoutService.host = $IPAddress
-$logoutService.port = "5307"
+$webdoc.configuration.Grpc.Services.add | %{
+ if ($_.name -eq "LogoutServiceClient"){
+	 $_.host = $IPAddress
+	 $_.port = "5307"
+ }
+}
 
-$authUrl = $webdoc.configuration.connectionStrings.add | Where-Object name -eq "UniAuthServiceUrl"
-$authUrl.connectionString = "https://$($env:COMPUTERNAME.ToLower()).bb-webapps.com:${uasPort}"
-
-$webdoc.configuration."system.web".sessionState.providers.add.connectionString = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000"
+$webdoc.configuration."system.web".sessionState.providers.add.connectionString = 
+	"$shortRedisStr,syncTimeout=10000,"+
+	"allowAdmin=True,connectTimeout=50000"
 $webdoc.configuration."system.web".sessionState.providers.add.accessKey = $redispasswd
-$webdoc.configuration.cache.redis.connection = "$shortRedisStr,syncTimeout=10000,allowAdmin=True,connectTimeout=50000,ssl=False,abortConnect=False,connectRetry=10,proxy=None,configCheckSeconds=5"
+$webdoc.configuration.cache.redis.connection = 
+	"$shortRedisStr,syncTimeout=10000,"+
+	"allowAdmin=True,connectTimeout=50000,"+
+	"ssl=False,abortConnect=False,"+
+	"connectRetry=10,proxy=None,configCheckSeconds=5"
 
-($webdoc.configuration.connectionStrings.add | where { $_.name -eq 'UniEventServiceUrl'
-	}).connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
+$webdoc.configuration.cache.db.connection =
+	"data source=localhost;"+
+	"initial catalog=${dbName};"+
+	"Integrated Security=true;"+
+	"MultipleActiveResultSets=True;"
 
-$webdoc.configuration.cache.db.connection = "data source=localhost;initial catalog=${dbName};Integrated Security=true;MultipleActiveResultSets=True;"
+$webdoc.configuration.Grpc.services.add | % { 
+	if ($_.name -eq 'DefaultService'){
+		$_.host = $IPAddress
+	}
 
-($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'DefaultService' }).host = $IPAddress
+	if($_.name -eq 'PromocodeAdminService'){
+		$_.host = $IPAddress
+	}
 
-if ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}){
-	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'PromocodeAdminService'}).host = $IPAddress
+	if ($_.name -eq 'TicketService'){
+		$_.host = $IPAddress
+			$_.port = $ticketServicePort
+	}
 }
 
-if ($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'TicketService'}){
-	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'TicketService'}).host = $IPAddress
-	($webdoc.configuration.Grpc.services.add | where {$_.name -eq 'TicketService'}).port = $ticketServicePort
+$webdoc.configuration.appSettings.add | % {
+	if ($_.key -eq 'ServerInstance'){
+		$_.value = $serverInstance}
 }
 
 #configuration.appSettings.SelectNodes add node enable swagger
@@ -102,7 +133,6 @@ if($targetNode.Count){
 }
 
 write-host 'creating node'
-$webdoc.configuration.appSettings.add| fc
 $new = $webdoc.CreateElement("add")
 $new.SetAttribute("key","webapi:EnableSwagger")
 $new.SetAttribute( "value","false")
@@ -110,19 +140,14 @@ if (!$webdoc.configuration.appSettings.add.Contains($new)){
 	$webdoc.configuration.appSettings.AppendChild($new)
 }
 if ($webdoc.configuration.ckfinder){
-		(($webdoc.configuration.ckfinder.backends.backend|	where {
-			$_.name -ilike "default" }).option| where {
-				$_.name -ilike 'root'}).value = 'c:\inetpub\images'
+	(($webdoc.configuration.ckfinder.backends.backend|	where {
+		$_.name -ilike "default" }).option| where {
+	 $_.name -ilike 'root'}).value = 'c:\inetpub\images'
 }
 else{
 	write-host 'CKFinder moved to admin app'
 }
 
-# Для UniCom
-if ($webdoc.configuration.appSettings.add | where {$_.key -eq 'ServerInstance'}){
-	($webdoc.configuration.appSettings.add | where {$_.key -eq 'ServerInstance'}).value = $serverInstance
-}
-
 $webdoc.Save($webConfig)
 
-Write-Host -ForegroundColor Green "[INFO] Done"
+	Write-Host -ForegroundColor Green "[INFO] Done"
