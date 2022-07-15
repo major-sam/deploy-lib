@@ -7,6 +7,6 @@ VALUES (1,'PlayerIdentificationSettings.ECupisBaseUrl','https://localhost:4453',
 GO
 "
 
-Write-Host -ForegroundColor Green "[INFO] Insert PlayerIdentificationSettings.ECupisBaseUrl to DB UniRu"
-Invoke-Sqlcmd -QueryTimeout 360 -verbose -ServerInstance $env:COMPUTERNAME -Database "UniRu" -query $query_insert_ECupisBaseUrl -ErrorAction continue
+Write-Host "[DISABLED] Insert PlayerIdentificationSettings.ECupisBaseUrl to DB UniRu"
+#Invoke-Sqlcmd -QueryTimeout 360 -verbose -ServerInstance $env:COMPUTERNAME -Database "UniRu" -query $query_insert_ECupisBaseUrl -ErrorAction continue
 
