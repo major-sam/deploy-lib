@@ -72,6 +72,6 @@ $webdoc.configuration.applicationSettings.'IntegrationService.Properties.Exchang
         $_.value = $serviceUrl
     }
 }
-$webdoc.Save($webConfig_new)
+$webdoc.Save($webConfig)
 
 Write-Host -ForegroundColor Green "[INFO] Done!"
