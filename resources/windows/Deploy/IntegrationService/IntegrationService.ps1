@@ -20,6 +20,11 @@ $1Cuser = "User"
 $1Cpsw = "Password"
 $serviceUrl = "http://localhost:${isPort}"
 
+$emailServerAddress = "127.0.0.1"
+$emailServerPort = "25"
+$emailServeUser = "User"
+$emailServePassword = "Password"
+
 $consulToken = "E78EC97B-3A90-4BC1-BE88-1E0A2B49224C"
 $defaultDomain = "bb-webapps.com"
 
@@ -72,6 +77,15 @@ $webdoc.configuration.applicationSettings.'IntegrationService.Properties.Exchang
         $_.value = $serviceUrl
     }
 }
+
+# Настройки подключения к email серверу
+$webdoc.configuration.email.Servers.add | % {
+    $_.Address = $emailServerAddress
+    $_.Port = $emailServerPort
+    $_.Login = $emailServeUser
+    $_.Password = $emailServePassword
+}
+
 $webdoc.Save($webConfig)
 
 Write-Host -ForegroundColor Green "[INFO] Done!"
