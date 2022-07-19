@@ -115,6 +115,10 @@ $webdoc.configuration.Grpc.services.add | % {
 		$_.host = $IPAddress
 			$_.port = $ticketServicePort
 	}
+	if ($_.name -eq 'BetCalculationService'){
+		$_.host = $IPAddress
+		$_.port = $betCalculationServicePort
+	}
 }
 
 $webdoc.configuration.appSettings.add | % {
