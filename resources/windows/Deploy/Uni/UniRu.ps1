@@ -32,6 +32,7 @@ $redisPwdStr= "password=$redispasswd"
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
 $uasPort = 449
 $ticketServicePort = "5037"
+$betCalculationServicePort = "5007"
 
 
 ###
@@ -116,7 +117,11 @@ $webdoc.configuration.Grpc.services.add | % {
 
 	if ($_.name -eq 'TicketService'){
 		$_.host = $IPAddress
-			$_.port = $ticketServicePort
+		$_.port = $ticketServicePort
+	}
+	if ($_.name -eq 'BetCalculationService'){
+		$_.host = "localhost"
+		$_.port = $betCalculationServicePort
 	}
 }
 

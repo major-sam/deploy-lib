@@ -7,6 +7,7 @@ $targetDir = "C:\inetpub\KRM"
 $KRMConfig ="$targetDir\Web.config"
 $krmLogsPath = "C:\Logs\KRM"
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
+$betCalculationServicePort = "5007"
 
 ### edit KRM Web.config
 $xmlconfig = [Xml](Get-Content $KRMConfig)
@@ -20,10 +21,14 @@ if ($xmlconfig.configuration."system.serviceModel".client) {
 }
 $xmlconfig.configuration.rabbitMqConfig.connectionString = $shortRabbitStr
 
-if(($xmlconfig.configuration.appSettings.add | ? {$_.key -ilike "Redis.ConnectionString"})) {
-	($xmlconfig.configuration.appSettings.add | ? {$_.key -ilike "Redis.ConnectionString"}).value = $shortRedisStr
+$xmlconfig.configuration.appSettings.add | % { 
+	if ($_.key -eq 'Redis.ConnectionString'){
+		$_.value = $shortRedisStr
+	}
+	if ($_.key -eq 'IsBetCalculationEnabled'){
+		$_.value = "true"
+	}
 }
-
 # Можно удалить после выхода WEB-6904
 if($xmlconfig.configuration."system.web".sessionState.providers.add.host) {
 	$xmlconfig.configuration."system.web".sessionState.providers.add.host = "$($env:REDIS_HOST):$($env:REDIS_Port)"
@@ -39,6 +44,13 @@ $xmlconfig.configuration."system.web".sessionState.providers.add.accessKey = $re
 # Для WEB-6904
 if($xmlconfig.configuration.connectionStrings.add | ? {$_.name -ilike "Redis"}) {
 	($xmlconfig.configuration.connectionStrings.add | ? {$_.name -ilike "Redis"}).connectionString = $shortRedisStr
+}
+
+$xmlconfig.configuration.Grpc.services.add | % { 
+	if ($_.name -eq 'BetCalculationService'){
+		$_.host = "localhost"
+		$_.port = $betCalculationServicePort
+	}
 }
 
 Write-Host "####  Edit log file path"
