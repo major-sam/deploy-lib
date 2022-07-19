@@ -120,7 +120,7 @@ $webdoc.configuration.Grpc.services.add | % {
 		$_.port = $ticketServicePort
 	}
 	if ($_.name -eq 'BetCalculationService'){
-		$_.host = $IPAddress
+		$_.host = "localhost"
 		$_.port = $betCalculationServicePort
 	}
 }

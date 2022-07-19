@@ -48,7 +48,7 @@ if($xmlconfig.configuration.connectionStrings.add | ? {$_.name -ilike "Redis"}) 
 
 $xmlconfig.configuration.Grpc.services.add | % { 
 	if ($_.name -eq 'BetCalculationService'){
-		$_.host = "$IPAddress"
+		$_.host = "localhost"
 		$_.port = $betCalculationServicePort
 	}
 }
