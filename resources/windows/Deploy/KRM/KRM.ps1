@@ -22,10 +22,10 @@ if ($xmlconfig.configuration."system.serviceModel".client) {
 $xmlconfig.configuration.rabbitMqConfig.connectionString = $shortRabbitStr
 
 $xmlconfig.configuration.appSettings.add | % { 
-	if ($_.name -eq 'Redis.ConnectionString'){
+	if ($_.key -eq 'Redis.ConnectionString'){
 		$_.value = $shortRedisStr
 	}
-	if ($_.name -eq 'IsBetCalculationEnabled'){
+	if ($_.key -eq 'IsBetCalculationEnabled'){
 		$_.value = "true"
 	}
 }
