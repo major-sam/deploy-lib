@@ -78,10 +78,10 @@ $webdoc.configuration.connectionStrings.add | % {
 		$_.connectionString = $shortRedisStr 
 	}
 	if ($_.name -eq "UniAuthServiceUrl") {
-		$_.connectionString = "https://$($env:COMPUTERNAME).bb-webapps.com:${uasPort}".ToLower()
+		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:${uasPort}".ToLower()
 	}
 	if ($_.name -eq "UniEventServiceUrl") {
-		$_.connectionString = "https://${$env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
+		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
 	}
 }
 
