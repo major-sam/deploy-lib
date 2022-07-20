@@ -40,6 +40,7 @@ WHEN 'BroadcastSettings.Rfpl.StreamUrl' THEN 'https://$($env:computername.ToLowe
 WHEN 'Global.RabbitMq.PicBus.ConnectionString' THEN 'host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT); username=$($ENV:RABBIT_CREDS_USR); password=$($ENV:RABBIT_CREDS_PSW)$($ENV:VM_ID); publisherConfirms=true; timeout=100; requestedHeartbeat=0'
 WHEN 'Global.RabbitMq.PicBus.IsEnabled' THEN 'true'
 WHEN 'Global.RabbitMq.PicBus.Exchange' THEN 'Exchange.Pic.Ru'
+WHEN 'Pages.History.IsBetCalculationEnabled' THEN 'false'
 ELSE Value END
 
 UPDATE [$dbname].Settings.SiteOptionsGroups SET Host = CASE Instance
