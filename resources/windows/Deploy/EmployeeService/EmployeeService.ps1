@@ -13,7 +13,7 @@ $jsonDepth = 5
 
 $esPort = 60679
 $dbname = "BaltBetM"
-$kernelDbCS = "Server=localhost;Database=${dbname};Trusted_Connection=True;"
+$kernelDbCS = "Server=localhost;Database=${dbname};Trusted_Connection=True;Encrypt=false;"
 # Адрес сервиса WebDataService
 $webDataUrl = "http://localhost:65011"
 # Адрес сервиса Кернела
