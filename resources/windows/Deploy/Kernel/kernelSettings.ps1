@@ -35,6 +35,9 @@ $webdoc.Settings.AggregatorSettings.connection | % { $_.serviceType
 		$_.SetAttribute("NotificationUrl", "http://$($CurrentIpAddr):88/callback/baltbet")
 	}
 }
+# WEB-7062
+$webdoc.Settings.Features.UniLiveEventCacheEnabled = "true"
+
 $webdoc.Save($webConfig)
 ### edit Log.config
 Write-Host "[INFO] Edit web.config of $LogConfig"
