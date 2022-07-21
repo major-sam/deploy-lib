@@ -13,7 +13,7 @@ $jsonDepth = 5
 
 $esPort = 60679
 $dbname = "BaltBetM"
-$kernelDbCS = "Server=localhost;Database=${dbname};Trusted_Connection=True;"
+$kernelDbCS = "Server=localhost;Database=${dbname};Trusted_Connection=True;Encrypt=false;"
 # Адрес сервиса WebDataService
 $webDataUrl = "http://localhost:65011"
 # Адрес сервиса Кернела
@@ -32,6 +32,7 @@ $jsonAppsetings.Kestrel.EndPoints.Http.Url = "http://$($env:COMPUTERNAME).$($def
 # Настраиваем секцию ConnectionStrings
 Write-host "[INFO] Change settings for ConnectionStrings"
 $jsonAppsetings.ConnectionStrings.DBConnectionString = $kernelDbCS
+$jsonAppsetings.ConnectionStrings.WriteDBConnectionString = $kernelDbCS
 $jsonAppsetings.ConnectionStrings.WebDataUrl = $webDataUrl
 
 # Настраиваем KernelAddress

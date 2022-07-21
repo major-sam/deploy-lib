@@ -18,7 +18,7 @@ $ServiceFolderPath = "C:\Services\CupisIntegrationService\${ServiceName}"
 
 # Редактируем конфиг
 Write-Host -ForegroundColor Green "[INFO] Print CupisIntegrationService configuration files..."
-Get-Content -Encoding UTF8 -Path "${ServiceFolderPath}\appsettings.json"
+Get-Content -Encoding UTF8 -Path "${ServiceFolderPath}\appsettings.json" | % { $_ -replace '[\s^]//.*', "" } | ConvertFrom-Json 
 
 $CupisBaseUrl = "https://demo-api.1cupis.ru/binding-api/"
 $CupisBackupBaseUrl = "https://demo-api.1cupis.ru/"
