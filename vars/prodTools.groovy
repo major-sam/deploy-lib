@@ -18,9 +18,9 @@ def defineMvn(List props=[]){
 }
 
 def getBuilds(Map config = [:]){
-  AGENTS = getHostLabel(
+  AGENTS = getHostByLabel(
     _checkbox: config.INPUTMAP.AllNodes,
-    label: config.GROUPID) ?: config.AGENT_LABEL
+    label: config.GROUPID) ?: [ config.AGENT_LABEL ]
   BUILDERS = [:]
   AGENTS.each { BuildAgent ->
     BUILDERS[BuildAgent]= {

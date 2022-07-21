@@ -73,18 +73,11 @@ $webdoc.configuration.connectionStrings.add | % {
 			$_.connectionString = $shortRedisStr 
 	}
 	if ($_.name -eq "UniAuthServiceUrl"){
-		$_.connectionString = "https://$($env:COMPUTERNAME).bb-webapps.com:${uasPort}".ToLower()
+		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:${uasPort}".ToLower()
 	}
-	if ($_.name -eq 'UniEventServiceUrl'){
+	if ($_.name -eq "UniEventServiceUrl"){
 		$_.connectionString = "https://${env:COMPUTERNAME}.bb-webapps.com:4435".ToLower()
 	}
-}
-
-$webdoc.configuration.Grpc.Services.add | %{
- if ($_.name -eq "LogoutServiceClient"){
-	 $_.host = $IPAddress
-	 $_.port = "5307"
- }
 }
 
 $webdoc.configuration."system.web".sessionState.providers.add.connectionString = 
@@ -104,26 +97,28 @@ $webdoc.configuration.cache.db.connection =
 	"MultipleActiveResultSets=True;"
 
 $webdoc.configuration.Grpc.services.add | % { 
-	if ($_.name -eq 'DefaultService'){
+	if ($_.name -eq "DefaultService"){
 		$_.host = $IPAddress
 	}
-
-	if($_.name -eq 'PromocodeAdminService'){
+	if($_.name -eq "PromocodeAdminService"){
 		$_.host = $IPAddress
 	}
-
-	if ($_.name -eq 'TicketService'){
+	if ($_.name -eq "TicketService"){
 		$_.host = $IPAddress
 			$_.port = $ticketServicePort
 	}
-	if ($_.name -eq 'BetCalculationService'){
+	if ($_.name -eq "BetCalculationService"){
 		$_.host = "localhost"
 		$_.port = $betCalculationServicePort
+	}
+	if ($_.name -eq "LogoutServiceClient"){
+		$_.host = $IPAddress
+		$_.port = "5307"
 	}
 }
 
 $webdoc.configuration.appSettings.add | % {
-	if ($_.key -eq 'ServerInstance'){
+	if ($_.key -eq "ServerInstance"){
 		$_.value = $serverInstance}
 }
 
