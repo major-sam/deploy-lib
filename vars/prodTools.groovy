@@ -25,23 +25,32 @@ def getBuilds(Map config = [:]){
   AGENTS.each { BuildAgent ->
     BUILDERS[BuildAgent]= {
       node(BuildAgent){
-        def deployparams = [
-          "deploy.groupId=${config.GROUPID}",
+        stage('Reload Pipline'){
+          when {expression {params.Reload}}
+          steps{
+            currentBuild.result = 'NOT_BUILT'
+            error('Reload Pipeline')
+          }
+        }
+        stage('deploy'){
+          def deployparams = [
+            "deploy.groupId=${config.GROUPID}",
           "deploy.artifactId=${config.INPUTMAP.Branch}",
           "deploy.dir=${config.INPUTMAP.Folder}",
           "deploy.version=${config.INPUTMAP.Version}" ]
-        configFileProvider(
-            [configFile(
-              fileId: 'defaultPom',
-              targetLocation: config.POM)]) {
-          withMaven(
-              globalMavenSettingsConfig: 'GlobalMavenSettings',
-              jdk: '11',
-              maven: 'latest',
-              mavenLocalRepo: '.\\m2-repo',
-              mavenSettingsConfig: 'MavenSettings',
-              tempBinDir: '.\\m2') {
-            bat "mvn clean versions:use-latest-releases dependency:unpack exec:exec -f ${config.POM} -U ${defineMvn(deployparams)}"
+          configFileProvider(
+              [configFile(
+                fileId: 'defaultPom',
+                targetLocation: config.POM)]) {
+            withMaven(
+                globalMavenSettingsConfig: 'GlobalMavenSettings',
+                jdk: '11',
+                maven: 'latest',
+                mavenLocalRepo: '.\\m2-repo',
+                mavenSettingsConfig: 'MavenSettings',
+                tempBinDir: '.\\m2') {
+              bat "mvn clean versions:use-latest-releases dependency:unpack exec:exec -f ${config.POM} -U ${defineMvn(deployparams)}"
+            }
           }
         }
         cleanWs notFailBuild: true
