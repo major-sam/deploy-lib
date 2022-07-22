@@ -8,10 +8,9 @@ def kuberPortShift(Map config = [:]){
 	return config.port + config.VM.replaceAll("\\D+","").toInteger()
 }
 
-def getKuberNodeLabelv2(Map config = [:]){
-	def nodes =nodesByLabel config.nodeLabel
-	nodes=nodes.sort()
-	return nodes[config.KuberID]
+def getKuberNodeIP_v2(Map config = [:]){
+  def nodes = nodesByLabel config.nodeLabel
+  return nodes[config.KuberID].toComputer().getHostName()
 }
 
 def getNodeIP(Map config = [:]){
