@@ -25,9 +25,13 @@ def getKuberNodeLabel(Map config = [:]){
 	return nodes[config.KuberID]
 }
 
+def getKuberNodeIPv2(Map config = [:]){
+	def nodes = nodesByLabel config.nodeLabel
+	return nodes[config.KuberID].toComputer().getHostName()
+}
+
 def getKuberNodeIP(Map config = [:]){
 	def nodes =nodesByLabel config.nodeLabel
-	nodes=nodes.sort()
 	return Jenkins.getInstance().getComputer(nodes[config.KuberID]).getHostName()
 }
 
@@ -196,7 +200,7 @@ def doMavenDeploy(taskBranch){
 
 def doSingleServiceMavenDeploy(Map config = [:]){
 	def taskBranch = config.skipCheck ? config.branch :
-		getNexusGroupID (config.groupId, config.branch) 
+		getNexusGroupID (config.groupId, config.branch)
 	if (taskBranch){
 		def deployParams = [
 				"-Ddeploy.groupid=${config.groupId}",
@@ -223,6 +227,39 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 			Branch: $taskBranch,
 			Version: ${packageVersion.trim()}
 		"""
+	}
+	else{
+		error ("${config.groupId} repo has no master branch")
+
+	}
+}
+
+def doSingleServiceMavenDeploy_v2(Map config = [:]){
+	def taskBranch = config.skipCheck ? config.branch :
+		getNexusGroupID (config.groupId, config.branch)
+	if (taskBranch){
+		def deployParams = [
+				"-Ddeploy.groupid=${config.groupId}",
+				"-Ddeploy.dir=${config.deployDir}",
+				"-Ddeploy.branch=${taskBranch}",
+				"-DartifactName=${config.groupId}"].join(' ')
+		withMaven(
+				globalMavenSettingsConfig: 'mavenSettingsGlobal',
+				jdk: '11',
+				maven: 'maven382',
+				mavenLocalRepo: ".mvn",
+				mavenSettingsConfig: 'mavenSettings') {
+			def packageVersion =  powershell (
+				script: """
+				(Get-ChildItem -Directory -Path (
+					 [IO.Path]::Combine('.mvn', '${config.groupId}' ,'${taskBranch}')) |
+				 sort Name -Descending |
+				 Select-Object -First 1).Name """,
+				returnStdout: true
+				)
+			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
+			return packageVersion
+		}
 	}
 	else{
 		error ("${config.groupId} repo has no master branch")

@@ -25,13 +25,27 @@ def getBuilds(Map config = [:]){
   AGENTS.each { BuildAgent ->
     BUILDERS[BuildAgent]= {
       node(BuildAgent){
-        stage('Reload Pipline'){
-          when {expression {params.Reload}}
-          steps{
-            currentBuild.result = 'NOT_BUILT'
-            error('Reload Pipeline')
+
+        if (config.INPUTMAP.Cleanup ){
+          stage('Cleanup files'){
+            catchError(buildResult:null, stageResult: 'UNSTABLE') {
+              powershell(
+                  label: 'Cleanup files&service',
+                  script: """
+                  Get-WmiObject Win32_Service | % {
+                    if(\$_.pathname -ilike "*${params.Folder}*"){
+                      Stop-Service \$_.Name -verbose
+                    }
+                  }
+                  if (test-path ${params.Folder}){
+                    remove-item -Path ${params.Folder} -Recurse -Verbose
+                  }
+                  else {write-Error '${params.Folder} does not exists'}
+                  """)
+            }
           }
         }
+        
         stage('deploy'){
           def deployparams = [
             "deploy.groupId=${config.GROUPID}",
@@ -50,6 +64,40 @@ def getBuilds(Map config = [:]){
                 mavenSettingsConfig: 'MavenSettings',
                 tempBinDir: '.\\m2') {
               bat "mvn clean versions:use-latest-releases dependency:unpack exec:exec -f ${config.POM} -U ${defineMvn(deployparams)}"
+            }
+          }
+        }
+
+        stage('Configure'){
+          withFolderProperties {
+            catchError(buildResult:null, stageResult: 'UNSTABLE') {
+              if ( isUnix() ){
+                sh (
+                    label:'configure.py',
+                    script:"""
+                    python -m pip install -r .Deploy/requirements.txt || true
+                    python ./Deploy/configure.py
+                    """)
+              }
+              else {
+                powershell (
+                    label: 'configure.py',
+                    script:"""
+                    if (test-path ${params.Folder}\\Deploy\\requirements.txt){
+                      \\Python310\\python.exe -m pip -r ${params.Folder}\\Deploy\\requirements.txt
+                    }
+                    \\Python310\\python.exe ${params.Folder}\\Deploy\\configure.py
+                    """)
+              }
+            }
+          }
+        }
+        if (config.INPUTMAP.WinSvc && isUnix()){
+          stage('Install Service'){
+            catchError(buildResult:null, stageResult: 'UNSTABLE') {
+              powershell(
+                label: 'Install service (ignore errors)',
+                script: "${params.Folder}\\Deploy\\windows\\registerService.ps1")
             }
           }
         }

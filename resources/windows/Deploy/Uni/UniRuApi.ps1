@@ -19,6 +19,7 @@ if(Test-Path 'env:Zone') {
 	Write-Host "[INFO] 'env:Zone' does not exist. Set default zone RU."
 	$zone = "Ru"
 	$dbName = "Uni${zone}"
+	$adminDbName = "UniAdministration"
 	$serverInstance = "Uni${zone}"
 	$apitargetDir = "C:\inetpub\ClientWorkPlace\Uni${zone}WebApi"
 	$logsPath = "C:\Logs\ClientWorkPlace\Uni${zone}WebApi"
@@ -59,6 +60,13 @@ $webdoc.configuration.connectionStrings.add | % {
 		$_.connectionString = 
 			"data source=localhost;"+
 			"initial catalog=${dbName};"+
+			"Integrated Security=true;"+
+			"MultipleActiveResultSets=True;"
+	}
+	if ( $_.name -eq 'AdministrationContext'){
+		$_.connectionString = 
+			"data source=localhost;"+
+			"initial catalog=${adminDbName};"+
 			"Integrated Security=true;"+
 			"MultipleActiveResultSets=True;"
 	}
