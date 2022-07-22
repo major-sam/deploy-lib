@@ -9,8 +9,13 @@ def kuberPortShift(Map config = [:]){
 }
 
 def getKuberNodeIP_v2(Map config = [:]){
-  def nodes = nodesByLabel config.nodeLabel
-  return nodes[config.KuberID].toComputer().getHostName()
+	return Jenkins
+		 .instance
+		 .getNodes()
+		 .findAll{ it.getLabelString().contains(config.nodeLabel) }
+		 .findAll{ it.toComputer().isOnline() }
+		 .name
+		 .find{it.contains("${config.KuberID}")} as String
 }
 
 def getNodeIP(Map config = [:]){
@@ -175,7 +180,7 @@ def doMavenDeploy(taskBranch){
 	withMaven(
 		globalMavenSettingsConfig: 'mavenSettingsGlobal',
 		jdk: '11',
-		maven: 'maven382',
+		maven: 'latest',
 		mavenLocalRepo: ".mvn",
 		mavenSettingsConfig: 'mavenSettings') {
 		bat "mvn clean versions:use-latest-releases dependency:unpack -f deployPom.xml -U "
@@ -209,7 +214,7 @@ def doSingleServiceMavenDeploy(Map config = [:]){
 		withMaven(
 				globalMavenSettingsConfig: 'mavenSettingsGlobal',
 				jdk: '11',
-				maven: 'maven382',
+				maven: 'latest',
 				mavenLocalRepo: ".mvn",
 				mavenSettingsConfig: 'mavenSettings') {
 			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
@@ -245,7 +250,7 @@ def doSingleServiceMavenDeploy_v2(Map config = [:]){
 		withMaven(
 				globalMavenSettingsConfig: 'mavenSettingsGlobal',
 				jdk: '11',
-				maven: 'maven382',
+				maven: 'latest',
 				mavenLocalRepo: ".mvn",
 				mavenSettingsConfig: 'mavenSettings') {
 			def packageVersion =  powershell (

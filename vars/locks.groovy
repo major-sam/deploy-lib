@@ -1,7 +1,7 @@
 import jenkins.model.Jenkins
 import groovy.xml.*
 
-def findLocks_v2(Map config = [:]){
+def findLocks(Map config = [:]){
 	def resManager = org.jenkins.plugins
 		.lockableresources
 		.LockableResourcesManager
@@ -10,27 +10,6 @@ def findLocks_v2(Map config = [:]){
 	def all_lockable_resources = resManager.resources
 	def lockable_resource = all_lockable_resources.find { r->
 		r.getName() == config.resource
-	}
-	def boolean locked_by_me = (
-		"${lockable_resource.getReservedBy()}" ==
-		"${currentBuild.getBuildCauses()[0].userName}"
-		)
-	if (locked_by_me){
-		println "Vm ${lockable_resource}" +
-			" is locked by current build user (" +
-			currentBuild.getBuildCauses()[0].userName +
-			") \n Continue Build"
-	}
-	return [
-		accessDeny:(lockable_resource.isReserved() && !locked_by_me),
-		resource: lockable_resource
-		]
-}
-
-//TODO REMOVE
-def findLocks(all_lockable_resources){
-	def lockable_resource = all_lockable_resources.find { r->
-		r.getName() == params.TESTVM
 	}
 	def boolean locked_by_me = (
 		"${lockable_resource.getReservedBy()}" ==
