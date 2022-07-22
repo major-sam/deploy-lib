@@ -1,22 +1,22 @@
 def setAllowDescr(Map config = [:]){
-	def GIT_COMMIT_MSG = powershell (
-			script: 'git log -1 --pretty=%B ${GIT_COMMIT}', 
-			returnStdout: true, 
-			label: "get commit message"
-			).trim()
-			.replaceAll("[\\p{Cc}\\p{Cf}\\p{Co}\\p{Cn}]", "?")
-			.replaceAll("[^a-zA-Z0-9{\\[\\]\\/:?#_\\-% \\}\n\r]+","")
-	def GIT_COMMIT = powershell (
-			script: 'git log -1 --pretty=%h', 
-			label: "get commit message",
-			returnStdout: true).trim()
+//	def GIT_COMMIT_MSG = powershell (
+//			script: 'git log -1 --pretty=%B ${GIT_COMMIT}', 
+//			returnStdout: true, 
+//			label: "get commit message"
+//			).trim()
+//			.replaceAll("[\\p{Cc}\\p{Cf}\\p{Co}\\p{Cn}]", "?")
+//			.replaceAll("[^a-zA-Z0-9{\\[\\]\\/:?#_\\-% \\}\n\r]+","")
+//	def GIT_COMMIT = powershell (
+//			script: 'git log -1 --pretty=%h', 
+//			label: "get commit message",
+//			returnStdout: true).trim()
 	def BUILD_TRIGGER_BY = config.couse.shortDescription + 
 		"/" + config.couse.userId
 
 	return (currentBuild.description ? currentBuild.description +'<br/>' : '') +
 		"vm: ${TESTVM}<br/>${BUILD_TRIGGER_BY}" +
-		"<br/>CommitMsg: ${GIT_COMMIT_MSG}" +
-		"<br/>CommitHash: ${GIT_COMMIT}"+
+//		"<br/>CommitMsg: ${GIT_COMMIT_MSG}" +
+//		"<br/>CommitHash: ${GIT_COMMIT}"+
 		"<br/>Task(Branch): ${params.Task ? params.Task : config.task}"
 }
 
