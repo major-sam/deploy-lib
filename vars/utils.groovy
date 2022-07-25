@@ -15,7 +15,7 @@ def getKuberNodeIP_v2(Map config = [:]){
 		 .findAll{ it.getLabelString().contains(config.nodeLabel) }
 		 .findAll{ it.toComputer().isOnline() }
 		 .name
-		 .find{it.contains("${config.KuberID}")} as String
+		 .find{it.contains(config.KuberID)} as String
 }
 
 def getNodeIP(Map config = [:]){
@@ -36,7 +36,9 @@ def getKuberNodeIPv2(Map config = [:]){
 
 def getKuberNodeIP(Map config = [:]){
 	def nodes =nodesByLabel config.nodeLabel
-	return Jenkins.getInstance().getComputer(nodes[config.KuberID]).getHostName()
+	return Jenkins.getInstance().getComputer(nodes.find{
+		it.contains(config.KuberID.toString())
+		}).getHostName()
 }
 
 def getNodeList(label = 'windows'){
