@@ -15,7 +15,7 @@ def getKuberNodeIP_v2(Map config = [:]){
 		 .findAll{ it.getLabelString().contains(config.nodeLabel) }
 		 .findAll{ it.toComputer().isOnline() }
 		 .name
-		 .find{it.contains(config.KuberID)} as String
+		 .find{it.toString().contains(config.KuberID)} as String
 }
 
 def getNodeIP(Map config = [:]){
