@@ -57,8 +57,10 @@ $webdoc.Save($UnityConfig)
 ### edit kernel.exe.config
 $conf = [Xml](Get-Content $KernelConfig)
 Write-Host "[INFO] Edit web.config of $KernelConfig"
-$conf.configuration."system.serviceModel".services.service | % { 
-	$_.endpoint |% {$_.address = $_.address.replace("localhost",$CurrentIpAddr)}}
+try {
+	$conf.configuration."system.serviceModel".services.service | % { 
+		$_.endpoint |% {$_.address = $_.address.replace("localhost",$CurrentIpAddr)}}
+} catch { Write-Host "[WARN] The services field is missing in the config..." }
 ($conf.configuration.appSettings.add| ?{
 	$_.key -ilike 'RabbitMQConnectionString'}).value =$shortRabbitStr
 ($conf.configuration.connectionStrings.add| ?{
