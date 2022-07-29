@@ -7,7 +7,7 @@ $targetDir = "C:\inetpub\KRM"
 $KRMConfig ="$targetDir\Web.config"
 $krmLogsPath = "C:\Logs\KRM"
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
-$betCalculationServicePort = "5007"
+$betCalculationServicePort = "5041"
 
 ### edit KRM Web.config
 $xmlconfig = [Xml](Get-Content $KRMConfig)

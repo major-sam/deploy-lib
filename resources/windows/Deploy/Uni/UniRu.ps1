@@ -33,7 +33,7 @@ $redisPwdStr = "password=$redispasswd"
 $shortRedisStr = "$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
 $uasPort = 449
 $ticketServicePort = "5037"
-$betCalculationServicePort = "5007"
+$betCalculationServicePort = "5041"
 
 
 ###
