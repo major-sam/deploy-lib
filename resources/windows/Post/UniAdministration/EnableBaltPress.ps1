@@ -1,7 +1,7 @@
 # Task DEVOPS-145
 # https://jira.baltbet.ru:8443/browse/DEVOPS-145
 # Включает отображения страницы "БАЛТПРЕСС" на UniRu
-# На БД BaltBetM выполняется первый скрипт
+# На БД BaltBetM выполняется первый скрипт AddExpressCoupons.ps1
 
 $dbname = "UniAdministration"
 $query = "

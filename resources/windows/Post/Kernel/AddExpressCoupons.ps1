@@ -1,7 +1,7 @@
 # Task DEVOPS-145
 # https://jira.baltbet.ru:8443/browse/DEVOPS-145
 # Добавляет купон в базу BaltBetM
-# На БД UniAdministration выполняется второй скрипт
+# На БД UniAdministration выполняется второй скрипт EnableBaltPress.ps1
 
 $dbname = "BaltBetM"
 $query = "
