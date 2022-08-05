@@ -23,7 +23,7 @@ else {
 	$dbName = "Uni${zone}"
 	$serverInstance = "Uni${zone}"
 	$targetDir = "C:\inetpub\ClientWorkPlace\uni${zone}"
-	$logsPath = "C:\Logs\ClientWorkPlace\Uni${zone}"
+	$logsPath = "C:\Logs\Uni${zone}\uni${zone}"
 }
 
 $webConfig = "$targetDir\Web.config"

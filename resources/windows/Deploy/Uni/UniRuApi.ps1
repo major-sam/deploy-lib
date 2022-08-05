@@ -22,7 +22,7 @@ if(Test-Path 'env:Zone') {
 	$adminDbName = "UniAdministration"
 	$serverInstance = "Uni${zone}"
 	$apitargetDir = "C:\inetpub\ClientWorkPlace\Uni${zone}WebApi"
-	$logsPath = "C:\Logs\ClientWorkPlace\Uni${zone}WebApi"
+	$logsPath = "C:\Logs\Uni${zone}\uni${zone}WebApi"
 }
 
 $apiWebConfig = "$apiTargetDir\Web.config"
