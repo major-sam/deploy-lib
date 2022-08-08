@@ -68,10 +68,11 @@ def addNotes(Map config = [:]){
 		.get()
 		.getResources()
 		.find{ it.getName().equalsIgnoreCase(config.vmName)}
-	def currentNotes = resource.getNote().split('\n') as List
-	println currentNotes
-	currentNotes.removeAll{ it.contains("id=${config.id}")}
-	println currentNotes
+	def currentNotes = ''
+	if (resource.getNote()?.trim()){
+		currentNotes = resource.getNote().split('\n') as List
+		currentNotes.removeAll{ it.contains("id=${config.id}")}
+	}
 	def lockNotes = (currentNotes + "<p style='text-align: center;'>${config.notes} <strong>$dateTime</strong></p>").join('\n')
 	resource.setNote(lockNotes)
 }
