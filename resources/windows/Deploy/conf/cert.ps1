@@ -39,3 +39,10 @@ $Secure_String_Pwd = ConvertTo-SecureString "Baltbet*123" -AsPlainText -Force
 Import-PfxCertificate -FilePath $env:TESTERAICERT -CertStoreLocation Cert:\LocalMachine\My -Password $Secure_String_Pwd
 
 Push-Location $env:WORKSPACE
+
+# Добавляем тестовый сертификат LotoService в Windows
+Write-Host -ForegroundColor Green "[INFO] Add 1.pfx certificate for LotoService"
+$Secure_String_Pwd = ConvertTo-SecureString "$($env:LOTO_CERT_PSW)" -AsPlainText -Force
+Import-PfxCertificate -FilePath $env:TESTLOTOCERT -CertStoreLocation Cert:\LocalMachine\My -Password $Secure_String_Pwd
+
+Push-Location $env:WORKSPACE
