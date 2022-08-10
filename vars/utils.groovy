@@ -48,7 +48,7 @@ def getNodeList(label = 'windows'){
 		.getNodes()
 		.findAll{ it.getLabelString().contains(label) }
 		.findAll{ it.toComputer().isOnline() }
-		.name as List
+		.name.sort() as List
 }
 
 def getNodeIPAddr(node_name){
