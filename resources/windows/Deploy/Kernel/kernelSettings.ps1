@@ -12,6 +12,9 @@ $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)"
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+
+$lotoServiceGrpcPort = "8099"
+
 ### edit settings.xml
 Write-Host -ForegroundColor Green "[INFO] Edit web.config of $webConfig"
 $cachePath = 'c:\kCache'
@@ -66,6 +69,17 @@ try {
 ($conf.configuration.connectionStrings.add| ?{
 	$_.name -ilike 'Redis'}
 	).connectionString = "$shortRedisStr,connectTimeout=15000,syncTimeout=15000,asyncTimeout=15000"
+# ARCHI-461 LotoService
+try {
+	$conf.configuration.Grpc.Services.add | % {
+		if ($_.name -eq "LotoService"){
+			$_.port = $lotoServiceGrpcPort
+		}
+	}
+}
+catch {
+	Write-Host "[INFO] Section configuration.Grpc.Services.add does not exist."
+}
 $conf.Save($KernelConfig)
 
 ####KERNELWEB
