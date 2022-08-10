@@ -51,6 +51,11 @@ def getNodeList(label = 'windows'){
 		.name as List
 }
 
+def getNodeIPAddr(node_name){
+	def it_node = Jenkins.instance.getNodes().findAll{ it.getDisplayName() == node_name}.first()
+	return it_node.toComputer().getHostName()
+}
+
 def getLastSuccessfullTaskJobDescription(node){
 	def test_job = Jenkins.instance.getItemByFullName(JOB_NAME)
 	prev_sucessful_build=test_job.getLastSuccessfulBuild()
