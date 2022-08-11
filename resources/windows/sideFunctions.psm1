@@ -155,10 +155,8 @@ function RegisterIISSite($site){
 	}
     if (Test-Path IIS:\AppPools\$name){
         Write-output "SITE EXIST!!!"
-        $pool = get-IISAppPool $name
-        Remove-WebAppPool $pool
-        $site = get-website $name
-        Remove-WebSite $site
+        Remove-WebAppPool $name
+        Remove-WebSite $name
     }
         New-Item -Path IIS:\AppPools\$name -force
         Set-ItemProperty -Path IIS:\AppPools\$name -Name managedRuntimeVersion -Value $runtimeVersion
