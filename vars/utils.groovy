@@ -260,21 +260,16 @@ def doSingleServiceMavenDeploy_v2(Map config = [:]){
 				jdk: '11',
 				maven: 'latest',
 				mavenLocalRepo: ".mvn",
+				traceability: false,
 				mavenSettingsConfig: 'mavenSettings') {
-			bat "mvn help:evaluate -Dexpression=project.version -Dartifact=${config.groupId}:${taskBranch} -q -DforceStdout"
+			def packageVersion = bat (
+					script:"mvn help:evaluate -Dexpression=project.version -Dartifact=${config.groupId}:${taskBranch} -U -q -DforceStdout",
+					returnStdout:true).trim().readLines()[-1]
 			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
-			def packageVersion =  powershell (
-				script: """
-				(Get-ChildItem -Directory -Path (
-					 [IO.Path]::Combine('.mvn', '${config.groupId}' ,'${taskBranch}')) |
-				 sort Name -Descending |
-				 Select-Object -First 1).Name """,
-				returnStdout: true)
 			return packageVersion
 		}
 	}
 	else{
 		error ("${config.groupId} repo has no master branch")
-
 	}
 }
