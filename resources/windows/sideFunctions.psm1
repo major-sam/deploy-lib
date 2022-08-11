@@ -148,11 +148,11 @@ function RegisterIISSite($site){
     Import-Module -Force WebAdministration
     $name =  $site.SiteName
     $runtimeVersion = $site.RuntimeVersion
-	if ($site.siteSubDir){
-		$targetDir = Join-Path -path $site.rootDir -childpath $name
-	}else{
-		$targetDir = "$($site.rootDir)"
-	}
+    if ($site.siteSubDir){
+        $targetDir = Join-Path -path $site.rootDir -childpath $name
+    }else{
+        $targetDir = "$($site.rootDir)"
+    }
     if (Test-Path IIS:\AppPools\$name){
         Write-output "Pool EXIST!!!"
         Remove-WebAppPool $name

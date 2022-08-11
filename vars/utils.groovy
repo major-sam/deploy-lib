@@ -261,15 +261,15 @@ def doSingleServiceMavenDeploy_v2(Map config = [:]){
 				maven: 'latest',
 				mavenLocalRepo: ".mvn",
 				mavenSettingsConfig: 'mavenSettings') {
+			bat "mvn help:evaluate -Dexpression=project.version -Dartifact=${config.groupId}:${taskBranch} -q -DforceStdout"
+			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
 			def packageVersion =  powershell (
 				script: """
 				(Get-ChildItem -Directory -Path (
 					 [IO.Path]::Combine('.mvn', '${config.groupId}' ,'${taskBranch}')) |
 				 sort Name -Descending |
 				 Select-Object -First 1).Name """,
-				returnStdout: true
-				)
-			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
+				returnStdout: true)
 			return packageVersion
 		}
 	}
