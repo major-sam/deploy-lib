@@ -155,8 +155,11 @@ function RegisterIISSite($site){
 	}
     if (Test-Path IIS:\AppPools\$name){
         Write-output "SITE EXIST!!!"
+        $pool = get-IISAppPool $name
+        Remove-WebAppPool $pool
+        $site = get-website $name
+        Remove-WebSite $site
     }
-    else{
         New-Item -Path IIS:\AppPools\$name -force
         Set-ItemProperty -Path IIS:\AppPools\$name -Name managedRuntimeVersion -Value $runtimeVersion
         Set-ItemProperty -Path IIS:\AppPools\$name -Name startMode -Value 'AlwaysRunning'
@@ -174,7 +177,6 @@ function RegisterIISSite($site){
         }
         Start-WebSite -Name "$name"
         Start-WebAppPool -Name "$name"
-    }
 }
 
 function RegisterWinService_v2{
