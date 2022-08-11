@@ -154,8 +154,11 @@ function RegisterIISSite($site){
 		$targetDir = "$($site.rootDir)"
 	}
     if (Test-Path IIS:\AppPools\$name){
-        Write-output "SITE EXIST!!!"
+        Write-output "Pool EXIST!!!"
         Remove-WebAppPool $name
+    }
+    if (Test-Path IIS:\Sites\$name){
+        Write-output "SITE EXIST!!!"
         Remove-WebSite $name
     }
         New-Item -Path IIS:\AppPools\$name -force
