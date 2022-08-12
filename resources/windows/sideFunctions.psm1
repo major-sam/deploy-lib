@@ -148,15 +148,19 @@ function RegisterIISSite($site){
     Import-Module -Force WebAdministration
     $name =  $site.SiteName
     $runtimeVersion = $site.RuntimeVersion
-	if ($site.siteSubDir){
-		$targetDir = Join-Path -path $site.rootDir -childpath $name
-	}else{
-		$targetDir = "$($site.rootDir)"
-	}
-    if (Test-Path IIS:\AppPools\$name){
-        Write-output "SITE EXIST!!!"
+    if ($site.siteSubDir){
+        $targetDir = Join-Path -path $site.rootDir -childpath $name
+    }else{
+        $targetDir = "$($site.rootDir)"
     }
-    else{
+    if (Test-Path IIS:\AppPools\$name){
+        Write-output "Pool EXIST!!!"
+        Remove-WebAppPool $name
+    }
+    if (Test-Path IIS:\Sites\$name){
+        Write-output "SITE EXIST!!!"
+        Remove-WebSite $name
+    }
         New-Item -Path IIS:\AppPools\$name -force
         Set-ItemProperty -Path IIS:\AppPools\$name -Name managedRuntimeVersion -Value $runtimeVersion
         Set-ItemProperty -Path IIS:\AppPools\$name -Name startMode -Value 'AlwaysRunning'
@@ -174,7 +178,6 @@ function RegisterIISSite($site){
         }
         Start-WebSite -Name "$name"
         Start-WebAppPool -Name "$name"
-    }
 }
 
 function RegisterWinService_v2{

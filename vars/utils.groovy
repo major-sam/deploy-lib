@@ -19,10 +19,10 @@ def getKuberNodeIP_v2(Map config = [:]){
 		 .getHostName() as String
 }
 
-def getNodeIP(Map config = [:]){
-	def nodes =nodesByLabel config.nodeLabel
-	return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
-}
+//def getNodeIP(Map config = [:]){
+//	def nodes =nodesByLabel config.nodeLabel
+//	return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
+//}
 
 def getKuberNodeLabel(Map config = [:]){
 	def nodes =nodesByLabel config.nodeLabel
@@ -37,7 +37,7 @@ def getKuberNodeIPv2(Map config = [:]){
 
 def getKuberNodeIP(Map config = [:]){
 	def nodes =nodesByLabel config.nodeLabel
-	return Jenkins.getInstance().getComputer(nodes.find{
+	return Jenkins.instance.getComputer(nodes.find{
 		it.contains(config.KuberID.toString())
 		}).getHostName()
 }
@@ -260,21 +260,16 @@ def doSingleServiceMavenDeploy_v2(Map config = [:]){
 				jdk: '11',
 				maven: 'latest',
 				mavenLocalRepo: ".mvn",
+				traceability: false,
 				mavenSettingsConfig: 'mavenSettings') {
-			def packageVersion =  powershell (
-				script: """
-				(Get-ChildItem -Directory -Path (
-					 [IO.Path]::Combine('.mvn', '${config.groupId}' ,'${taskBranch}')) |
-				 sort Name -Descending |
-				 Select-Object -First 1).Name """,
-				returnStdout: true
-				)
+			def packageVersion = bat (
+					script:"mvn help:evaluate -Dexpression=project.version -Dartifact=${config.groupId}:${taskBranch} -U -q -DforceStdout",
+					returnStdout:true).trim().readLines()[-1]
 			bat "mvn clean versions:use-latest-releases dependency:unpack -f ${config.pom} -U ${deployParams}"
 			return packageVersion
 		}
 	}
 	else{
 		error ("${config.groupId} repo has no master branch")
-
 	}
 }
