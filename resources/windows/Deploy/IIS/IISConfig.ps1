@@ -336,7 +336,6 @@ C:\Windows\system32\inetsrv\appcmd.exe set config "images" /section:directorybro
 
 $sitesToChangeAuthentication = @(
     "BaltBet.Payment.BalancingService.Blazor",
-    "UpdateApkService",
     "UpdateApkServiceAdmin"
 )
 
