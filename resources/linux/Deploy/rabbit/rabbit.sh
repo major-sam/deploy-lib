@@ -12,7 +12,7 @@ echo '==============================='
     --namespace $NAMESPACE \
     --create-namespace \
     --set persistence.enabled="false" \
-    --set service.type="NodePort",auth.erlangCookie=secretcookie \
+    --set service.type="NodePort" \
     --set auth.erlangCookie=secretcookie \
     --set service.nodePort=$RABBIT_PORT \
     --set service.managerNodePort=$RABBIT_WEB_PORT\
