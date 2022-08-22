@@ -12,8 +12,8 @@ $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
 $webConfig = "$targetDir\IntegrationService.exe.config"
 
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $isPort = 65011
 $1Cuser = "User"

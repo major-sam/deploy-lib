@@ -4,8 +4,8 @@
 
 Import-module '.\scripts\sideFunctions.psm1'
 
-$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
+$redispasswd = $ENV:REDIS_CREDS_PSW
+$shortRedisStr="$($env:REDIS_HOST),password=$redispasswd"
 
 
 $serviceName = "UnicomWebRegistrationGrpc"

@@ -1,6 +1,6 @@
 import-module '.\scripts\sideFunctions.psm1'
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)"
-$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 $apiId = "a629bb95-71c9-4cc2-892a-57e3d5a95c41"
 $apiKey = "NDQxYmVlZjktNzRhZC00NTc0LWJkYzUtMjFlYTU3MDQzNzY5"
 

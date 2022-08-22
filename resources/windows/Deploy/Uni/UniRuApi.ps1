@@ -27,9 +27,8 @@ if(Test-Path 'env:Zone') {
 
 $apiWebConfig = "$apiTargetDir\Web.config"
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1 }).IPAddress.trim()
-$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
-$redisPwdStr = "password=$redispasswd"
-$shortRedisStr = "$($env:REDIS_HOST):$($env:REDIS_Port),$redisPwdStr"
+$redispasswd = $ENV:REDIS_CREDS_PSW
+$shortRedisStr = "$($env:REDIS_HOST),password=$redispasswd"
 $uasPort = 449
 $ticketServicePort = "5037"
 $betCalculationServicePort = "5041"

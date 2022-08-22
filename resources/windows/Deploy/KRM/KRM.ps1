@@ -1,8 +1,8 @@
 ###vars
-$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$redispasswd = $ENV:REDIS_CREDS_PSW
+$shortRedisStr="$($env:REDIS_HOST),password=$redispasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 $targetDir = "C:\inetpub\KRM"
 $KRMConfig ="$targetDir\Web.config"
 $krmLogsPath = "C:\Logs\KRM"
@@ -31,7 +31,7 @@ $xmlconfig.configuration.appSettings.add | % {
 }
 # Можно удалить после выхода WEB-6904
 if($xmlconfig.configuration."system.web".sessionState.providers.add.host) {
-	$xmlconfig.configuration."system.web".sessionState.providers.add.host = "$($env:REDIS_HOST):$($env:REDIS_Port)"
+	$xmlconfig.configuration."system.web".sessionState.providers.add.host = $env:REDIS_HOST
 }
 
 # Для WEB-6904

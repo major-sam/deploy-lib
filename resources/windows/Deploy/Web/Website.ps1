@@ -5,10 +5,10 @@ $SiteFolder = "C:\inetpub\WebSite"
 $SiteConfig = "$SiteFolder\Web.config"
 $wildcardDomain = "bb-webapps.com"
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
-$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)"
-$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)"
-$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$redispasswd = $ENV:REDIS_CREDS_PSW
+$shortRedisStr="$($env:REDIS_HOST),password=$redispasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 Write-Host -ForegroundColor Green "[INFO] Edit web.config of WebSite"
 $webdoc = [Xml](Get-Content $SiteConfig)

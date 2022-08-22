@@ -4,8 +4,8 @@ $ServicesFolder = "C:\Services"
 $ServiceName = "WebParser"
 $PathToConfig = "$($ServicesFolder)\$($ServiceName)\Config"
 $PathToExeConfig = "$($ServicesFolder)\$($ServiceName)\WebParser.exe.config"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 Write-Host "[INFO] EDIT WebParser.exe.config..."
 [xml]$config = Get-Content -Path $PathToExeConfig

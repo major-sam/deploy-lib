@@ -2,7 +2,6 @@ echo '==============================='
 echo 'rabbitmq helm chart deploy script'
 echo '==============================='
 echo $NAMESPACE
-echo $VM_ID
 echo $RABBIT_PORT
 echo $RABBIT_WEB_PORT
 echo '==============================='
@@ -19,7 +18,7 @@ echo '==============================='
     --set service.distPortEnabled="false" \
     --set service.epmdPortEnabled="false" \
     --set auth.username=$REDIS_CREDS_USR \
-    --set auth.password=$REDIS_CREDS_PSW$VM_ID  \
+    --set auth.password=$REDIS_CREDS_PSW \
     --set resources.requests.cpu=30m \
     --set resources.limits.cpu=550m  \
     --set resources.requests.memory=450Mi \
