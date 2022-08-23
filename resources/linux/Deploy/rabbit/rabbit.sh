@@ -17,8 +17,8 @@ echo '==============================='
     --set service.managerNodePort=$RABBIT_WEB_PORT\
     --set service.distPortEnabled="false" \
     --set service.epmdPortEnabled="false" \
-    --set auth.username=$REDIS_CREDS_USR \
-    --set auth.password=$REDIS_CREDS_PSW \
+    --set auth.username=$RABBIT_CREDS_USR \
+    --set auth.password=$RABBIT_CREDS_PSW \
     --set resources.requests.cpu=30m \
     --set resources.limits.cpu=550m  \
     --set resources.requests.memory=450Mi \
