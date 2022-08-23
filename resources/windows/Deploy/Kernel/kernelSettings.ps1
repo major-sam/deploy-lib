@@ -12,8 +12,11 @@ $redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)"
 $shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
 $rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
 $shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+
+$lotoServiceGrpcPort = "8099"
+
 ### edit settings.xml
-Write-Host -ForegroundColor Green "[INFO] Edit web.config of $webConfig"
+Write-Host -ForegroundColor Green "[INFO] Edit $webConfig"
 $cachePath = 'c:\kCache'
 if (!(test-path $cachePath)){
 	md $cachePath
@@ -40,7 +43,7 @@ $webdoc.Settings.Features.UniLiveEventCacheEnabled = "true"
 
 $webdoc.Save($webConfig)
 ### edit Log.config
-Write-Host "[INFO] Edit web.config of $LogConfig"
+Write-Host "[INFO] Edit $LogConfig"
 
 $webdoc = [Xml](Get-Content $LogConfig)
 $webdoc.log4net.appender|%{$_.file.value = $_.file.value.replace("Log\", "c:\logs\kernel\")}
@@ -48,7 +51,7 @@ $webdoc.log4net.appender|%{$_.file.value = $_.file.value.replace("Log\", "c:\log
 $webdoc.Save($LogConfig)
 
 ### edit Unity.config.xml
-Write-Host "[INFO] Edit web.config of $UnityConfig"
+Write-Host "[INFO] Edit $UnityConfig"
 
 $webdoc = [Xml](Get-Content $UnityConfig)
 ($webdoc.unity.container|%{$_.register}|?{$_.type -like "Kernel.IStopKernelValidator, Kernel"}).constructor.param.value = "config\StartStop.txt"
@@ -56,7 +59,7 @@ $webdoc.Save($UnityConfig)
 
 ### edit kernel.exe.config
 $conf = [Xml](Get-Content $KernelConfig)
-Write-Host "[INFO] Edit web.config of $KernelConfig"
+Write-Host "[INFO] Edit $KernelConfig"
 try {
 	$conf.configuration."system.serviceModel".services.service | % { 
 		$_.endpoint |% {$_.address = $_.address.replace("localhost",$CurrentIpAddr)}}
@@ -66,11 +69,18 @@ try {
 ($conf.configuration.connectionStrings.add| ?{
 	$_.name -ilike 'Redis'}
 	).connectionString = "$shortRedisStr,connectTimeout=15000,syncTimeout=15000,asyncTimeout=15000"
+# ARCHI-461 LotoService
+$conf.configuration.Grpc.Services.add | % {
+	if ($_.name -eq "LotoService"){
+		$_.port = $lotoServiceGrpcPort
+	}
+}
+
 $conf.Save($KernelConfig)
 
 ####KERNELWEB
 $webLogConfig  = "C:\KernelWeb\KernelWeb.exe.config"
-Write-Host "[INFO] Edit web.config of $webLogConfig"
+Write-Host "[INFO] Edit $webLogConfig"
 
 $webdoc = [Xml](Get-Content $webLogConfig)
 $webdoc.configuration.'system.serviceModel'.behaviors.serviceBehaviors.behavior | ? {
