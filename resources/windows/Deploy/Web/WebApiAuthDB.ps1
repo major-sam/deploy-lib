@@ -3,10 +3,10 @@ Import-module '.\scripts\sideFunctions.psm1'
 ###vars
 $IPAddress = (Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 
-$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd"
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$redispasswd = $ENV:REDIS_CREDS_PSW
+$shortRedisStr="$($env:REDIS_HOST),password=$redispasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 $ProgressPreference = 'SilentlyContinue'
 
 $release_bak_folder = "\\server\tcbuild`$\Testers\DB\For WebApi"

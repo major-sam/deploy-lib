@@ -2,7 +2,6 @@ echo '==============================='
 echo 'redis helm chart deploy script'
 echo '==============================='
 echo $NAMESPACE
-echo $VM_ID
 echo $REDIS_PORT 
 echo '==============================='
 
@@ -13,7 +12,7 @@ echo '==============================='
     --create-namespace \
     --set master.service.nodePorts.redis=$REDIS_PORT \
     --set master.service.type="NodePort" \
-    --set auth.password=$REDIS_CREDS_PSW$VM_ID \
+    --set auth.password=$REDIS_CREDS_PSW \
     --set replica.replicaCount=0  \
     --set master.persistence.enabled='false' \
     --set master.resources.requests.cpu=25m \

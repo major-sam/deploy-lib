@@ -13,8 +13,8 @@ $ProgressPreference = 'SilentlyContinue'
 $pathtojson = "$targetDir\appSettings.json"
 $jsonDepth = 5
 
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRabbitStr = "host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd;publisherConfirms=true;timeout=100;requestedHeartbeat=0"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW
+$shortRabbitStr = "host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd;publisherConfirms=true;timeout=100;requestedHeartbeat=0"
 
 # ERAI vars
 $dbname = "EraiDB"

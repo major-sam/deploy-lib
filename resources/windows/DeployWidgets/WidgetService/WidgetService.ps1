@@ -4,8 +4,8 @@ WidgetService (хостим в IIS https:6001, доступен swagger)
 
 Import-module '.\scripts\sideFunctions.psm1'
 
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRabbitStr = "host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW 
+$shortRabbitStr = "host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 $serviceName = "BaltWidgetsService"
 $targetDir = "C:\Services\BaltWidgets\${serviceName}"

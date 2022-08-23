@@ -3,8 +3,8 @@ Import-module '.\scripts\sideFunctions.psm1'
 Write-host '[INFO] Start EventService deploy script'
 #get release params
 
-$redispasswd = "$($ENV:REDIS_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRedisStr="$($env:REDIS_HOST):$($env:REDIS_Port),password=$redispasswd,connectTimeout=15000,syncTimeout=15000,asyncTimeout=15000"
+$redispasswd = $ENV:REDIS_CREDS_PSW
+$shortRedisStr="$($env:REDIS_HOST),password=$redispasswd,connectTimeout=15000,syncTimeout=15000,asyncTimeout=15000"
 $defaultDomain = "bb-webapps.com"
 $targetDir  = "C:\Services\EventService"
 $ProgressPreference = 'SilentlyContinue'

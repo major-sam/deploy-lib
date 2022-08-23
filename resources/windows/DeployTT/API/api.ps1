@@ -7,8 +7,8 @@ $pathtojson = 'C:\Services\TradingTool\Services\Baltbet.TradingTool.Api\appsetti
 $jsonDepth = 4
 $logPath = "C:\\Logs\\TradingTool\\Baltbet.TradingTool.Api.txt"
 
-$rabbitpasswd = "$($env:RABBIT_CREDS_PSW)$($ENV:VM_ID)" 
-$shortRabbitStr="host=$($ENV:RABBIT_HOST):$($ENV:RABBIT_PORT);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$rabbitpasswd = $env:RABBIT_CREDS_PSW 
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
 
 Write-Host -ForegroundColor Green "[info] edit json files"
 $configFile = Get-Content -Raw -path $pathtojson 
