@@ -4,42 +4,9 @@ import groovy.json.JsonOutput
 import jenkins.model.Jenkins
 import java.util.stream.*
 
-def kuberPortShift(Map config = [:]){
-	return config.port + config.VM.replaceAll("\\D+","").toInteger()
-}
-
-def getKuberNodeIP_v2(Map config = [:]){
-	return Jenkins
-		 .instance
-		 .getNodes()
-		 .findAll{ it.getLabelString().contains(config.nodeLabel) }
-		 .findAll{ it.toComputer().isOnline() }
-		 .find{it.name.contains(config.KuberID.toString())}
-		 .toComputer()
-		 .getHostName() as String
-}
-
-//def getNodeIP(Map config = [:]){
-//	def nodes =nodesByLabel config.nodeLabel
-//	return Jenkins.getInstance().getComputer(nodes[0]).getHostName()
-//}
-
-def getKuberNodeLabel(Map config = [:]){
-	def nodes =nodesByLabel config.nodeLabel
-	nodes=nodes.sort()
-	return nodes[config.KuberID]
-}
-
-def getKuberNodeIPv2(Map config = [:]){
-	def nodes = nodesByLabel config.nodeLabel
-	return nodes[config.KuberID].toComputer().getHostName()
-}
-
-def getKuberNodeIP(Map config = [:]){
-	def nodes =nodesByLabel config.nodeLabel
-	return Jenkins.instance.getComputer(nodes.find{
-		it.contains(config.KuberID.toString())
-		}).getHostName()
+def getKuberIP(Map config= [:]){
+	shift_id = config.agent_vm.find( /\d+/ ).toInteger()
+	return "10.0.253.${100+shift_id}"
 }
 
 def getNodeList(label = 'windows'){
