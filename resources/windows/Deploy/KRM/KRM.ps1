@@ -24,9 +24,6 @@ $xmlconfig.configuration.rabbitMqConfig.connectionString = $shortRabbitStr
 
 $xmlconfig.configuration.appSettings.add | % { 
 	# LEGACY!! >
-	if ($_.key -eq 'Redis.ConnectionString'){
-		$_.value = $shortRedisStr
-	}
 	if ($_.key -eq 'IsBetCalculationEnabled'){
 		$_.value = "true"
 	}#  < LEGACY!!
