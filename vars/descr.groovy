@@ -8,14 +8,6 @@ def setAllowDescr(Map config = [:]){
 }
 
 def setDenyDescr(Map config = [:]){
-	def lastBuildDescr = "Can't find any info about last successfull build"
-	if(lastDescr){
-		lastBuildDescr ="Last successfull build " +
-			config.descr[1] +' '+ congfig.descr[2] +
-			" <br/>Last  ${config.descr[0]}"
-	}
 	currentBuild.description = "VM ${config.vmName} is Locked. " +
-		" Skipped <br/><p><a href='" +
-		"${JENKINS_URL}lockable-resources/"+
-		"'>Remove VM Lock</a><p><br/>${lastBuildDescr}"
+		"<a href='${JENKINS_URL}lockable-resources/'>Remove VM Lock</a>"
 }
