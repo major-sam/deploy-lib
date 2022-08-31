@@ -11,24 +11,23 @@ def findLocks(Map config = [:]){
 	def lockable_resource = all_lockable_resources.find { r->
 		r.getName() == config.resource
 	}
-	def boolean locked_by_me = (
-		"${lockable_resource.getReservedBy()}" ==
-		"${currentBuild.getBuildCauses()[0].userName}"
-		)
-	if (locked_by_me){
-		println "Vm ${lockable_resource}" +
-			" is locked by current build user (" +
-			currentBuild.getBuildCauses()[0].userName +
-			") \n Continue Build"
+	def Map result = [
+		accessDeny:false,
+		resource:lockable_resource
+	]
+	if ("${lockable_resource.getReservedBy()}" == "${currentBuild.getBuildCauses()[0].userName}"){
+		println "Vm ${lockable_resource} is locked by current build user " +
+			"(${currentBuild.getBuildCauses()[0].userName}) \n Continue Build"
+	}
+	else if (!currentBuild.getBuildCauses('hudson.model.Cause$UpstreamCause').isEmpty()){
+		println "Runned by UpstreamCause ${currentBuild.getBuildCauses()?.shortDescription}"
 	}
 	else{
 		println "$lockable_resource is locked"
 		println currentBuild.getBuildCauses()
+		result.accessDeny =  true
 	}
-	return [
-		accessDeny:(lockable_resource.isReserved() && !locked_by_me),
-		resource: lockable_resource
-		]
+	return result 
 }
 
 def setNotes(Map config = [:]){
