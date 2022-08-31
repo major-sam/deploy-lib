@@ -21,6 +21,10 @@ def findLocks(Map config = [:]){
 			currentBuild.getBuildCauses()[0].userName +
 			") \n Continue Build"
 	}
+	else{
+		println "$lockable_resource is locked"
+		println currentBuild.getBuildCauses()
+	}
 	return [
 		accessDeny:(lockable_resource.isReserved() && !locked_by_me),
 		resource: lockable_resource
