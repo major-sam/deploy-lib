@@ -24,12 +24,8 @@ $xmlconfig.configuration.rabbitMqConfig.connectionString = $shortRabbitStr
 
 $xmlconfig.configuration.appSettings.add | % { 
 	# LEGACY!! >
-	if ($_.key -eq 'IsBetCalculationEnabled'){
-		$_.value = "true"
-	}#  < LEGACY!!
-	if ($_key -eq "UniBonusUrl"){
-		$_value = "https://$($ENV:COMPUTERNAME):$($uniBonusPort)".toLower()
-	}
+	if ($_.key -ieq 'IsBetCalculationEnabled'){ $_.value = "true" }#  < LEGACY!!
+	if ($_key -ieq "UniBonusUrl"){ $_.value = "https://$($ENV:COMPUTERNAME):$($uniBonusPort)".toLower() }
 }
 # Можно удалить после выхода WEB-6904
 if($xmlconfig.configuration."system.web".sessionState.providers.add.host) {
