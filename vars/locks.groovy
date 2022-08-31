@@ -19,7 +19,8 @@ def findLocks(Map config = [:]){
 		println "Vm ${lockable_resource} is locked by current build user " +
 			"(${currentBuild.getBuildCauses()[0].userName}) \n Continue Build"
 	}
-	else if (!currentBuild.getBuildCauses('hudson.model.Cause$UpstreamCause').isEmpty()){
+	else if (currentBuild.getBuildCauses()[0].upstreamBuild){
+		result.upstreamJob = true
 		println "Runned by UpstreamCause ${currentBuild.getBuildCauses()?.shortDescription}"
 	}
 	else{
