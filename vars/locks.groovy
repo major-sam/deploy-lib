@@ -15,7 +15,10 @@ def findLocks(Map config = [:]){
 		accessDeny:false,
 		resource:lockable_resource
 	]
-	if ("${lockable_resource.getReservedBy()}" == "${currentBuild.getBuildCauses()[0].userName}"){
+	if (!lockable_resource.isReserved()){
+		println "Vm ${lockable_resource} is free to use"
+	}
+	else if ("${lockable_resource.getReservedBy()}" == "${currentBuild.getBuildCauses()[0].userName}"){
 		println "Vm ${lockable_resource} is locked by current build user " +
 			"(${currentBuild.getBuildCauses()[0].userName}) \n Continue Build"
 	}
