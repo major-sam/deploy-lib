@@ -6,7 +6,7 @@ $ServiceName = "WebParser"
 $PathToConfig = "$($ServicesFolder)\$($ServiceName)\Config"
 $PathToExeConfig = "$($ServicesFolder)\$($ServiceName)\WebParser.exe.config"
 $shortRabbitStr="host=$($ENV:RABBIT_HOST);"+
-    "username=$($ENV:RABBIT_CREDS_USR);password=$($env:RABBIT_CREDS_PSW)" +
+    "username=$($ENV:RABBIT_CREDS_USR);password=$($env:RABBIT_CREDS_PSW);" +
     "publisherConfirms=true;timeout=100;requestedHeartbeat=0"
 
 [xml]$config = Get-Content -Path $PathToExeConfig
