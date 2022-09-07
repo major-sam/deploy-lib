@@ -1,10 +1,10 @@
 $svcs = (invoke-sqlcmd -Query "sp_linkedservers").SRV_NAME
-if($svcs.contains("srvapkbb8.gkbaltbet.local")){ 
+if($svcs.contains("srvapkbb9.gkbaltbet.local")){ 
     $svcs
-    Write-Host "srvapkbb8.gkbaltbet.local allready linked"
+    Write-Host "srvapkbb9.gkbaltbet.local allready linked"
 }
 else{
-    invoke-sqlcmd -Query "sp_addlinkedserver  [srvapkbb8.gkbaltbet.local]" | Out-Null
+    invoke-sqlcmd -Query "sp_addlinkedserver  [srvapkbb9.gkbaltbet.local]" | Out-Null
 }
 
 
