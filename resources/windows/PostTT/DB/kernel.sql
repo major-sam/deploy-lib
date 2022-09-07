@@ -56,7 +56,7 @@ set IDENTITY_INSERT MARKEt ON
 PRINT 'insert into Market'
 insert into Market(ID, Name, IsMain, EventTypeID, SuperMarketID, SortOrder, BindDate, UserBindID, FactTypeKindId,MarketKindId,MarketMergeTypeId)
 select ID, Name, IsMain, EventTypeID, SuperMarketID, SortOrder, BindDate, UserBindID, FactTypeKindId,MarketKindId,MarketMergeTypeId 
-from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.Market
+from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.Market
 set IDENTITY_INSERT MARKEt OFF
 go
 PRINT 'insert into Market done'
@@ -76,7 +76,7 @@ select [LineMemberBindId]
       ,[LineMemberId2]
       ,[LineMemberBindVisible]
       ,[DateCreate] 
-      from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.LineMemberBind
+      from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.LineMemberBind
 PRINT 'insert into LineMemberBind done'
 set IDENTITY_INSERT LineMemberBind OFF
 GO
@@ -115,7 +115,7 @@ select [EventTypesCoefTypesBindId]
       ,[Visibility]
       ,[AutoCalculated]
       ,[DateCreate]
-	  from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.EventTCoefTBind
+	  from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.EventTCoefTBind
 PRINT 'insert into EventTCoefTBind done'
 set IDENTITY_INSERT EventTCoefTBind OFF
 go
@@ -169,7 +169,7 @@ select [CoefTypeID]
       ,[NameTemplates]
       ,[CoefTypeAnalogId]
       ,[DateCreate]
-	   from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.CoefTypes
+	   from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.CoefTypes
 PRINT 'insert into CoefTypes done'
 go
 
@@ -179,8 +179,8 @@ select ct.[EventMemberId]
       ,ct.[LineMemberId]
       ,ct.[LineID]
       ,ct.[DateCreate]
-       from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.EventMembers ct
-INNER JOIN [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.Events ev on ct.LineID = ev.LineID
+       from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.EventMembers ct
+INNER JOIN [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.Events ev on ct.LineID = ev.LineID
 where ev.EVENTSTARTTIME > GETDATE() -3 AND ev.Live = 0
 PRINT 'insert into EventMembers done'
 go
@@ -245,14 +245,14 @@ SELECT  [LineMemberId]
       ,[MaxExpressCount]
       ,[SortOrder]
       ,[DateCreate] 
-      from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.LineMembers
+      from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.LineMembers
 
 PRINT 'insert into LineMembers done'
 go
 set IDENTITY_INSERT Federations ON
 PRINT 'insert into Federations'
 insert into Federations(ID,Name)
-select ID, Name from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.Federations
+select ID, Name from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.Federations
 set IDENTITY_INSERT Federations OFF
 PRINT 'insert into Federations done'
 
@@ -274,7 +274,7 @@ select [EventTypeId]
       ,[PartTime]
       ,[Visibility]
       ,[DateCreate]
-	   from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.EventTypes
+	   from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.EventTypes
 PRINT 'insert into EventTypes done'
 go
 ---КОНЕЦ КОПИРОВАНИЯ СПРАВОЧНЫХ ДАННЫХ---
@@ -369,7 +369,7 @@ select [LineID],
 	[BetEndDate],
 	[IsBetFinished],
 	[EventTypeID] 
-from [srvapkbb8.gkbaltbet.local].BaltBetM.dbo.Events ct 
+from [srvapkbb9.gkbaltbet.local].BaltBetM.dbo.Events ct 
 where ct.EventStartTime>=getdate() -3 and ct.Live=0
 PRINT 'insert into Events done'
 go
