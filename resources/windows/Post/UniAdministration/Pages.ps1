@@ -11,5 +11,5 @@ INSERT INTO [UniAdministration].[Settings].[SiteOptions] VALUES (2, 'Pages.Event
 GO
 "
 
-Write-Host "[INFO] Add 'BroadcastSettings.*' settings"
+Write-Host "[INFO] Enable 'Pages.Events.*' client rendering"
 Invoke-Sqlcmd -QueryTimeout 360 -verbose -ServerInstance $env:COMPUTERNAME -Database $dbname -query $query -ErrorAction stop
