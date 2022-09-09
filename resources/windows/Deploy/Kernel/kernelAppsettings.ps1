@@ -15,5 +15,5 @@ $HttpsInlineCertStore = '
 '| ConvertFrom-Json 
 $json_appsetings.Kestrel.EndPoints.HttpsInlineCertStore =  $HttpsInlineCertStore
 $json_appsetings.ConnectionStrings.RabbitMQ = $shortRabbitStr
-ConvertTo-Json $json_appsetings -Depth 4| Format-Json | Set-Content $pathtojson -Encoding UTF8
+ConvertTo-Json $json_appsetings -Depth 5 | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "$pathtojson renewed with json depth $jsonDepth"
