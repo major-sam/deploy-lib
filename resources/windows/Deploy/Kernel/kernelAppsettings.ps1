@@ -50,5 +50,5 @@ $json_appsetings.Consul.Services | % {
     }
 }
 
-ConvertTo-Json $json_appsetings -Depth 5 | Format-Json | Set-Content $pathtojson_new -Encoding UTF8
+ConvertTo-Json $json_appsetings -Depth 5 | Format-Json | Set-Content $pathtojson -Encoding UTF8
 Write-Host -ForegroundColor Green "[INFO] $pathtojson renewed with json depth $jsonDepth"
