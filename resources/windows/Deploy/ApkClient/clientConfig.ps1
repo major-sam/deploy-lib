@@ -26,6 +26,13 @@ if (Test-Path $clientConfig){
         $_.key -ilike 'DomainServiceUrl'}).value = $DomainServiceUrl
     ($xmlconfig.configuration.'system.serviceModel'.client.endpoint| ? {
         $_.name -ilike 'StatisticsWCFService'}).address = "http://localhost:30000/"
+    # ARCHI-90
+    try {
+        $xmlconfig.configuration.SignalRServer.ServerAddress = "http://${CurrentIpAddr}:8201"
+    }
+    catch {
+        Write-Host "[INFO] Can't find SignalRServer section"
+    }
     $xmlconfig.Save($clientConfig)
 }
 else{
