@@ -7,9 +7,12 @@ $shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);pass
 $ServiceName = "UniBonusService"
 $targetDir = "C:\Services\$($ServiceName)"
 $pathtojson = "$targetDir\appsettings.json"
+$wildcardDomain = "bb-webapps.com"
 $uniRu_https_port = 4443
+$KRM_https_port = 9081
 $origins = @(
-    "https://${env:COMPUTERNAME}.bb-webapps.com:${uniRu_https_port}"
+    "https://$($env:COMPUTERNAME).$($wildcardDomain):$($uniRu_https_port)".toLower()
+    "https://$($env:COMPUTERNAME).$($wildcardDomain):$($KRM_https_port)".toLower()
 )
 
 Write-Host -ForegroundColor Green "[INFO] Edit $pathtojson"

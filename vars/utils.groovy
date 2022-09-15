@@ -23,31 +23,6 @@ def getNodeIPAddr(node_name){
 	return it_node.toComputer().getHostName()
 }
 
-def getLastSuccessfullTaskJobDescription(node){
-	def test_job = Jenkins.instance.getItemByFullName(JOB_NAME)
-	prev_sucessful_build=test_job.getLastSuccessfulBuild()
-	while (prev_sucessful_build){
-		prev_sucessful_build_descr=prev_sucessful_build.getDescription()
-		if(prev_sucessful_build_descr){
-			if (prev_sucessful_build_descr.contains("${node}")){
-				def matches = (prev_sucessful_build_descr =~ /Task\(Branch\):.*$/)
-				return [
-					matches[0],
-					prev_sucessful_build.getId(),
-					prev_sucessful_build.getCauses()[0].shortDescription as String
-				]
-			}
-			else{
-				prev_sucessful_build = prev_sucessful_build.getPreviousSuccessfulBuild()
-					prev_sucessful_build_descr = false
-			}
-		}
-		else{
-			prev_sucessful_build = prev_sucessful_build.getPreviousSuccessfulBuild()
-				prev_sucessful_build_descr = false
-		}
-	}
-}
 
 def	addToDescription(Map config = [:]){
 	def String result = ""

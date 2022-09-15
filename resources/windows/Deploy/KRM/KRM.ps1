@@ -8,6 +8,8 @@ $KRMConfig ="$targetDir\Web.config"
 $krmLogsPath = "C:\Logs\KRM"
 $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScript { $_.interfaceindex -ne 1}).IPAddress.trim()
 $betCalculationServicePort = "5041"
+$uniBonusPort = "4437"
+$wildcardDomain = '.bb-webapps.com'
 
 ### edit KRM Web.config
 $xmlconfig = [Xml](Get-Content $KRMConfig)
@@ -22,12 +24,10 @@ if ($xmlconfig.configuration."system.serviceModel".client) {
 $xmlconfig.configuration.rabbitMqConfig.connectionString = $shortRabbitStr
 
 $xmlconfig.configuration.appSettings.add | % { 
-	if ($_.key -eq 'Redis.ConnectionString'){
-		$_.value = $shortRedisStr
-	}
-	if ($_.key -eq 'IsBetCalculationEnabled'){
-		$_.value = "true"
-	}
+	# LEGACY!! >
+	if ($_.key -ieq 'IsBetCalculationEnabled'){ $_.value = "true" }#  < LEGACY!!
+	if ($_.key -ieq "UniBonusUrl"){ 
+		$_.value = "https://$($ENV:COMPUTERNAME)$($wildcardDomain):$($uniBonusPort)".toLower() }
 }
 # Можно удалить после выхода WEB-6904
 if($xmlconfig.configuration."system.web".sessionState.providers.add.host) {

@@ -1,13 +1,14 @@
 import-module '.\scripts\sideFunctions.psm1'
 
+Write-Host "[INFO] EDIT WebParser.exe.config..."
 $ServicesFolder = "C:\Services"
 $ServiceName = "WebParser"
 $PathToConfig = "$($ServicesFolder)\$($ServiceName)\Config"
 $PathToExeConfig = "$($ServicesFolder)\$($ServiceName)\WebParser.exe.config"
-$rabbitpasswd = $env:RABBIT_CREDS_PSW 
-$shortRabbitStr="host=$($ENV:RABBIT_HOST);username=$($ENV:RABBIT_CREDS_USR);password=$rabbitpasswd"
+$shortRabbitStr="host=$($ENV:RABBIT_HOST);"+
+    "username=$($ENV:RABBIT_CREDS_USR);password=$($env:RABBIT_CREDS_PSW);" +
+    "publisherConfirms=true;timeout=100;requestedHeartbeat=0"
 
-Write-Host "[INFO] EDIT WebParser.exe.config..."
 [xml]$config = Get-Content -Path $PathToExeConfig
 $config.configuration.'system.serviceModel'.services.service |% { if ( $_.name -eq "WebParser.ServiceWebParser")
     {$_.endpoint.address = "http://$($env:COMPUTERNAME):9011"}}
@@ -20,19 +21,9 @@ $BaseParserContext = $config.configuration.connectionStrings.add | %{
             "initial catalog=Parser;"+
             "MultipleActiveResultSets=True;"}
 
-    if ($_.name -eq "RabbitConnection"){
-        $_.connectionString = 
-            "$shortRabbitStr; "+
-            "publisherConfirms=true; "
-            "timeout=100; " +
-            "requestedHeartbeat=0"}
-
-    if ($_.name -eq "RabbitClientAPK"){
-        $_.connectionString = 
-            "$shortRabbitStr; "+
-            "publisherConfirms=true; "+
-            "timeout=100; "+
-            "requestedHeartbeat=0"}
+    if ($_.name -ieq "RabbitConnection"){ $_.connectionString = $shortRabbitStr }
+    if ($_.name -ieq "RabbitClientAPK"){ $_.connectionString = $shortRabbitStr }
+    if ($_.name -ieq "MatchFactRabbit"){ $_.connectionString = $shortRabbitStr }
 }
 $config.Save($PathToExeConfig)
 
