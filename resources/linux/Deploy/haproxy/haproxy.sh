@@ -27,4 +27,4 @@ EOF
     --create-namespace \
     --set crt.path=$BB_CRT \
     --set backend.website.addr=$HAPROXY_WEBSITE_BACK \
-    -f haproxy.yaml
+    -f haproxy.yaml | exit 0
