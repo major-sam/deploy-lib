@@ -20,6 +20,13 @@ config: |
     log stdout format raw local0
     daemon
     maxconn 1024
+  frontend stats
+    mode http
+    bind *:1024
+    no log
+    stats enable
+    stats uri /stats
+    stats refresh 10s
   defaults
     log global
     timeout client 60s
