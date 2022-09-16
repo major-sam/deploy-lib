@@ -13,18 +13,16 @@ config: |
     timeout server 60s
   frontend website
     mode http
-    bind website.bb-webapps.com:443 ssl crt {{ crt.path }}
+    bind website.bb-webapps.com:443 ssl crt $BB_CRT 
     http-request redirect scheme https code 301 unless { ssl_fc }
     default_backend website
   backend website
     mode http
-    server web1 {{ backend.website.addr }} check
+    server web1 $HAPROXY_WEBSITE_BACK check
 EOF
 
 /usr/sbin/helm upgrade -i haproxy haproxytech/haproxy \
     --version 1.17.0 \
     --namespace $NAMESPACE \
     --create-namespace \
-    --set crt.path=$BB_CRT \
-    --set backend.website.addr=$HAPROXY_WEBSITE_BACK \
     -f haproxy.yaml | exit 0
