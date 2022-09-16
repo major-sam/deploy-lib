@@ -6,7 +6,7 @@ echo $RABBIT_PORT
 echo $RABBIT_WEB_PORT
 echo '==============================='
 
-/usr/sbin/helm upgrade -i test-rabbitmq bitnami/rabbitmq  \
+/usr/sbin/helm upgrade -i rabbitmq bitnami/rabbitmq  \
     --version 8.31.2 \
     --namespace $NAMESPACE \
     --create-namespace \
