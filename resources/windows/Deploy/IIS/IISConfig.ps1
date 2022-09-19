@@ -15,7 +15,7 @@ $IISPools = @(
            username="$username";password="$pass";identitytype=3
            }
        bindings= @(
-               @{protocol='https';bindinginformation="*:54381:$($env:computername).$($wildcarddomain)"}
+               @{protocol='https';bindinginformation="*:54381:"}
            )
  	certpath = 'cert:\localmachine\my\38be86bcf49337804643a671c4c56bc4224c6606'
  	rootdir = 'c:\Services'
