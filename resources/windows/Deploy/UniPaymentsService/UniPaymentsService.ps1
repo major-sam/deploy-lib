@@ -11,6 +11,10 @@ $ConfigPath = "c:\Services\UniPaymentsService\appsettings.json"
 Write-Host -ForegroundColor Green "[INFO] Change settings $ConfigPath"
 $config = Get-Content -Raw -path $ConfigPath 
 $json_appsettings = $config -replace '(?m)(?<=^([^"]|"[^"]*")*)//.*' -replace '(?ms)/\*.*?\*/' | ConvertFrom-Json
+$json.kestrel.endpoints.https.url = "https://+$($ENV:UNIPAYMENT_SERVICE_PORT)"
+$json.kestrel.endpoints.https.Certificate.Location = "LocalMachine"
+$json.kestrel.endpoints.https.Certificate.Subject = "*.bb-webapps.com"
+$json.kestrel.endpoints.https.Certificate.Store = 'My'
 $json_appsettings.ConnectionStrings.UniSiteSettings = "data source=localhost;initial catalog=${uniRuAdminDbName};Integrated Security=SSPI;MultipleActiveResultSets=True;"
 $json_appsettings.Origins =@( 
 		"https://$($env:COMPUTERNAME).bb-webapps.com:4443",

@@ -8,19 +8,19 @@ $pass =  "$($ENV:SERVICE_CREDS_PSW)"
 $preloader = "SitePreload"
 $wildcardDomain = "bb-webapps.com"
 $IISPools = @( 
-    @{
-        sitename = 'UniPaymentsService'
-        RuntimeVersion = ''
-        domainauth =  @{
-            username="$username";password="$pass";identitytype=3
-            }
-        bindings= @(
-                @{protocol='https';bindinginformation="*:54381:$($env:computername).$($wildcarddomain)"}
-            )
-		certpath = 'cert:\localmachine\my\38be86bcf49337804643a671c4c56bc4224c6606'
-		rootdir = 'c:\Services'
-		sitesubdir = $true
-    }
+  #  @{
+  #      sitename = 'UniPaymentsService'
+  #      RuntimeVersion = ''
+  #      domainauth =  @{
+  #          username="$username";password="$pass";identitytype=3
+  #          }
+  #      bindings= @(
+  #              @{protocol='https';bindinginformation="*:54381:$($env:computername).$($wildcarddomain)"}
+  #          )
+	#	certpath = 'cert:\localmachine\my\38be86bcf49337804643a671c4c56bc4224c6606'
+	#	rootdir = 'c:\Services'
+	#	sitesubdir = $true
+  #  }
     @{
         sitename = 'websitecom'
         RuntimeVersion = 'v4.0'
