@@ -15,6 +15,7 @@ $json_appsettings.ConnectionStrings.UniSiteSettings = "data source=localhost;ini
 $json_appsettings.Origins =@( 
 		"https://$($env:COMPUTERNAME).bb-webapps.com:4443",
 		"https://$($env:COMPUTERNAME).bb-webapps.com:4444",
+		"https://website.bb-webapps.com",
 		"https://$($env:COMPUTERNAME).bb-webapps.com:4445"
 		)
 $json_appsettings.Grpc.Services | % {
