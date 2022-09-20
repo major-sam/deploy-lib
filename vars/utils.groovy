@@ -195,6 +195,7 @@ def doSingleServiceMavenDeploy_v2(Map config = [:]){
 		def deployParams = [
 				"-Ddeploy.groupid=${config.groupId}",
 				"-Ddeploy.dir=${config.deployDir}",
+				"-Ddeploy.version=${config.version}",
 				"-Ddeploy.branch=${taskBranch}",
 				"-DartifactName=${config.groupId}"].join(' ')
 		withMaven(
