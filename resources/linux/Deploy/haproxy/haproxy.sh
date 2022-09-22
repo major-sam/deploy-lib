@@ -19,6 +19,7 @@ config: |
   global
     log stdout format raw local0
     daemon
+    lua-load /etc/haproxy/lua/cors.lua
     maxconn 1024
   frontend stats
     mode http
@@ -36,13 +37,16 @@ config: |
     mode http
     bind *:443 ssl crt /usr/local/etc/ssl/cert.crt 
     http-request redirect scheme https code 301 unless { ssl_fc }
+    http-request lua.cors "*" "*" "*"
     default_backend website
   backend website
-    mode http
-    option forwardfor
+    mode http 
+    http-response lua.cors
+    http-response add-header Access-Control-Allow-Origin "*"
+    http-response add-header Access-Control-Allow-Headers "*"
+    http-response add-header Access-Control-Max-Age 3600
+    http-response add-header Access-Control-Allow-Methods "GET, DELETE, OPTIONS, POST, PUT, PATCH"
     server web1 $AGENT_IP:$WEBSITE_HTTP_PORT check
-    http-request set-header X-Forwarded-Port %[dst_port]
-    http-request add-header X-Forwarded-Proto https if { ssl_fc }
 initContainers:
   - name: sysctl
     image: "busybox:musl"
@@ -56,7 +60,12 @@ mountedSecrets:
   - volumeName: ssl-certificate
     secretName: bb-cert
     mountPath: /usr/local/etc/ssl
+  - volumeName: cors-lua
+    secretName: cors-lua
+    mountPath: /etc/haproxy/lua/
 EOF
+/usr/bin/kubectl create secret --namespace=$NAMESPACE generic cors-lua \
+  --from-file=./cors.lua
 /usr/bin/kubectl create secret --namespace=$NAMESPACE generic bb-cert \
   --from-file=./cert.crt --from-file=./cert.crt.key 
 /usr/sbin/helm upgrade -i haproxy haproxytech/haproxy \
