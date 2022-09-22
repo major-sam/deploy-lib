@@ -29,7 +29,7 @@ $jsonAppsetings.Kestrel.EndPoints.Https.Certificate.Store = "My"
 $jsonAppsetings.Kestrel.EndPoints.Https.Certificate.AllowInvalid = "true"
 
 # Настраиваем секцию Kestrel.GrpcPort
-$jsonAppsetings.Kestrel.EndPoints.gRPC.Url = "http://localhost:${assGrpcPort}"
+$jsonAppsetings.Kestrel.EndPoints.gRPC.Url = "http://${env:AGENT_IP}:${assGrpcPort}"
 
 
 ConvertTo-Json $jsonAppsetings -Depth $jsonDepth  | Format-Json | Set-Content $pathtojson -Encoding UTF8
