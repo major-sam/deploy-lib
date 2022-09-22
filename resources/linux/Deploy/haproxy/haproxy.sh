@@ -39,7 +39,10 @@ config: |
     default_backend website
   backend website
     mode http
+    option forwardfor
     server web1 $AGENT_IP:$WEBSITE_HTTP_PORT check
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
 initContainers:
   - name: sysctl
     image: "busybox:musl"
