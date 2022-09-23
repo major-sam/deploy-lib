@@ -103,7 +103,7 @@ function RestoreSqlDb($db_params) {
         $dbname = $db.DbName
         foreach ($r in $dt){
             $RelocateFile += New-Object Microsoft.SqlServer.Management.Smo.RelocateFile(
-                    $r.LogicalName , ("{0}{1}_{2}" -f $MSSQLDataPath,$dbname,$r.LogicalName)
+                    $dbname, ("{0}{1}_{2}" -f $MSSQLDataPath,$dbname,$r.LogicalName)
                 )
         }
         Restore-SqlDatabase -Verbose -ServerInstance $env:COMPUTERNAME -Database $db.DbName -BackupFile $db.BackupFile -RelocateFile $RelocateFile -ReplaceDatabase
