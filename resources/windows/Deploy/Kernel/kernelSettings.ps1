@@ -6,9 +6,17 @@ $CurrentIpAddr =(Get-NetIPAddress -AddressFamily ipv4 |  Where-Object -FilterScr
 $webConfig = "$targetDir\settings.xml"
 $UnityConfig = "$targetDir\Config\UnityConfig.config"
 $LogConfig = "$targetDir\Config\Log.Config"
-$KernelConfig ="$targetDir\Kernel.exe.config"
+if (test-path "$targetDir\Kernel.exe.config"){
+	$KernelConfig = "$targetDir\Kernel.exe.config"
+}elseif (test-path "$targetDir\Kernel.dll.config"){
+	$KernelConfig = "$targetDir\Kernel.dll.config"
+}
+else{
+	write-error "Kernel .config file is missing"
+}
 
 $lotoServiceGrpcPort = "8099"
+
 $redispasswd = $ENV:REDIS_CREDS_PSW
 $shortRedisStr="$($env:REDIS_HOST),password=$redispasswd"
 $rabbitpasswd = $env:RABBIT_CREDS_PSW
