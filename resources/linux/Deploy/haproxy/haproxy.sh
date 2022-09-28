@@ -33,20 +33,26 @@ config: |
     timeout client 60s
     timeout connect 60s
     timeout server 60s
-  frontend website
+  frontend default
     mode http
     bind *:443 ssl crt /usr/local/etc/ssl/cert.crt 
     http-request redirect scheme https code 301 unless { ssl_fc }
     http-request lua.cors "*" "*" "*"
+    use_backend %[req.hdr(host),lower,map(/etc/haproxy/maps/hosts.map,be_default)]
     default_backend website
+
+  backend livemoncontent
+    mode http 
+    server web1 $agent_ip:$livemonitor_content_port check
+
   backend website
     mode http 
     http-response lua.cors
-    http-response add-header Access-Control-Allow-Origin "*"
-    http-response add-header Access-Control-Allow-Headers "*"
-    http-response add-header Access-Control-Max-Age 3600
-    http-response add-header Access-Control-Allow-Methods "GET, DELETE, OPTIONS, POST, PUT, PATCH"
-    server web1 $AGENT_IP:$WEBSITE_HTTP_PORT check
+    http-response add-header access-control-allow-origin "*"
+    http-response add-header access-control-allow-headers "*"
+    http-response add-header access-control-max-age 3600
+    http-response add-header access-control-allow-methods "get, delete, options, post, put, patch"
+    server web1 $agent_ip:$website_http_port check
 initContainers:
   - name: sysctl
     image: "busybox:musl"
@@ -57,6 +63,9 @@ initContainers:
     securityContext:
       privileged: true
 mountedSecrets:
+  - volumeName: maps
+    secretName: maps
+    mountPath: /etc/haproxy/maps
   - volumeName: ssl-certificate
     secretName: bb-cert
     mountPath: /usr/local/etc/ssl
@@ -64,6 +73,8 @@ mountedSecrets:
     secretName: cors-lua
     mountPath: /etc/haproxy/lua/
 EOF
+/usr/bin/kubectl create secret --namespace=$NAMESPACE generic maps \
+  --from-file=./hosts.map
 /usr/bin/kubectl create secret --namespace=$NAMESPACE generic cors-lua \
   --from-file=./cors.lua
 /usr/bin/kubectl create secret --namespace=$NAMESPACE generic bb-cert \
